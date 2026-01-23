@@ -1,0 +1,20 @@
+.custom-row {
+  /* keep bootstrap grid working */
+  --bs-gutter-x: 1.25rem;
+  --bs-gutter-y: 0;
+
+  /* spacing */
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  /* optional layout control */
+  min-height: calc(100vh - 70px); /* header offset */
+
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-.9 * var(--bs-gutter-x)) !important;
+  margin-left: calc(-.9 * var(--bs-gutter-x)) !important;
+}

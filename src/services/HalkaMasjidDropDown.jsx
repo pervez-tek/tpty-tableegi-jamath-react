@@ -1,24 +1,26 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
+//import { initialMasjidsList } from "./dummyMasjidsData";
+import { toast } from "react-toastify";
 
-const halkaMasjids1 = [
-  {
-    label: "Halka 1",
-    options: [
-      { value: "AP", text: "Andhra Pradesh (AP)" },
-      { value: "TG", text: "Telangana (TG)" },
-      { value: "KA", text: "Karnataka (KA)" }
-    ]
-  },
-  {
-    label: "Halka 2",
-    options: [
-      { value: "Doha", text: "Doha" },
-      { value: "Riyadh", text: "Riyadh" }
-    ]
-  }
-];
+
+// dummyMasjidsData.js
+export const initialMasjidsList = {
+  1: [
+    { id: "AP-001", masjidName: "Masjid-e-Quba (AP)" },
+    { id: "TG-001", masjidName: "Masjid Noor (TG)" },
+    { id: "KA-001", masjidName: "Masjid-e-Bilal (KA)" }
+  ],
+  2: [
+    { id: "Doha-001", masjidName: "Masjid-e-Madina (Doha)" },
+    { id: "Riyadh-001", masjidName: "Masjid-e-Rehmat (Riyadh)" }
+  ],
+  0: [
+    { id: "GEN-001", masjidName: "General Masjid (No Halka)" }
+  ]
+};
+
 
 
 
@@ -33,8 +35,23 @@ function HalkaMasjidDropDown({ value, onChange }) {
       .then((response) => {
         // console.log("Welcome" + JSON.stringify(response.data));
         setHalkaMasjids(response.data); // assuming response.data is an array 
-      }).catch((error) => { console.error("Error fetching data:", error); });
-       
+      }).catch((error) => {
+        console.error("Error fetching data:", error);
+        setHalkaMasjids(initialMasjidsList);
+
+        if (error.code === "ERR_NETWORK") {
+          console.error("Error fetching masjids:", error);
+          toast.warning("⚠️ Network error, showing dummy authentication instead!");
+        } else {
+          // Other errors (e.g. 400/500 from backend)
+          // showNotification(`❌ Error: ${error.response?.data || error.message}`, "danger");
+          console.error("Error:", error.response?.data || error.message);
+          const backendMessage = error.response?.data?.message || error.message;
+          toast.error(`❌ Error: ${backendMessage}`);
+        }
+
+      });
+
   }, []);
 
   return (
@@ -48,16 +65,35 @@ function HalkaMasjidDropDown({ value, onChange }) {
         required
       >
         <option value="">-- Select Masjid --</option> {/* 👈 placeholder */}
-        {Object.entries(halkaMasjids).map(([halkaNo, masjids]) => (
-          <optgroup key={halkaNo} label={`HalkaNo - ${halkaNo}`}>
-            {masjids.map((m) => (
-              <option key={m.id} value={m.id}>
-                {m.masjidName}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-        <option value="others">Others</option>
+        {Object.entries(halkaMasjids)
+          // sort keys: numeric ascending, but push 0 to the end
+          .sort(([a], [b]) => {
+            if (Number(a) === 0) return 1;   // push "0" after others
+            if (Number(b) === 0) return -1;
+            return Number(a) - Number(b);    // normal numeric sort
+          })
+          .map(([halkaNo, masjids]) =>
+            Number(halkaNo) > 0 ? (
+              // ✅ For other halkaNo values, render with optgroup label
+              <optgroup key={halkaNo} label={`HalkaNo - ${halkaNo}`}>
+                {masjids.map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.masjidName}
+                  </option>
+                ))}
+              </optgroup>
+            ) : (
+              // ✅ For halkaNo = 0, render options directly (no label)
+              masjids.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.masjidName}
+                </option>
+              ))
+            )
+          )}
+
+
+
       </select>
       <label htmlFor="masjid" className="form-label">HalkaNo (1–5)</label>
     </div>

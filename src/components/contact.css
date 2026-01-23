@@ -1,0 +1,33 @@
+.card img {
+  width: 200px;
+  height: 200px;
+  object-fit: fill;
+}
+
+/* Medium screens */
+@media (max-width: 992px) {
+  .card img {
+    width: 150px;
+    height: 150px;
+  }
+  .card-title {
+    font-size: 1.25rem; /* smaller heading */
+  }
+  .card-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small screens */
+@media (max-width: 576px) {
+  .card img {
+    width: 100px;
+    height: 100px;
+  }
+  .card-title {
+    font-size: 1rem;
+  }
+  .card-text {
+    font-size: 0.85rem;
+  }
+}

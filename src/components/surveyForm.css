@@ -1,0 +1,47 @@
+.google-btn {
+  padding: 0.25rem 0.5rem;
+  /* smaller padding */
+  font-size: 0.85rem;
+}
+
+@media (max-width: 56px) {
+  .google-btn {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .google-btn img {
+    width: 14px;
+  }
+}
+
+@media (min-width:320px) and (max-width: 480px) {
+  /*  mobile potrait*/
+}
+
+
+@media (min-width:481px) and (max-width: 767px) {
+  /* mobile landscape */
+}
+
+@media (min-width:768px) and (max-width: 1024px) {
+
+  /*  Tablet potrait or landscape */
+  .form-select {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (min-width:1025px) and (max-width: 1280px) {
+  /*  laptop or desktop*/
+}
+
+@media (min-width: 1281px) {}
+
+@media (max-width: 576px) {
+  .form-select {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+  }
+}

@@ -21,6 +21,7 @@ function App() {
     const handleUnload = () => {
       navigator.sendBeacon("http://localhost:5000/api/cleanup");
       // sendBeacon is better for unload events
+      console.log("Leaving.......")
     };
 
     window.addEventListener("beforeunload", handleUnload);
@@ -31,7 +32,7 @@ function App() {
   return (
     <>
 
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick pauseOnHover />
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick pauseOnHover />
       <AuthProvider>
         <Navbar />
         <SurveyPage />

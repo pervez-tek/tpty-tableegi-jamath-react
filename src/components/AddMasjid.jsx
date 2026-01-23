@@ -2,14 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-
-const initialMasjidsList = [
-    { id: "", halkaNo: "1", masjidName: "Masjid-e-Quba", address: "Hyderabad, Telangana" },
-    { id: "", halkaNo: "2", masjidName: "Masjid Noor", address: "Tirupati, Andhra Pradesh" },
-    { id: "", halkaNo: "3", masjidName: "Masjid-e-Bilal", address: "Bengaluru, Karnataka" },
-    { id: "", halkaNo: "4", masjidName: "Masjid-e-Madina", address: "Chennai, Tamil Nadu" },
-    { id: "", halkaNo: "5", masjidName: "Masjid-e-Rehmat", address: "Mumbai, Maharashtra" }
-];
+import { initialMasjidsList, addDummyMasjid, updateDummyMasjid, deleteDummyMasjid } from "./dummyMasjidsData";
+import { useNavigate } from "react-router-dom";
 
 const AddMasjid = () => {
     const halka = [
@@ -17,7 +11,8 @@ const AddMasjid = () => {
         { id: 2, name: "Halka-2" },
         { id: 3, name: "Halka-3" },
         { id: 4, name: "Halka-4" },
-        { id: 5, name: "Halka-5" }
+        { id: 5, name: "Halka-5" },
+        { id: 0, name: "N/A" }
     ];
     const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,29 +20,72 @@ const AddMasjid = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
+    const location = useLocation();
+    const navLoginData = location.state?.loginData;
+    // after Login from Admin capturing user login information
+    // Try sessionStorage fallback (optional) 
+    const stored = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
+    const persisted = stored ? JSON.parse(stored) : null;
+    const initialLogin = navLoginData ?? persisted ?? { adminUsrTrackingId: "", username: "", sessionid: null, usrAdminId: "" };
+
+    const navigate = useNavigate();
+
+    const api = axios.create({ baseURL: API_URL });
+
+    api.interceptors.response.use(
+        response => response,
+        error => {
+            if (error.response && error.response.status === 401) {
+                // session expired → redirect to login
+                //window.location.href = "/login";
+                // or use 
+                navigate("/login"); //if inside a React component
+            }
+            return Promise.reject(error);
+        }
+    );
+
+
+
+
     useEffect(() => { // Call backend GET API using axios
-        axios.get(`${API_URL}/getAllMasjids`, { withCredentials: true }).then((response) => {
-            console.log("Datar:" + JSON.stringify(response.data));
+        api.get(`${API_URL}/getAllMasjids`, {
+            headers: {
+                sessionid: initialLogin.sessionid ?? "",
+                id: initialLogin.id ?? "", username: initialLogin.username ?? "",
+                usrAdminId: initialLogin.usrAdminId ?? null
+            },
+            withCredentials: true
+        }).then((response) => {
+            // console.log("Response: from getAllMasjids API =:" + JSON.stringify(response.data));
             setMasjids(response.data);
             setError("");
             // Axios auto-parses JSON 
         }).catch((error) => {
             console.error("Error fetching masjids:", error);
-            setError("Network error. Unable to fetch data.");
-            setMasjids([]);
+            if (error.code === "ERR_NETWORK") {
+                // Custom handling for network errors
+                showNotification("⚠️ Network error, showing dummy data instead!", "warning");
+                setMasjids(initialMasjidsList);
+                setError("");
+            } else {
+                // Other errors (e.g. 400/500 from backend)
+                const backendMessage = error.response?.data?.message || error.message;
+                showNotification(`❌ Error: ${backendMessage}`, "danger");
+                //setError(`${error.response?.data || error.message} Unable to fetch data.`);
+                setMasjids(initialMasjidsList);
+                setError("");
+            }
         }).finally(() => setLoading(false));
 
     }, []);
 
-    const location = useLocation();
-    const navLoginData = location.state?.loginData;
-    // Try sessionStorage fallback (optional) 
-    const stored = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
-    const persisted = stored ? JSON.parse(stored) : null; const initialLogin = navLoginData ?? persisted ?? { id: "", username: "", sessionid: null };
+
     const [form, setForm] = useState(() => (
         {
-            id: "", halkaNo: "", masjidName: "", address: "",
-            userId: initialLogin.id ?? "", username: initialLogin.username ?? "", sessionid: initialLogin.sessionid ?? null
+            id: "", halkaNo: 0, masjidName: "", address: "",
+            adminUsrTrackingId: initialLogin.id ?? "", username: initialLogin.username ?? "", sessionid: initialLogin.sessionid ?? null,
+            usrAdminId: initialLogin.usrAdminId ?? null
         }));
 
 
@@ -72,37 +110,72 @@ const AddMasjid = () => {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Form:" + JSON.stringify(form));
+
+        const payload = {
+            ...form,
+            adminUsrTrackingId: initialLogin.id,
+            username: initialLogin.username,
+            sessionid: initialLogin.sessionid,
+            usrAdminId: initialLogin.usrAdminId
+        };
+        console.log("Form:" + JSON.stringify(payload));
         if (editIndex !== null) {
             // Update existing masjid
             const updatedMasjids = [...masjids];
 
             setEditIndex(null);
-            showNotification("✅ Masjid updated successfully!", "info");
-            axios.put(`${API_URL}/updateMasjid`, form)
+
+            // console.log("Update=" + JSON.stringify(form));
+            api.put(`${API_URL}/updateMasjid`, form, {
+                headers: {
+                    sessionid: initialLogin.sessionid ?? "",
+                    id: initialLogin.id ?? "", username: initialLogin.username ?? "",
+                    usrAdminId: initialLogin.usrAdminId ?? null
+                },
+                withCredentials: true
+            })
                 .then(response => {
-                    console.log("Response:" + JSON.stringify(response.data));
-                    //setMasjids([...masjids, response.data]);
+                    console.log("Response: from updateMasjid API = " + JSON.stringify(response.data));
+
+                    const updatedMasjids = [...masjids];
                     updatedMasjids[editIndex] = response.data;
                     setMasjids(updatedMasjids);
+
+
+                    showNotification(`✅ Masjid updated successfully by ${initialLogin.username}!`, "info");
                 })
                 .catch(error => {
                     console.error("Error:", error.response?.data || error.message);
+                    if (error.code === "ERR_NETWORK") {
+                        setMasjids(updateDummyMasjid(masjids, form));
+                        showNotification("⚠️ Network error, updated locally!", "warning");
+                    }
 
                 });
         } else {
             // Add new masjid
-            setMasjids([...masjids, form]);
-            showNotification("✅ Masjid added successfully!", "success");
+            //  setMasjids([...masjids, form]);
 
-            axios.post(`${API_URL}/addMasjid`, form)
+            //console.log("Add=" + JSON.stringify(form));
+            api.post(`${API_URL}/addMasjid`, payload, {
+                headers: {
+                    sessionid: initialLogin.sessionid ?? "",
+                    id: initialLogin.id ?? "", username: initialLogin.username ?? "",
+                    usrAdminId: initialLogin.usrAdminId ?? null
+                },
+                withCredentials: true
+            })
                 .then(response => {
-                    console.log("Response:" + JSON.stringify(response.data));
+                    console.log("Response: from addMasjid API = " + JSON.stringify(response.data));
                     setMasjids([...masjids, response.data]);
+                    showNotification(`✅ Masjid added successfully by ${initialLogin.username}!`, "success");
                 })
                 .catch(error => {
                     console.error("Error:", error.response?.data || error.message);
-
+                    if (error.code === "ERR_NETWORK") {
+                        setMasjids(addDummyMasjid(masjids, form));
+                        showNotification("⚠️ Network error, added locally!", "warning");
+                    }
                 });
         }
 
@@ -110,23 +183,65 @@ const AddMasjid = () => {
     };
 
     const handleReset = () => {
-        setForm({ id: "", halkaNo: "", address: "", masjidName: "" });
         setEditIndex(null);
+        setForm({
+            id: "", halkaNo: 0, address: "", masjidName: "",
+            adminUsrTrackingId: initialLogin.id ?? "", username: initialLogin.username ?? "", sessionid: initialLogin.sessionid ?? null,
+            usrAdminId: initialLogin.usrAdminId ?? null
+        });
+
     };
 
     const handleDelete = (index) => {
+        const deletedMasjid = masjids[index];   // capture the entity being deleted
         const updatedMasjids = masjids.filter((_, i) => i !== index);
-        setMasjids(updatedMasjids);
+
+        //console.log("Delete:" + JSON.stringify(deletedMasjid));
+
+        try {
+            // Call API delete with the deleted entity
+            api.delete(`${API_URL}/deleteMasjid`, {
+                data: deletedMasjid,   // axios.delete requires { data: ... } for body
+                headers: {
+                    sessionid: initialLogin.sessionid ?? "",
+                    id: initialLogin.id ?? "", username: initialLogin.username ?? "",
+                    usrAdminId: initialLogin.usrAdminId ?? null
+                },
+                withCredentials: true
+            })
+                .then(() => {
+                    setMasjids(updatedMasjids);
+                    showNotification(`🗑️ Masjid deleted successfully by ${initialLogin.username}!`, "danger");
+                })
+                .catch(error => {
+                    if (error.code === "ERR_NETWORK") {
+                        setMasjids(deleteDummyMasjid(masjids, index));
+                        showNotification("⚠️ Network error, deleted locally!", "warning");
+                    }
+                });
+        } catch (err) {
+            console.error(err);
+        }
+
         handleReset();
-        showNotification("🗑️ Masjid deleted successfully!", "danger");
+        console.log("Delete end");
     };
 
+
     const handleEdit = (index) => {
-        setForm(masjids[index]);
+        console.log("Edited 1=" + JSON.stringify(form));
+        setForm({
+            ...masjids[index],
+            adminUsrTrackingId: initialLogin.id,
+            username: initialLogin.username,
+            sessionid: initialLogin.sessionid,
+            usrAdminId: initialLogin.usrAdminId
+        });
         setEditIndex(index);
 
         // Scroll to top smoothly 
         window.scrollTo({ top: 0, behavior: "smooth" });
+        console.log("Edited 2=" + JSON.stringify(form));
     };
 
     return (
@@ -137,8 +252,11 @@ const AddMasjid = () => {
                         {editIndex !== null ? "Edit Masjid" : "Add Masjid"}
                     </h4>
 
-                    <input type="hidden" value={form.userId || ""} name="userId" />
-                    <input type="hidden" value={form.sessionid || ""} name="sessionid" />
+                    <input type="hidden" value={form.adminUsrTrackingId || ""} name="adminUsrTrackingId" />
+                    <input type="hidden" value={initialLogin.username || ""} name="username" />
+                    <input type="hidden" value={initialLogin.usrAdminId || ""} name="usrAdminId" />
+                    <input type="hidden" value={initialLogin.sessionid || ""} name="sessionid" />
+
                     <form className="was-validated" onSubmit={handleSubmit}>
                         <input type="hidden" value={form.id || ""} name="id" />
                         <div className="form-floating mb-3 mt-3">
@@ -146,8 +264,8 @@ const AddMasjid = () => {
                                 className="form-select"
                                 id="halkaNo"
                                 name="halkaNo"
-                                value={form.halkaNo || ""}
-                                onChange={handleChange}
+                                value={form.halkaNo ?? ""}
+                                onChange={(e) => setForm(prev => ({ ...prev, halkaNo: Number(e.target.value) }))}
                                 required
                             >
                                 <option value="">-- Select Halqa --</option>
@@ -215,7 +333,7 @@ const AddMasjid = () => {
             <h4 className="card-title text-center mb-4">Masjid List</h4>
             <div className="table-responsive">
                 <table className="table table-hover">
-                    <thead className="table-success">
+                    <thead className="table-warning">
                         <tr>
                             <th>Halka No.</th>
                             <th>Name</th>
@@ -251,17 +369,20 @@ const AddMasjid = () => {
                                 <td>{data.masjidName}</td>
                                 <td>{data.address}</td>
                                 <td>
-                                    <button
+                                    {/* <button
                                         className="btn btn-sm btn-outline-primary me-2"
                                         title="Edit"
                                         onClick={() => handleEdit(index)}
                                     >
                                         <i className="bi bi-pencil-square"></i>
-                                    </button>
+                                    </button> */}
                                     <button
                                         className="btn btn-sm btn-outline-danger"
                                         title="Delete"
-                                        onClick={() => handleDelete(index)}
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // prevent triggering row's onClick
+                                            handleDelete(index);
+                                        }}
                                     >
                                         <i className="bi bi-trash"></i>
                                     </button>

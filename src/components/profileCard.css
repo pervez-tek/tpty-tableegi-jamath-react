@@ -1,0 +1,39 @@
+.profile-card {
+  border: 1px solid #dee2e6;
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+}
+
+.profile-details {
+  flex: 1;              /* take up left space */
+}
+
+.profile-details ul li {
+  padding: 0rem 0;
+  font-size: 0.95rem;
+}
+
+.profile-image {
+  flex-shrink: 0;        /* prevent shrinking */
+}
+
+.profile-img {
+  width: 96px ;
+  height: 96px ;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+@media (max-width: 375px) {
+    .card img {
+        width: 86px;
+        height: 86px;
+    }
+}
+
+@media (max-width: 363px) {
+    .card img {
+        width: 75px;
+        height: 75px;
+    }
+}

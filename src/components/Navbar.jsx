@@ -42,7 +42,7 @@ function Navbar() {
 
     // Build payload from context or fallback to sessionStorage 
     const payload = user ?? JSON.parse(sessionStorage.getItem("user") || "{}");
-    console.log("Payload" + payload);
+    console.log("Payload" + JSON.stringify(payload));
     await axios.post(`${API_URL}/signOut`, payload, { withCredentials: true })
       .then(response => {
         console.log("DTO:", response.data);
@@ -54,6 +54,8 @@ function Navbar() {
         const backendMessage = error.response?.data?.message || error.message;
 
         console.log("Erro:" + backendMessage);
+        logout();
+        navigate("/login"); // redirect 
       });
   }
 
@@ -98,6 +100,11 @@ function Navbar() {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="/listOfMasjids" onClick={closeMenu}>
+                List Of Majids
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/contact" onClick={closeMenu}>
                 Contact
               </NavLink>
@@ -114,6 +121,19 @@ function Navbar() {
                 </NavLink>
               </li>
             )}
+
+            {isLoggedIn && (
+              <li className="nav-item">
+                <NavLink
+                  className="nav-link"
+                  to="/reports"
+                  onClick={closeMenu}
+                >
+                  Reports
+                </NavLink>
+              </li>
+            )}
+
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink

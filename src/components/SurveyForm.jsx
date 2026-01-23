@@ -3,8 +3,10 @@ import JamathCheckboxes from "../services/JamathCheckboxes";
 import FiveAamalCheckboxes from "../services/FiveAamalCheckboxes";
 import HalkaMasjidDropDown from "../services/HalkaMasjidDropDown";
 import axios from "axios";
+import GoogleButton from "./GoogleButton";
+import { toast } from "react-toastify";
 
-
+import "./surveyForm.css";
 
 const SurveyForm = () => {
     const [form, setForm] = useState({
@@ -13,53 +15,79 @@ const SurveyForm = () => {
         name: "",
         email: "",
         service: "",
-        phone: 0,
-        age: 0,
+        phone: "",
+        age: "",
         masjidId: "", // dropdown 
         jamath: [], // checkboxes group 
         _5aamal: [], // checkboxes group
         comment: "",
-        agree: ""
+        agreeTerms: ""
     });
 
     const APP_HEADING = import.meta.env.VITE_APP_HEADING;
     const API_URL = import.meta.env.VITE_BACKEND_URL;
-    const GOOGLE_API_URL = import.meta.env.VITE_OAUTH2_BACK_END_GOOGLE_URL
+    const ROOT_API_URL = import.meta.env.VITE_BACKEND_ROOT_URL;
 
-    function GoogleLogin() {
-        window.location.href = GOOGLE_API_URL;
-    }
+    const [add, setAdd] = useState(true);
+
 
     useEffect(() => {
-        axios.get(`${API_URL}/user`, { withCredentials: true })
+
+        axios
+            .get(`${API_URL}/googleUser`, { withCredentials: true })
             .then(res => {
-                console.log("Response:" + JSON.stringify(res.data));
+                console.log("Response:", JSON.stringify(res.data));
                 setForm(prev => ({
                     ...prev,
                     name: res.data.name || "",
                     email: res.data.email || "",
                     image: res.data.picture || ""
                 }));
-
-
             })
-            .catch(() => {
+            .catch(err => {
                 // user not logged in – ignore
-                console.error("Error occured")
-            });
+                // console.error("Error occurred:", err);
+                //toast.error("Please Contact Admin");
+            }).finally(); // reset trigger
 
-        axios.get(`${API_URL}/getJamathiDetails`, form, { withCredentials: true })
-            .then(res => {
-                console.log("Response:" + JSON.stringify(res.data));
+    }, []); // ✅ dependency array goes here
 
+    const handleGoogleClick = () => {
+        console.log("Google button clicked, notify parent here"); // you can set state, show a toast, etc.     
+    };
+
+    useEffect(() => {
+        if (form.email) {
+            axios.post(`${API_URL}/getJamathiDetails`, form, {
+                withCredentials: true
             })
-            .catch(() => {
-                // user not logged in – ignore
-                console.error("Error occured")
-            });
-
-    }, []);
-
+                .then(res => {
+                    console.log("After G Siginin" + JSON.stringify(res.data));
+                    if (res.data && res.data.email) {
+                        setForm(prev => ({
+                            ...prev,
+                            service: res.data.service || "",
+                            image: res.data.image || "",
+                            name: res.data.name || "",
+                            id: res.data.id || "",
+                            age: res.data.age || "",
+                            phone: res.data.phone || "",
+                            masjidId: res.data.masjidId || "",
+                            jamath: res.data.jamath || "",
+                            _5aamal: res.data._5aamal || "",
+                            comment: res.data.comment || "",
+                            agreeTerms: res.data.agreeTerms || ""
+                        }));
+                        setAdd(false);
+                    }
+                })
+                .catch(err => {
+                    setAdd(true);
+                    console.error(err);
+                    toast.error("Please Contact Admin");
+                });
+        }
+    }, [form.email]);
 
 
     const handleChange = (e) => {
@@ -78,11 +106,16 @@ const SurveyForm = () => {
             })
             .catch(error => {
                 console.error("Error:", error.response?.data || error.message);
-
+                toast.error("Please Contact Admin");
             });
 
-        alert("Survey submitted successfully!");
+        if (add) {
+            toast.success("Survey submitted successfully!");
+        } else {
+            toast.success("Survey updated successfully!");
+        }
         handleReset();
+        setAdd(true);
     };
 
     const handleReset = () => {
@@ -92,51 +125,50 @@ const SurveyForm = () => {
             name: "",
             email: "",
             service: "",
-            phone: 0,
-            age: 0,
+            phone: "",
+            age: "",
             masjidId: "", // dropdown 
             jamath: [], // checkboxes group 
             _5aamal: [], // checkboxes group
             comment: "",
-            agree: ""
+            agreeTerms: ""
         });
+        setAdd(true);
     };
 
     return (
         <div className="card shadow">
             <div className="card-body">
-                <table className="table table-hover">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <h4 className="card-title text-center mb-4">
-                                    {APP_HEADING}
-                                </h4>
-                            </td>
-                            <td>
-                                <button
-                                    className="btn btn-light border d-flex align-items-center gap-2 px-3"
-                                    style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.15)" }}
-                                    onClick={GoogleLogin}>
-                                    <img
-                                        src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                                        alt="Google"
-                                        width="20"
-                                    />
-                                </button>
-                            </td>
-                            <td>{form.image && (
-                                <div className="text-center mb-3">
-                                    <img
-                                        src={form.image}
-                                        alt="Profile"
-                                        className="rounded-circle"
-                                        width="80"
-                                    />
-                                </div>
-                            )}
-                            </td>
-                        </tr></tbody></table>
+                <div className="table-responsive">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h4 className="card-title text-center mb-4">
+                                        {APP_HEADING}
+                                    </h4>
+                                </td>
+                                <td>
+                                    <GoogleButton onClick={handleGoogleClick} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>{form.image && (
+                                    <div className="text-center mb-3">
+                                        <img                                        
+                                            src={`${ROOT_API_URL}${form.image}`} 
+                                            alt="Profile"
+                                            className="rounded-circle"
+                                            width="50px" height="50px"
+                                        />
+                                    </div>
+                                )}
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
 
                 <form onSubmit={submitSurvey} className="was-validated">
                     <div className="form-floating mb-3 mt-3">
@@ -150,12 +182,13 @@ const SurveyForm = () => {
                     </div>
 
                     <div className="form-floating mb-3 mt-3">
-                        <input type="name" className="form-control" name="service" onChange={handleChange} placeholder="Enter Service" required />
+                        <input type="name" className="form-control" value={form.service} name="service" onChange={handleChange} placeholder="Enter Service" required />
                         <label className="form-label">Profession/Busineess/Student</label>
                     </div>
 
                     <div className="form-floating mb-3 mt-3">
                         <input type="tel" pattern="[0-9]{10}" className="form-control" maxLength="10" name="phone"
+                            value={form.phone}
                             //onChange={handleChange} 
                             onChange={(e) => setForm({ ...form, phone: Number(e.target.value) }) // 👈 convert to number 
                             }
@@ -166,51 +199,55 @@ const SurveyForm = () => {
 
                     <div className="form-floating mb-3 mt-3">
                         <input className="form-control" name="age" type="number" min="12" max="75"
+                            value={form.age}
                             onChange={(e) => setForm({ ...form, age: Number(e.target.value) }) // 👈 convert to number 
                             }
                             required />
                         <label className="form-label">Age</label>
                     </div>
                     <HalkaMasjidDropDown value={form.masjidId} onChange={(e) => setForm({ ...form, masjidId: e.target.value })} />
-                    <table className="table table-hover">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <label className="form-label">Jamath</label>
-                                </td>
-                                <td>
-                                    <JamathCheckboxes
-                                        value={form.jamath} onChange={(selected) => setForm({ ...form, jamath: selected })} />
-                                </td>
-                            </tr>
+                    <div className="table-responsive">
+                        <table className="table table-hover">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label className="form-label">Jamath</label>
+                                    </td>
+                                    <td>
+                                        <JamathCheckboxes
+                                            value={form.jamath} onChange={(selected) => setForm({ ...form, jamath: selected })} />
+                                    </td>
+                                </tr>
 
-                            <tr>
-                                <td><label className="form-label">5 Aamal </label></td>
-                                <td>
-                                    <FiveAamalCheckboxes
-                                        value={form._5aamal} onChange={(selected) => setForm({ ...form, _5aamal: selected })} />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                <tr>
+                                    <td><label className="form-label">5 Aamal </label></td>
+                                    <td>
+                                        <FiveAamalCheckboxes
+                                            value={form._5aamal} onChange={(selected) => setForm({ ...form, _5aamal: selected })} />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
 
                     <div className="form-floating">
-                        <textarea className="form-control" name="comment" placeholder="Comment goes here" onChange={handleChange} />
+                        <textarea className="form-control" name="comment" placeholder="Comment goes here" onChange={handleChange}
+                            value={form.comment} />
                         <label className="form-check-label" htmlFor="comment">Comments</label>
                     </div>
                     <div className="form-check">
                         <input
                             className="form-check-input"
                             type="checkbox"
-                            id="agree"
-                            name="agree"
+                            id="agreeTerms"
+                            name="agreeTerms"
                             //onChange={handleChange}
-                            onChange={(e) => setForm({ ...form, agree: e.target.checked })}
-                            checked={form.agree}
+                            onChange={(e) => setForm({ ...form, agreeTerms: e.target.checked })}
+                            checked={form.agreeTerms}
                             required
                         />
-                        <label className="form-check-label" htmlFor="agree">
+                        <label className="form-check-label" htmlFor="agreeTerms">
                             I agree
                         </label>
                     </div>
@@ -218,7 +255,7 @@ const SurveyForm = () => {
                     &nbsp;
                     <div className="d-grid gap-3">
                         <button className="btn btn-primary w-100">
-                            Submit Survey
+                            {add && add ? "Submit" : "Update"} Survey
                         </button>
                         <button className="btn btn-danger w-100" onClick={handleReset}>
                             Reset

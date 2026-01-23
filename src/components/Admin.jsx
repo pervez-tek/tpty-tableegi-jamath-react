@@ -15,7 +15,7 @@ const Admin = () => {
   });
 
   const API_URL = import.meta.env.VITE_BACKEND_URL;
-
+  const [loading, setLoading] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -28,31 +28,59 @@ const Admin = () => {
   };
 
   // Handle form submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    if (loading) return; // guard
     e.preventDefault();
+    setLoading(true);
     console.log("URL:" + API_URL);
-    axios.post(`${API_URL}/signIn`, form, { withCredentials: true })
+    await axios.post(`${API_URL}/signIn`, form, { withCredentials: true })
       .then(response => {
         setErrorMessage(""); // clear error on success
 
         // after successful signIn
+        console.log(response.data);
         const user = {
           id: response.data.id,
           username: response.data.username,
-          sessionid: response.data.sessionid
+          sessionid: response.data.sessionid,
+          isAdminLogin: response.data.isAdminLogin,
+          usrAdminId: response.data.usrAdminId
         };
         login(user); // from useAuth
         navigate("/addMasjid", { state: { loginData: user } });
-
-
+        toast.success("Login Success");
+        console.log("After Successful Login" + JSON.stringify(user));
       })
       .catch(error => {
-        console.error("Error:", error.response?.data || error.message);
-        const backendMessage = error.response?.data?.message || error.message;
-        setErrorMessage(backendMessage);
-        toast.error(backendMessage);
-      });
+        if (error.code === "ERR_NETWORK") {
+          console.error("Error fetching masjids:", error);
+          // Custom handling for network errors
+          //showNotification("⚠️ Network error, showing dummy authentication instead!", "warning");
+          if (form.username === "admin" && form.password === "admin") {
+            const user = {
+              id: "response.data.id",
+              username: "response.data.username",
+              sessionid: "response.data.sessionid",
+              isAdminLogin: "response.data.isAdminLogin",
+              usrAdminId: "response.data.usrAdminId"
+            };
+            login(user); // from useAuth
+            navigate("/addMasjid", { state: { loginData: user } });
+            toast.warning("⚠️ Network error, showing dummy authentication instead!");
+          }
 
+        } else {
+          // Other errors (e.g. 400/500 from backend)
+          // showNotification(`❌ Error: ${error.response?.data || error.message}`, "danger");
+          console.error("Error:", error.response?.data || error.message);
+          const backendMessage = error.response?.data?.message || error.message;
+          toast.error(`❌ Error: ${backendMessage}`);
+          navigate("/login");
+        }
+
+
+      });
+    setLoading(false);
   };
 
   // Handle reset
@@ -95,7 +123,7 @@ const Admin = () => {
 
           <div className="d-grid gap-3">
             <button type="submit" className="btn btn-primary w-100">
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
             <button
               type="button"
