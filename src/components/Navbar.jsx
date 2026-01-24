@@ -47,7 +47,7 @@ function Navbar() {
       .then(response => {
         console.log("DTO:", response.data);
         logout();
-        navigate("/"); // redirect 
+        navigate("/login"); // redirect 
       })
       .catch(error => {
         console.error("Error:", error.response?.data || error.message);

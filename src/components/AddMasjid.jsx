@@ -4,6 +4,7 @@ import { Alert } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { initialMasjidsList, addDummyMasjid, updateDummyMasjid, deleteDummyMasjid } from "./dummyMasjidsData";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddMasjid = () => {
     const halka = [
@@ -40,6 +41,8 @@ const AddMasjid = () => {
                 //window.location.href = "/login";
                 // or use 
                 navigate("/login"); //if inside a React component
+                console.log("Session expired=" + JSON.stringify(error.response));
+                toast.warning(`${error.response}`);
             }
             return Promise.reject(error);
         }

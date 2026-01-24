@@ -5,6 +5,8 @@ import HalkaMasjidDropDown from "../services/HalkaMasjidDropDown";
 import axios from "axios";
 import GoogleButton from "./GoogleButton";
 import { toast } from "react-toastify";
+import Man from "../assets/images/avt_man.jpg";
+import Wom from "../assets/images/avt_wom.jpg";
 
 import "./surveyForm.css";
 
@@ -21,7 +23,8 @@ const SurveyForm = () => {
         jamath: [], // checkboxes group 
         _5aamal: [], // checkboxes group
         comment: "",
-        agreeTerms: ""
+        agreeTerms: "",
+        picture: ""
     });
 
     const APP_HEADING = import.meta.env.VITE_APP_HEADING;
@@ -41,7 +44,8 @@ const SurveyForm = () => {
                     ...prev,
                     name: res.data.name || "",
                     email: res.data.email || "",
-                    image: res.data.picture || ""
+                    image: res.data.image || "",
+                    picture: res.data.picture || ""
                 }));
             })
             .catch(err => {
@@ -76,7 +80,8 @@ const SurveyForm = () => {
                             jamath: res.data.jamath || "",
                             _5aamal: res.data._5aamal || "",
                             comment: res.data.comment || "",
-                            agreeTerms: res.data.agreeTerms || ""
+                            agreeTerms: res.data.agreeTerms || "",
+                            picture: res.data.picture || "",
                         }));
                         setAdd(false);
                     }
@@ -131,7 +136,8 @@ const SurveyForm = () => {
             jamath: [], // checkboxes group 
             _5aamal: [], // checkboxes group
             comment: "",
-            agreeTerms: ""
+            agreeTerms: "",
+            picture: ""
         });
         setAdd(true);
     };
@@ -153,16 +159,23 @@ const SurveyForm = () => {
                                 </td>
                             </tr>
                             <tr>
-                                <td>{form.image && (
+                                <td>
                                     <div className="text-center mb-3">
-                                        <img                                        
-                                            src={`${ROOT_API_URL}${form.image}`} 
+                                        <img
+                                            //src={`${ROOT_API_URL}${form.image}`}
+                                            src={form.image ? `${ROOT_API_URL}${form.image}` : Man}
                                             alt="Profile"
                                             className="rounded-circle"
                                             width="50px" height="50px"
                                         />
+                                        {/* <img
+                                            //src={`${ROOT_API_URL}${form.picture}`}
+                                            src={form.picture ? `${ROOT_API_URL}${form.picture}` : Wom}
+                                            alt="Profile"
+                                            className="rounded-circle"
+                                            width="50px" height="50px"
+                                        /> */}
                                     </div>
-                                )}
                                 </td>
                             </tr>
                         </tbody>
@@ -172,13 +185,13 @@ const SurveyForm = () => {
 
                 <form onSubmit={submitSurvey} className="was-validated">
                     <div className="form-floating mb-3 mt-3">
-                        <input className="form-control" name="name" onChange={handleChange} placeholder="Enter name" value={form.name} required />
-                        <label className="form-label">Name</label>
+                        <input type="email" className="form-control" value={form.email} name="email" onChange={handleChange} placeholder="Enter email" required />
+                        <label className="form-label">Email</label>
                     </div>
 
                     <div className="form-floating mb-3 mt-3">
-                        <input type="email" className="form-control" value={form.email} name="email" onChange={handleChange} placeholder="Enter email" required />
-                        <label className="form-label">Email</label>
+                        <input className="form-control" name="name" onChange={handleChange} placeholder="Enter name" value={form.name} required />
+                        <label className="form-label">Name</label>
                     </div>
 
                     <div className="form-floating mb-3 mt-3">
