@@ -11,6 +11,8 @@ import Reports from "../components/Reports";
 import ListOfMasjids from "../components/ListOfMasjids";
 
 import Kalima from "../assets/images/bismillah.png";
+import BroadcastMessage from "../components/BroadcastMessage";
+import FeedBack from "../components/FeedBack";
 
 function SurveyPage() {
 
@@ -27,7 +29,7 @@ function SurveyPage() {
                     />
                 </div>
                 <div className="row justify-content-center custom-row">
-                    <div className="col-12 col-sm-12 col-md-10 col-lg-9 col-xl-8 mx-4">
+                    <div className="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-8 mx-4">
                         <Routes>
                             <Route path="/" element={<SurveyForm />} />
                             <Route path="/login" element={<Admin />} />
@@ -35,6 +37,7 @@ function SurveyPage() {
                             <Route path="/about" element={<About />} />
                             <Route path="/contact" element={<Contact />} />
                             <Route path="/listOfMasjids" element={<ListOfMasjids />} />
+                            <Route path="/feedBack" element={<FeedBack />} />
                             <Route path="/addMasjid" element={<ProtectedRoute>
                                 <AddMasjid />
                             </ProtectedRoute>
@@ -42,6 +45,11 @@ function SurveyPage() {
                             />
                             <Route path="/reports" element={<ProtectedRoute>
                                 <Reports />
+                            </ProtectedRoute>
+                            }
+                            />
+                            <Route path="/broadCastMessage" element={<ProtectedRoute>
+                                <BroadcastMessage />
                             </ProtectedRoute>
                             }
                             />

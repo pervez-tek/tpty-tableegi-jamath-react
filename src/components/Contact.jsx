@@ -1,6 +1,6 @@
 import React from 'react'
 import photo from "../assets/images/photo.png";
-//import Pervez from "../assets/images/pervez.jpg";
+//import Pervez from "../assets/images/pervez.jpeg";
 import "./contact.css";
 
 const Contact = () => {

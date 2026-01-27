@@ -11,7 +11,7 @@ function ProfileCard({ user }) {
         <div className="profile-details text-start">
           <ul className="list-unstyled mb-0">
             <li><strong>Name:</strong> {user.name}</li>
-            <li><strong>Masjid Name:</strong> {user.masjidName}</li>
+            <li><strong>Halka :</strong> {user.halkaNo} <strong>Masjid Name:</strong> {user.masjidName}</li>
             <li><strong>Phone No:</strong> {user.phone}</li>
             <li><strong>Profession:</strong> {user.profession}</li>
             <li><strong>Email:</strong> {user.email}</li>

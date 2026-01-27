@@ -122,6 +122,20 @@ function Navbar() {
               </li>
             )}
 
+             {isLoggedIn && (
+              <li className="nav-item">
+                <NavLink
+                  className="nav-link"
+                  to="/broadCastMessage"
+                  onClick={closeMenu}
+                >
+                  Broadcast Message
+                </NavLink>
+              </li>
+            )}
+
+            
+
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink

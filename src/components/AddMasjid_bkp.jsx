@@ -6,8 +6,6 @@ import { initialMasjidsList, addDummyMasjid, updateDummyMasjid, deleteDummyMasji
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "./auth/AuthContext";
-import { usePagination } from "./pagination/usePagination";
-import PaginationControls from "./pagination/PaginationControls";
 
 const AddMasjid = () => {
     const halka = [
@@ -253,23 +251,6 @@ const AddMasjid = () => {
         console.log("Edited 2=" + JSON.stringify(form));
     };
 
-    // usePagination returns pageItems, pageSize, currentPage, etc.
-    const {
-        pageItems,
-        pageSize,
-        setPageSize,
-        currentPage,
-        setCurrentPage,
-        totalItems,
-        totalPages
-    } = usePagination(masjids, 5);
-
-    // Reset to first page when the data set changes (prevents empty page)
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [masjids, setCurrentPage]);
-
-    
     return (
         <>
             <div className="card shadow">
@@ -285,9 +266,7 @@ const AddMasjid = () => {
 
                     <form className="was-validated" onSubmit={handleSubmit}>
                         <input type="hidden" value={form.id || ""} name="id" />
-
                         <div className="form-floating mb-3 mt-3">
-                         
                             <select
                                 className="form-select"
                                 id="halkaNo"
@@ -359,28 +338,6 @@ const AddMasjid = () => {
             <hr />
 
             <h4 className="card-title text-center mb-4">Masjid List</h4>
-            {/* Controls outside the table */}
-            <div className="d-flex align-items-center mb-0">
-                <div className="ms-auto d-flex align-items-center">
-                    <select
-                        className="form-select form-select-sm me-3"
-                        style={{ width: 60, height: 30 }}
-                        value={pageSize}
-                        onChange={e => setPageSize(Number(e.target.value))}
-                    >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                        <option value={50}>50</option>
-                    </select>
-
-                    <PaginationControls
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onChange={setCurrentPage}
-                    />
-                </div>
-            </div>
             <div className="table-responsive">
                 <table className="table table-hover">
                     <thead className="table-warning">
@@ -413,7 +370,7 @@ const AddMasjid = () => {
                                 </td>
                             </tr>
                         )}
-                        {!loading && !error && pageItems.map((data, index) => (
+                        {!loading && !error && masjids.map((data, index) => (
                             <tr key={index} onClick={() => handleEdit(index)} className="cursor-pointer">
                                 <td>{data.halkaNo}</td>
                                 <td>{data.masjidName}</td>
@@ -442,16 +399,6 @@ const AddMasjid = () => {
                     </tbody>
                 </table>
 
-            </div>
-            {/* Bottom controls (outside table) */}
-            <div className="d-flex mt-2">
-                <div className="ms-auto">
-                    <PaginationControls
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onChange={setCurrentPage}
-                    />
-                </div>
             </div>
         </>
     );

@@ -2,11 +2,12 @@ import React from "react";
 
 function JamathCheckboxes({ value = [], onChange }) {
   const jamath = [
-    { id: "all", name: "all", label: "All", value: 0 },
+    { id: "all", name: "all", label: "-- All --", value: 0 },
     { id: "3days", name: "3days", label: "3 Days", value: 1 },
     { id: "40days", name: "40days", label: "40 Days", value: 2 },
     { id: "4months", name: "4months", label: "4 Months", value: 3 },
-    { id: "masthurath", name: "masthurath", label: "Masthurath", value: 4 }
+    { id: "masthurath", name: "masthurath", label: "Masthurath", value: 4 },
+    { id: "behroon", name: "behroon", label: "Behroon", value: 5 }
   ];
 
   const handleCheck = (e) => {

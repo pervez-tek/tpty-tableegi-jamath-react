@@ -7,6 +7,13 @@ export const initialMasjidsList = [
   { id: "", halkaNo: "5", masjidName: "Masjid-e-Rehmat", address: "Mumbai, Maharashtra" }
 ];
 
+export const hugeMasjidsList = Array.from({ length: 100 }, (_, i) => ({
+  id: i+1,
+  masjidName: i % 2 === 0 ? "Masjid-e-Quba-" + i : "Masjid-e-Bilal-" + i,
+  halkaNo: i % 2 === 0 ? 1 : 2,
+  address: i % 2 === 0 ? "Bengaluru, Karnataka" : "Mumbai, Maharashtra"
+}));
+
 // Utility functions for CRUD operations on dummy data
 export const addDummyMasjid = (list, masjid) => [...list, masjid];
 

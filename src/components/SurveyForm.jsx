@@ -18,6 +18,7 @@ const SurveyForm = () => {
         email: "",
         service: "",
         phone: "",
+        gender: "M",
         age: "",
         masjidId: "", // dropdown 
         jamath: [], // checkboxes group 
@@ -76,6 +77,7 @@ const SurveyForm = () => {
                             id: res.data.id || "",
                             age: res.data.age || "",
                             phone: res.data.phone || "",
+                            gender: res.data.gender || "",
                             masjidId: res.data.masjidId || "",
                             jamath: res.data.jamath || "",
                             _5aamal: res.data._5aamal || "",
@@ -131,6 +133,7 @@ const SurveyForm = () => {
             email: "",
             service: "",
             phone: "",
+            gender: "M",
             age: "",
             masjidId: "", // dropdown 
             jamath: [], // checkboxes group 
@@ -143,14 +146,14 @@ const SurveyForm = () => {
     };
 
     return (
-        <div className="card shadow">
+        <div className="card shadow p-1">
             <div className="card-body">
                 <div className="table-responsive">
                     <table>
                         <tbody>
                             <tr>
                                 <td>
-                                    <h4 className="card-title text-center mb-4">
+                                    <h4 className="card-title text-center mb-1">
                                         {APP_HEADING}
                                     </h4>
                                 </td>
@@ -160,21 +163,13 @@ const SurveyForm = () => {
                             </tr>
                             <tr>
                                 <td>
-                                    <div className="text-center mb-3">
-                                        <img
-                                            //src={`${ROOT_API_URL}${form.image}`}
-                                            src={form.image ? `${ROOT_API_URL}${form.image}` : Man}
+                                    <div className="card-title text-start mb-0">
+                                        <img                                        
+                                            src={form.image ? `${ROOT_API_URL}${form.image}` : form.gender === "F" ? Wom : Man} // 👈 fallback female avatar : Man}
                                             alt="Profile"
                                             className="rounded-circle"
                                             width="50px" height="50px"
-                                        />
-                                        {/* <img
-                                            //src={`${ROOT_API_URL}${form.picture}`}
-                                            src={form.picture ? `${ROOT_API_URL}${form.picture}` : Wom}
-                                            alt="Profile"
-                                            className="rounded-circle"
-                                            width="50px" height="50px"
-                                        /> */}
+                                        />                            
                                     </div>
                                 </td>
                             </tr>
@@ -185,7 +180,10 @@ const SurveyForm = () => {
 
                 <form onSubmit={submitSurvey} className="was-validated">
                     <div className="form-floating mb-3 mt-3">
-                        <input type="email" className="form-control" value={form.email} name="email" onChange={handleChange} placeholder="Enter email" required />
+                        <input type="email" className="form-control"
+                            value={form.email} name="email" onChange={handleChange} placeholder="Enter email"
+                            pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$"
+                        />
                         <label className="form-label">Email</label>
                     </div>
 
@@ -203,10 +201,10 @@ const SurveyForm = () => {
                         <input type="tel" pattern="[0-9]{10}" className="form-control" maxLength="10" name="phone"
                             value={form.phone}
                             //onChange={handleChange} 
-                            onChange={(e) => setForm({ ...form, phone: Number(e.target.value) }) // 👈 convert to number 
+                            onChange={(e) => setForm({ ...form, phone: e.target.value }) // 👈 convert to number 
                             }
                             placeholder="Enter phone"
-                            required />
+                        />
                         <label className="form-label">Phone 10 Digits (0-9)</label>
                     </div>
 
@@ -222,6 +220,47 @@ const SurveyForm = () => {
                     <div className="table-responsive">
                         <table className="table table-hover">
                             <tbody>
+                                <tr>
+                                    <td>
+                                        <label className="form-label">Gender</label>
+                                    </td>
+                                    <td>
+                                        <div className="d-flex flex-row align-items-start">
+                                            <div className="me-3">
+                                                <input
+                                                    type="radio"
+                                                    id="male"
+                                                    name="gender"
+                                                    className="form-check-input"
+                                                    onChange={(e) => setForm({ ...form, gender: e.target.value, picture: Man })}
+                                                    value="M"
+                                                    checked={form.gender === "M"}
+                                                    required
+                                                />
+                                                <label className="form-check-label ms-1" htmlFor="male">
+                                                    Male
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <input
+                                                    type="radio"
+                                                    id="female"
+                                                    name="gender"
+                                                    className="form-check-input"
+                                                    onChange={(e) => setForm({ ...form, gender: e.target.value, picture: Wom })}
+                                                    value="F"
+                                                    checked={form.gender === "F"}
+                                                    required
+                                                />
+                                                <label className="form-check-label ms-1" htmlFor="female">
+                                                    Female
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
                                 <tr>
                                     <td>
                                         <label className="form-label">Jamath</label>
@@ -246,8 +285,11 @@ const SurveyForm = () => {
 
                     <div className="form-floating">
                         <textarea className="form-control" name="comment" placeholder="Comment goes here" onChange={handleChange}
-                            value={form.comment} />
+                            value={form.comment} maxLength={300} />
                         <label className="form-check-label" htmlFor="comment">Comments</label>
+                        <div className={300 - form.comment.length < 20 ? "text-danger" : "form-text"}>
+                            {300 - form.comment.length} characters remaining
+                        </div>
                     </div>
                     <div className="form-check">
                         <input
