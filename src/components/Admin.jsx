@@ -110,7 +110,7 @@ const Admin = () => {
 
           <div className="form-floating mb-3 mt-3">
             <input
-              type="text"   // 👈 use password type instead of email
+              type="password"   // 👈 use password type instead of email
               className="form-control"
               name="password"
               value={form.password}

@@ -10,7 +10,8 @@ import { Route, Routes } from 'react-router';
 import About from './components/About';
 import SurveyForm from './components/SurveyForm';
 import { AuthProvider } from "./components/auth/AuthContext"; // ✅ correct path
-import { ToastContainer } from "react-toastify"; import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -37,6 +38,7 @@ function App() {
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
+        limit={1}
         pauseOnHover />
       <AuthProvider>
         <Navbar />
