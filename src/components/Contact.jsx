@@ -10,13 +10,27 @@ const Contact = () => {
 
   return (
     <div className="card text-center">
-      <img className="rounded-circle img-fluid" src={photo} alt="profile" />
+      <div className="card-header bg-light">
+        <div className="d-flex align-items-center text-start">
+          {/* Profile Image */}
+          <img
+            className="rounded-circle img-fluid border border-3 border-success shadow-sm me-3"
+            src={photo}
+            alt="profile"
+            style={{ width: "120px", height: "120px", objectFit: "cover" }}
+          />
 
-      <div className="card-body">
-        <h4 className="card-title fs-4 fs-md-3 fs-lg-2">Pervez Mohammad</h4>
-        <p className="card-text">Software Architect and Engineer...</p>
-
+          {/* Text Section */}
+          <div>
+            <h4 className="card-title fs-4">Pervez Mohammad</h4>
+            <p className="card-text mb-0">Software Architect and Engineer...</p>
+          </div>
+        </div>
       </div>
+
+
+
+
 
       <div className="mt-4 pt-5 pb-5 px-3 bg-success text-white rounded">
         <p>నేను సాఫ్ట్‌వేర్ అభివృద్ధి పట్ల ఎంతో ఉత్సాహం మరియు ఆసక్తి కలిగిన డెవలపర్‌ను. సాంకేతికతను మంచి ఉద్దేశంతో ఉపయోగిస్తే సమాజానికి ఉపయోగపడుతుందనే నమ్మకం నాకు ఉంది. అల్లాహ్ (సుబ్హానహు వ తఆలా) కృపతో, నా సాంకేతిక నైపుణ్యాలను ముస్లిం సమాజ సేవకు వినియోగించాలనే ఆశయం నాకు ఉంది.
