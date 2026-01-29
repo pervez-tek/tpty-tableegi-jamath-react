@@ -12,6 +12,7 @@ import "./navbar.css";
 
 function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
 
 
   const toggleMenu = () => {
@@ -25,7 +26,7 @@ function Navbar() {
   };
 
 
-  const navigate = useNavigate();
+
 
   const closeMenu = () => {
     const nav = document.getElementById("navbarNav");
@@ -122,7 +123,7 @@ function Navbar() {
               </li>
             )}
 
-             {isLoggedIn && (
+            {isLoggedIn && (
               <li className="nav-item">
                 <NavLink
                   className="nav-link"
@@ -134,7 +135,7 @@ function Navbar() {
               </li>
             )}
 
-            
+
 
             {isLoggedIn && (
               <li className="nav-item">

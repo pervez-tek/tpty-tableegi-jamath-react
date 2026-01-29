@@ -9,6 +9,7 @@ import { useAuth } from "./auth/AuthContext";
 import { usePagination } from "./pagination/usePagination";
 import PaginationControls from "./pagination/PaginationControls";
 
+
 const AddMasjid = () => {
     const halka = [
         { id: 1, name: "Halka-1" },
@@ -73,14 +74,15 @@ const AddMasjid = () => {
         }).catch((error) => {
             console.error("Error fetching masjids:", error);
             if (error.code === "ERR_NETWORK") {
-                // Custom handling for network errors
-                showNotification("⚠️ Network error, showing dummy data instead!", "warning");
+                // Custom handling for network errors                
+                toast.warning("Network error, showing dummy data instead!.");
                 setMasjids(initialMasjidsList);
                 setError("");
             } else {
                 // Other errors (e.g. 400/500 from backend)
                 const backendMessage = error.response?.data?.message || error.message;
-                showNotification(`❌ Error: ${backendMessage}`, "danger");
+                //showNotification(`❌ Error: ${backendMessage}`, "danger");
+                toast.error(`Error: ${backendMessage}`);
                 //setError(`${error.response?.data || error.message} Unable to fetch data.`);
                 setMasjids(initialMasjidsList);
                 setError("");
@@ -102,14 +104,14 @@ const AddMasjid = () => {
 
     const [editIndex, setEditIndex] = useState(null);
 
-    // Notification state 
-    const [notification, setNotification] = useState({ show: false, message: "", variant: "success" });
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
 
+    // Notification state 
+    const [notification, setNotification] = useState({ show: false, message: "", variant: "success" });
 
     const showNotification = (message, variant = "success") => {
         setNotification({ show: true, message, variant });
@@ -150,14 +152,19 @@ const AddMasjid = () => {
                     updatedMasjids[editIndex] = response.data;
                     setMasjids(updatedMasjids);
 
+                    toast.info(`Masjid updated successfully by ${initialLogin.username}!`);
+                    //showNotification(`✅ Masjid updated successfully by ${initialLogin.username}!`, "info");
 
-                    showNotification(`✅ Masjid updated successfully by ${initialLogin.username}!`, "info");
                 })
                 .catch(error => {
                     console.error("Error:", error.response?.data || error.message);
                     if (error.code === "ERR_NETWORK") {
                         setMasjids(updateDummyMasjid(masjids, form));
-                        showNotification("⚠️ Network error, updated locally!", "warning");
+                        //showNotification("⚠️ Network error, updated locally!", "error");
+                        toast.error(`Network error, updated locally!`);
+                    } else if (error.response?.status === 409) {
+                        //showNotification(error.response.data.message, "error");
+                        toast.error(error.response.data.message);
                     }
 
                 });
@@ -177,14 +184,21 @@ const AddMasjid = () => {
                 .then(response => {
                     console.log("Response: from addMasjid API = " + JSON.stringify(response.data));
                     setMasjids([...masjids, response.data]);
-                    showNotification(`✅ Masjid added successfully by ${initialLogin.username}!`, "success");
+                    //showNotification(`✅ Masjid added successfully by ${initialLogin.username}!`, "success");
+                    toast.success(`Masjid added successfully by ${initialLogin.username}!`);
                 })
                 .catch(error => {
                     console.error("Error:", error.response?.data || error.message);
                     if (error.code === "ERR_NETWORK") {
                         setMasjids(addDummyMasjid(masjids, form));
-                        showNotification("⚠️ Network error, added locally!", "warning");
+                        //showNotification("⚠️ Network error, added locally!", "error");
+                        toast.error(`Network error, updated locally!`);
+                    } else if (error.response?.status === 409) {
+                        //showNotification(error.response.data.message, "error");
+                        toast.error(error.response.data.message);
                     }
+
+
                 });
         }
 
@@ -220,12 +234,14 @@ const AddMasjid = () => {
             })
                 .then(() => {
                     setMasjids(updatedMasjids);
-                    showNotification(`🗑️ Masjid deleted successfully by ${initialLogin.username}!`, "danger");
+                    // showNotification(`🗑️ Masjid deleted successfully by ${initialLogin.username}!`, "danger");
+                    toast.success(`Masjid deleted successfully by ${initialLogin.username}!`);
                 })
                 .catch(error => {
                     if (error.code === "ERR_NETWORK") {
                         setMasjids(deleteDummyMasjid(masjids, index));
-                        showNotification("⚠️ Network error, deleted locally!", "warning");
+                        //showNotification("⚠️ Network error, deleted locally!", "warning");
+                        toast.error("Network error, deleted locally!");
                     }
                 });
         } catch (err) {
@@ -269,7 +285,7 @@ const AddMasjid = () => {
         setCurrentPage(1);
     }, [masjids, setCurrentPage]);
 
-    
+
     return (
         <>
             <div className="card shadow">
@@ -287,7 +303,7 @@ const AddMasjid = () => {
                         <input type="hidden" value={form.id || ""} name="id" />
 
                         <div className="form-floating mb-3 mt-3">
-                         
+
                             <select
                                 className="form-select"
                                 id="halkaNo"

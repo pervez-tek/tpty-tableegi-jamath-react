@@ -165,7 +165,7 @@ const SurveyForm = () => {
                                 <td>
                                     <div className="card-title text-start mb-0">
                                         <img                                        
-                                            src={form.image ? `${ROOT_API_URL}${form.image}` : form.gender === "F" ? Wom : Man} // 👈 fallback female avatar : Man}
+                                            src={form.image ? form.image : form.gender === "F" ? Wom : Man} // 👈 fallback female avatar : Man}
                                             alt="Profile"
                                             className="rounded-circle"
                                             width="50px" height="50px"

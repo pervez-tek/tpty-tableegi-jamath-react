@@ -274,8 +274,8 @@ function Reports() {
                         email: user.email,
                         comments: user.comments || user.comment,
                         image: user.image
-                          ? `${ROOT_API_URL}${user.image}`
-                          : index % 2 === 0
+                          ? user.image
+                          : user.gender === 'M'
                             ? Man
                             : Wom
                       }}
