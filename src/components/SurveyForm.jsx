@@ -161,7 +161,7 @@ const SurveyForm = () => {
                                     </h4>
                                 </td>
                                 <td>
-                                    <GoogleButton onClick={handleGoogleClick} />
+                                    {/* <GoogleButton onClick={handleGoogleClick} /> */}
                                 </td>
                             </tr>
                             <tr>
