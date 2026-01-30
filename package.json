@@ -8,7 +8,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "clean:cache": "rimraf node_modules/.cache"
+    "clean:cache": "rimraf node_modules/.cache",
+    "postbuild": "cp public/_redirects dist/_redirects && cp public/_headers dist/_headers"
+
+
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
