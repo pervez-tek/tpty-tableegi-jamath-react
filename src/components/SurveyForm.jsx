@@ -33,7 +33,7 @@ const SurveyForm = () => {
     const ROOT_API_URL = import.meta.env.VITE_BACKEND_ROOT_URL;
 
     const [add, setAdd] = useState(true);
-    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
 
@@ -102,9 +102,7 @@ const SurveyForm = () => {
     };
 
     const submitSurvey = async (e) => {
-        if (loading) return; // guard
         e.preventDefault();
-        setLoading(true);
         console.log(form)
 
 
@@ -123,7 +121,6 @@ const SurveyForm = () => {
         } else {
             toast.success("Survey updated successfully!");
         }
-        setLoading(false);
         handleReset();
         setAdd(true);
     };
@@ -167,12 +164,12 @@ const SurveyForm = () => {
                             <tr>
                                 <td>
                                     <div className="card-title text-start mb-0">
-                                        <img
+                                        <img                                        
                                             src={form.image ? form.image : form.gender === "F" ? Wom : Man} // 👈 fallback female avatar : Man}
                                             alt="Profile"
                                             className="rounded-circle"
                                             width="50px" height="50px"
-                                        />
+                                        />                            
                                     </div>
                                 </td>
                             </tr>
@@ -313,14 +310,7 @@ const SurveyForm = () => {
                     &nbsp;
                     <div className="d-grid gap-3">
                         <button className="btn btn-primary w-100">
-                            {loading
-                                ? add
-                                    ? "Submitting Survey..."
-                                    : "Updating Survey..."
-                                : add
-                                    ? "Submit Survey"
-                                    : "Update Survey"}
-
+                            {add && add ? "Submit" : "Update"} Survey
                         </button>
                         <button className="btn btn-danger w-100" onClick={handleReset}>
                             Reset
