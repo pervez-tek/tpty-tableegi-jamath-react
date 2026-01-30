@@ -17,7 +17,7 @@ const BroadcastMessage = () => {
     const location = useLocation();
     const navLoginData = location.state?.loginData;
     // after Login from Admin capturing user login information
-    // Try sessionStorage fallback (optional) 
+    // Try sessionStorage fallback (optional) setEditIndex 
     const stored = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
     const persisted = stored ? JSON.parse(stored) : null;
     const initialLogin = navLoginData ?? persisted ?? { adminUsrTrackingId: "", username: "", sessionid: null, usrAdminId: "" };
@@ -59,8 +59,9 @@ const BroadcastMessage = () => {
 
 
     const handleSubmit = (e) => {
+        if (loading) return; // guard
         e.preventDefault();
-
+        setLoading(true);
         const payload = {
             ...form,
             adminUsrTrackingId: initialLogin.id,
@@ -93,12 +94,11 @@ const BroadcastMessage = () => {
 
             });
 
-
+        setLoading(false);
         handleReset();
     };
 
     const handleReset = () => {
-        setEditIndex(null);
         setForm({
             id: "", subject: 0, message: "",
             adminUsrTrackingId: initialLogin.id ?? "", username: initialLogin.username ?? "", sessionid: initialLogin.sessionid ?? null,
@@ -157,7 +157,7 @@ const BroadcastMessage = () => {
 
                     <div className="d-grid gap-3">
                         <button type="submit" className="btn btn-primary w-100">
-                            Send Message
+                            {loading ? "Sending Message..." : "Send Message"}
                         </button>
                         <button
                             type="button"

@@ -7,6 +7,7 @@ import StarRating from "./StarRating";
 const FeedBack = () => {
 
     const API_URL = import.meta.env.VITE_BACKEND_URL;
+    const [loading, setLoading] = useState(true);
 
     const [form, setForm] = useState(() => (
         {
@@ -22,7 +23,9 @@ const FeedBack = () => {
 
 
     const handleSubmit = (e) => {
+        if (loading) return; // guard
         e.preventDefault();
+        setLoading(true);
         console.log("Form:" + JSON.stringify(form));
         // console.log("Update=" + JSON.stringify(form));
         axios.post(`${API_URL}/sendFeedBack`, form, {
@@ -42,7 +45,7 @@ const FeedBack = () => {
 
             });
 
-
+        setLoading(false);
         handleReset();
     };
 
@@ -129,7 +132,7 @@ const FeedBack = () => {
 
                     <div className="d-grid gap-3">
                         <button type="submit" className="btn btn-primary w-100">
-                            Send FeedBack
+                            {loading ? "Sending FeedBack..." : "Send FeedBack"}
                         </button>
                         <button
                             type="button"
