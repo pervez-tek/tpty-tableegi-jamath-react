@@ -34,11 +34,11 @@ function App() {
   useEffect(() => {
     const handleUnload = () => {
 
-      //console.log("Befor Unload calling" + JSON.stringify(user));
+      console.log("Befor Unload calling" + JSON.stringify(user));
       const payload =
         JSON.parse(sessionStorage.getItem("user") || "{}");
-      //console.log("Test:" + JSON.stringify(JSON.parse(sessionStorage.getItem("user"))));
-      //console.log("Befor Unload calling" + JSON.stringify(payload));
+      console.log("Test:" + JSON.stringify(JSON.parse(sessionStorage.getItem("user"))));
+      console.log("Befor Unload calling" + JSON.stringify(payload));
       if (!payload || !payload.usrAdminId) return;
 
       const blob = new Blob(

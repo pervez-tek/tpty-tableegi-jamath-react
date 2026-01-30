@@ -58,10 +58,9 @@ const BroadcastMessage = () => {
     };
 
 
-    const handleSubmit = (e) => {
-        if (loading) return; // guard
+    const handleSubmit = (e) => {       
         e.preventDefault();
-        setLoading(true);
+                 
         const payload = {
             ...form,
             adminUsrTrackingId: initialLogin.id,
@@ -94,7 +93,7 @@ const BroadcastMessage = () => {
 
             });
 
-        setLoading(false);
+        
         handleReset();
     };
 
@@ -157,7 +156,7 @@ const BroadcastMessage = () => {
 
                     <div className="d-grid gap-3">
                         <button type="submit" className="btn btn-primary w-100">
-                            {loading ? "Sending Message..." : "Send Message"}
+                          Send Message
                         </button>
                         <button
                             type="button"
