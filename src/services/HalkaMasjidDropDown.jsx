@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { initialMasjidsList1 } from "../components/dummyMasjidsData";
+//import { initialMasjidsList1 } from "../components/dummyMasjidsData";
 import { toast } from "react-toastify";
 
 
