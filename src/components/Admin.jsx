@@ -68,12 +68,12 @@ const Admin = () => {
             login(user); // from useAuth
             navigate("/addMasjid", { state: { loginData: user } });
             toast.warning("⚠️ Network error, showing dummy authentication instead!");
+          } else {
+            console.error("Error:", error.response?.data || error.message);
+            const backendMessage = error.response?.data?.message || error.message;
+            toast.error(`❌ Error: ${backendMessage}`);
+            navigate("/login");
           }
-
-          console.error("Error:", error.response?.data || error.message);
-          const backendMessage = error.response?.data?.message || error.message;
-          toast.error(`❌ Error: ${backendMessage}`);
-          navigate("/login");
 
         } else {
           // Other errors (e.g. 400/500 from backend)

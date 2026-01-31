@@ -1,25 +1,48 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-
-//import { initialMasjidsList } from "./dummyMasjidsData";
+import { initialMasjidsList1 } from "../components/dummyMasjidsData";
 import { toast } from "react-toastify";
 
 
 // dummyMasjidsData.js
 export const initialMasjidsList = {
   1: [
-    { id: "AP-001", masjidName: "Masjid-e-Quba (AP)" },
-    { id: "TG-001", masjidName: "Masjid Noor (TG)" },
-    { id: "KA-001", masjidName: "Masjid-e-Bilal (KA)" }
+    { id: "TG-001", masjidName: "Masjid-e-Quba (Telangana)" },
+    { id: "AP-001", masjidName: "Masjid Noor (Andhra Pradesh)" },
+    { id: "KA-001", masjidName: "Masjid-e-Bilal (Karnataka)" },
+    { id: "MH-001", masjidName: "Masjid-e-Rehmat (Maharashtra)" }
   ],
+
   2: [
-    { id: "Doha-001", masjidName: "Masjid-e-Madina (Doha)" },
-    { id: "Riyadh-001", masjidName: "Masjid-e-Rehmat (Riyadh)" }
+    { id: "TN-001", masjidName: "Masjid-e-Madina (Tamil Nadu)" },
+    { id: "KL-001", masjidName: "Masjid-e-Noorani (Kerala)" },
+    { id: "GJ-001", masjidName: "Masjid-e-Huda (Gujarat)" }
   ],
+
+  3: [
+    { id: "UP-001", masjidName: "Masjid-e-Ali (Uttar Pradesh)" },
+    { id: "RJ-001", masjidName: "Masjid-e-Umar (Rajasthan)" },
+    { id: "MP-001", masjidName: "Masjid-e-Kausar (Madhya Pradesh)" }
+  ],
+
+  4: [
+    { id: "WB-001", masjidName: "Masjid-e-Nur (West Bengal)" },
+    { id: "BR-001", masjidName: "Masjid-e-Taqwa (Bihar)" },
+    { id: "JH-001", masjidName: "Masjid-e-Siddiq (Jharkhand)" }
+  ],
+
+  5: [
+    { id: "PB-001", masjidName: "Masjid-e-Farooq (Punjab)" },
+    { id: "HR-001", masjidName: "Masjid-e-Anwar (Haryana)" },
+    { id: "DL-001", masjidName: "Masjid-e-Aqsa (Delhi)" }
+  ],
+
   0: [
-    { id: "GEN-001", masjidName: "General Masjid (No Halka)" }
+    { id: "GEN-001", masjidName: "General Masjid (No Halka)" },
+    { id: "GEN-002", masjidName: "Common Area Masjid" }
   ]
 };
+
 
 
 
