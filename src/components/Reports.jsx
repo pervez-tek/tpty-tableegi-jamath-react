@@ -126,7 +126,7 @@ function Reports() {
     setFromDate("");
     setToDate("");
     setResults(null);
-    setShowResults(prev => !prev)
+    setShowResults(false)
   };
 
   // usePagination returns pageItems, pageSize, currentPage, etc.
