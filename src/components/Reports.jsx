@@ -58,6 +58,7 @@ function Reports() {
   const dummyProfiles = Array.from({ length: 100 }, (_, i) => ({
     name: i % 2 === 0 ? "Ahmed Khan" : "Sana Khan",
     masjidName: "Masjid-e-Quba",
+    gender:i % 2 === 0 ? "M" : "F",
     halkaNo: i % 2 === 0 ? 1 : 2,
     phone: "+91 9876543210",
     profession: "Engineer",
