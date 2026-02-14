@@ -6,7 +6,10 @@ const Footer = () => (
     <p className="mb-1">© 2026 Tableegi Jamath Survey App</p>
 
     <NavLink to="/feedBack" className="footer-link">
-      Send Feedback
+      <button
+        className="btn btn-dark glow-warning">
+        Send Feedback
+      </button>
     </NavLink>
   </footer>
 

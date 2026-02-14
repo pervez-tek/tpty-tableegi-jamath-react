@@ -92,7 +92,7 @@ function Navbar({ menuOpen, setMenuOpen }) {
         </Link>
 
         <div className="me-auto d-flex align-items-center gap-2">
-          <ImLocation2 className="location-icon" />
+          <ImLocation2 className="location-icon glow-icon-warning" />
           <span className="fw-semibold text-white-50">Tirupati</span>
         </div>
 

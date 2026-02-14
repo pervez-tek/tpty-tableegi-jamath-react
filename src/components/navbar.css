@@ -2,7 +2,7 @@
   /*background-color: rgb(7 77 49 / 1) !important;*/
   background-color: rgb(27 131 84/var(--tw-bg-opacity, 1)) !important;
   text-align: right;
-  
+
 }
 
 /* Brand + links */
@@ -60,7 +60,7 @@
   padding: 8px 15px;
   font-weight: bold;
   font-size: large;
-  margin-right:10px;
+  margin-right: 10px;
 }
 
 .location-icon {
@@ -73,6 +73,20 @@
   flex-direction: row;
   cursor: pointer;
 }
+
+/* 🌟 Glow Effect */
+.glow-icon-warning {
+  filter: none;
+  transition: all 0.3s ease;
+}
+
+.glow-icon-warning:hover {
+  filter: drop-shadow(0 0 6px #ffc107)
+          drop-shadow(0 0 12px #ffc107)
+          drop-shadow(0 0 20px rgba(255, 193, 7, 0.8));
+  transform: scale(1.15);
+}
+
 
 .menu-icons {
   font-size: 18px;
@@ -117,7 +131,8 @@
 
 /* When open */
 .animated-collapse.show {
-  max-height: 500px; /* enough height for menu */
+  max-height: 500px;
+  /* enough height for menu */
   opacity: 1;
   transform: translateY(0);
 }

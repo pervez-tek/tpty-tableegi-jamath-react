@@ -29,3 +29,25 @@
 .footer-link:hover {
   text-decoration: underline;
 }
+
+.glow-warning {
+  position: relative;
+  z-index: 1;
+  overflow: visible !important;
+}
+
+.glow-warning::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  background: #ffc107; /* ✅ Yellow glow */
+  filter: blur(18px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+  border-radius: 12px;
+}
+
+.glow-warning:hover::before {
+  opacity: 0.7;
+}
