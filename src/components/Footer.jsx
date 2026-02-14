@@ -1,12 +1,18 @@
 import { Link, NavLink } from "react-router-dom";
+import "./footer.css";
 
 const Footer = () => (
-  <footer className="bg-dark text-white text-center py-3 mt-2 sticky-bottom">
-    © 2026 Tableegi Jamath Survey App
-    <NavLink className="nav-link" to="/feedBack">
+  <footer className="mobile-footer">
+    <p className="mb-1">© 2026 Tableegi Jamath Survey App</p>
+
+    <NavLink to="/feedBack" className="footer-link">
       Send Feedback
     </NavLink>
   </footer>
+
+
+
+
 );
 
 export default Footer;

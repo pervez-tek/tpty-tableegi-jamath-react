@@ -73,6 +73,9 @@ function App() {
       <AuthProvider>
         <Navbar />
         <SurveyPage />
+        <br></br>
+        <br></br>
+        <br></br>
         <Footer />
       </AuthProvider>
 
