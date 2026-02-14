@@ -132,7 +132,7 @@ const FeedBack = () => {
 
                     <div className="d-grid gap-3">
                         <button type="submit" className="btn btn-primary w-100">
-                            {loading ? "Sending FeedBack..." : "Send FeedBack"}
+                            {loading ? "Send FeedBack" : "Sending FeedBack..."}
                         </button>
                         <button
                             type="button"

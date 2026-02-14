@@ -102,36 +102,36 @@ function Navbar() {
             {!isLoggedIn && (
               <li className="nav-item">
                 <NavLink className={({ isActive }) =>
-                  isActive ? "nav-link active" : "nav-link"
-                } to="/login" onClick={closeMenu}>
+                  isActive ? "nav-link active active-link" : "nav-link"}
+                  to="/login" onClick={closeMenu}>
 
                   Admin &nbsp;
-                  <GrUserAdmin />
+                  <GrUserAdmin className="menu-icons" />
                 </NavLink>
               </li>
             )}
             <li className="nav-item">
               <NavLink className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"}
+                isActive ? "nav-link active active-link" : "nav-link"}
                 to="/surveyForm" onClick={closeMenu}>
-                User &nbsp;
-                <RiSurveyLine />
+                Survey &nbsp;
+                <RiSurveyLine className="menu-icons" />
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"}
+                isActive ? "nav-link active active-link" : "nav-link"}
                 to="/about" onClick={closeMenu}>
                 About &nbsp;
-                <TbArrowRoundaboutLeft />
+                <TbArrowRoundaboutLeft className="menu-icons" />
               </NavLink>
             </li>
             <li className="nav-item">
               <NavLink className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"}
+                isActive ? "nav-link active active-link" : "nav-link"}
                 to="/listOfMasjids" onClick={closeMenu}>
                 List Of Majids &nbsp;
-                <MdMosque />
+                <MdMosque className="menu-icons" />
               </NavLink>
             </li>
             {/* <li className="nav-item">
@@ -143,37 +143,35 @@ function Navbar() {
             </li> */}
             <li className="nav-item">
               <NavLink className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"}
+                isActive ? "nav-link active active-link" : "nav-link"}
                 to="/contact" onClick={closeMenu}>
                 Contact &nbsp;
-                <MdContactMail />
+                <MdContactMail className="menu-icons" />
               </NavLink>
             </li>
 
             {isLoggedIn && (
               <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"}
+                <NavLink className={({ isActive }) =>
+                  isActive ? "nav-link active active-link" : "nav-link"}
                   to="/addMasjid"
                   onClick={closeMenu}
                 >
                   Add Masjid &nbsp;
-                  <FaMosque />
+                  <FaMosque className="menu-icons" />
                 </NavLink>
               </li>
             )}
 
             {isLoggedIn && (
               <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"}
+                <NavLink className={({ isActive }) =>
+                  isActive ? "nav-link active active-link" : "nav-link"}
                   to="/broadCastMessage"
                   onClick={closeMenu}
                 >
                   Broadcast Message &nbsp;
-                  <RiBroadcastFill />
+                  <RiBroadcastFill className="menu-icons" />
                 </NavLink>
               </li>
             )}
@@ -182,30 +180,29 @@ function Navbar() {
 
             {isLoggedIn && (
               <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"}
+                <NavLink className={({ isActive }) =>
+                  isActive ? "nav-link active active-link" : "nav-link"}
                   to="/reports"
                   onClick={closeMenu}
                 >
                   Reports &nbsp;
-                  <TbReportSearch />
+                  <TbReportSearch className="menu-icons" />
                 </NavLink>
               </li>
             )}
 
             {isLoggedIn && (
               <li className="nav-item">
-                <NavLink
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"}
+                <NavLink className={({ isActive }) =>
+                  isActive ? "nav-link active active-link" : "nav-link"}
+                  to="/login"
                   onClick={() => {
                     singout();
                     closeMenu();
                   }}
                 >
                   Logout &nbsp;
-                  <RiLogoutCircleLine />
+                  <RiLogoutCircleLine className="menu-icons" />
                 </NavLink>
               </li>
             )}

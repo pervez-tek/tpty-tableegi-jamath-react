@@ -61,10 +61,32 @@
 }
 
 .location-icon {
-  width: 30px;
-  height: 30px;
-  color: #fff !important; /* custom orange */
+  width: 38px;
+  height: 38px;
+  color: #fff !important;
+  /* custom orange */
   justify-content: left;
   text-align: left;
   flex-direction: row;
+  cursor: pointer;
+}
+
+.menu-icons {
+  font-size: 18px;
+  margin-left: 6px;
+  transition: all 0.3s ease;
+  color: #ccc; /* normal */
+}
+
+.active-link .menu-icons {
+  font-size: 24px;       /* bigger */
+  color: #ffc107;        /* highlight */
+  transform: scale(1.2); /* pop effect */
+  animation: bounce 0.4s ease;
+}
+
+@keyframes bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1.2); }
 }
