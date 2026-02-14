@@ -37,49 +37,53 @@ const ListOfMasjids = lazy(() => import("../components/ListOfMasjids"));
 
 const Loader = () => <div className="text-center mt-5">Loading...</div>;
 
-function SurveyPage() {
+function SurveyPage({ menuOpen }) {
     return (
         <>
-            <div className="container mt-3 pt-5" >
-                <div className="profile-image">
-                    <img
-                        src={Kalima}
-                        alt="profile"
-                        height="50px"
-                        width="300px"
-                    />
-                </div>
-                <div className="row justify-content-center custom-row">
-                    <div className="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-8 mx-4">
-                        <Suspense fallback={<Loader />}>
-                            <Routes>
-                                <Route path="/" element={<SurveyForm />} />
-                                <Route path="/login" element={<Admin />} />
-                                <Route path="/surveyForm" element={<SurveyForm />} />
-                                <Route path="/about" element={<About />} />
-                                <Route path="/contact" element={<Contact />} />
-                                <Route path="/listOfMasjids" element={<ListOfMasjids />} />
-                                <Route path="/feedBack" element={<FeedBack />} />
-                                <Route path="/loginForm" element={<LoginForm />} />
-                                <Route path="/addMasjid" element={<ProtectedRoute>
-                                    <AddMasjid />
-                                </ProtectedRoute>
-                                }
-                                />
-                                <Route path="/reports" element={<ProtectedRoute>
-                                    <Reports />
-                                </ProtectedRoute>
-                                }
-                                />
-                                <Route path="/broadCastMessage" element={<ProtectedRoute>
-                                    <BroadcastMessage />
-                                </ProtectedRoute>
-                                }
-                                />
-                                {/* 404 – MUST BE LAST */}
-                                <Route path="*" element={<NotFound />} />
-                            </Routes>
-                        </Suspense>
+            <div className={`page-content ${menuOpen ? "shift-down" : ""}`}>
+                <div className="container mt-3 pt-5" >
+                    <div className="profile-image">
+                        <img
+                            src={Kalima}
+                            alt="profile"
+                            height="50px"
+                            width="300px"
+                        />
+                    </div>
+                    <div className="row justify-content-center custom-row">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-8 mx-4">
+                            <Suspense fallback={<Loader />}>
+
+                                <Routes>
+                                    <Route path="/" element={<SurveyForm />} />
+                                    <Route path="/login" element={<Admin />} />
+                                    <Route path="/surveyForm" element={<SurveyForm />} />
+                                    <Route path="/about" element={<About />} />
+                                    <Route path="/contact" element={<Contact />} />
+                                    <Route path="/listOfMasjids" element={<ListOfMasjids />} />
+                                    <Route path="/feedBack" element={<FeedBack />} />
+                                    <Route path="/loginForm" element={<LoginForm />} />
+                                    <Route path="/addMasjid" element={<ProtectedRoute>
+                                        <AddMasjid />
+                                    </ProtectedRoute>
+                                    }
+                                    />
+                                    <Route path="/reports" element={<ProtectedRoute>
+                                        <Reports />
+                                    </ProtectedRoute>
+                                    }
+                                    />
+                                    <Route path="/broadCastMessage" element={<ProtectedRoute>
+                                        <BroadcastMessage />
+                                    </ProtectedRoute>
+                                    }
+                                    />
+                                    {/* 404 – MUST BE LAST */}
+                                    <Route path="*" element={<NotFound />} />
+                                </Routes>
+
+                            </Suspense>
+                        </div>
                     </div>
                 </div>
             </div>

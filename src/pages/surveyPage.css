@@ -18,3 +18,12 @@
   margin-right: calc(-.9 * var(--bs-gutter-x)) !important;
   margin-left: calc(-.9 * var(--bs-gutter-x)) !important;
 }
+
+.page-content {
+  transition: transform 0.4s ease;
+}
+
+.page-content.shift-down {
+  transform: translateY(200px);
+}
+

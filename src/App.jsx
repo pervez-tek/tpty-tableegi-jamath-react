@@ -18,6 +18,7 @@ function App() {
   const { user, isLoggedIn, logout } = useAuth;
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     document.title = import.meta.env.VITE_REACT_APP_TITLE || "Default Title";
@@ -47,7 +48,7 @@ function App() {
       );
       console.log("Befor Unload calling" + JSON.stringify(blob));
       navigator.sendBeacon(`${API_URL}/signOut`, blob);
-      sessionStorage.removeItem("user");  
+      sessionStorage.removeItem("user");
       sessionStorage.setItem("autoLogout", "true");
     };
 
@@ -71,8 +72,8 @@ function App() {
         limit={1}
         pauseOnHover />
       <AuthProvider>
-        <Navbar />
-        <SurveyPage />
+        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <SurveyPage  menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         <br></br>
         <br></br>
         <br></br>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Collapse from "bootstrap/js/dist/collapse";
 import makkah from "../assets/images/makkah.jpg";
@@ -15,32 +15,40 @@ import { MdContactMail, MdMosque, MdNightlight, MdOutlineNightlight } from "reac
 import { FaMosque } from "react-icons/fa";
 import { ImLocation2 } from "react-icons/im";
 
-function Navbar() {
+function Navbar({ menuOpen, setMenuOpen }) {
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
 
 
   const toggleMenu = () => {
-    const nav = document.getElementById("navbarNav");
-    if (!nav) return;
-
-    const bsCollapse =
-      Collapse.getInstance(nav) || new Collapse(nav, { toggle: false });
-
-    bsCollapse.toggle(); // 👈 open if closed, close if open
+    setMenuOpen(!menuOpen);
   };
-
-
-
 
   const closeMenu = () => {
-    const nav = document.getElementById("navbarNav");
-    if (nav) {
-      const bsCollapse =
-        Collapse.getInstance(nav) || new Collapse(nav, { toggle: false });
-      bsCollapse.hide();
-    }
+    setMenuOpen(false);
   };
+
+
+
+  // const toggleMenu = () => {
+  //   const nav = document.getElementById("navbarNav");
+  //   if (!nav) return;
+
+  //   const bsCollapse =
+  //     Collapse.getInstance(nav) || new Collapse(nav, { toggle: false });
+
+  //   bsCollapse.toggle(); // 👈 open if closed, close if open
+  // };
+
+  // const closeMenu = () => {
+  //   const nav = document.getElementById("navbarNav");
+  //   if (nav) {
+  //     const bsCollapse =
+  //       Collapse.getInstance(nav) || new Collapse(nav, { toggle: false });
+  //     bsCollapse.hide();
+  //   }
+  // };
+
   const API_URL = import.meta.env.VITE_BACKEND_URL;
   const singout = async () => {
 
@@ -97,7 +105,9 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarNav">
+
+
+        <div className={`navbar-collapse animated-collapse ${menuOpen ? "show" : ""}`}>
           <ul className="navbar-nav ms-auto">
             {!isLoggedIn && (
               <li className="nav-item">
