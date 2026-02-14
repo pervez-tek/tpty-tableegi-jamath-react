@@ -1,0 +1,19 @@
+/* Red border */
+.input-error {
+  border: 2px solid #dc3545 !important;
+  box-shadow: none !important;
+}
+
+/* Form shake animation */
+@keyframes formShake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+  100% { transform: translateX(0); }
+}
+
+.form-shake {
+  animation: formShake 0.4s ease-in-out;
+}

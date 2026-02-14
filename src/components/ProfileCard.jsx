@@ -3,10 +3,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./profileCard.css";
 
 function ProfileCard({ user }) {
+  
   return (
-    <div className="card shadow rounded profile-card p-3">
-      <div className="card-body d-flex justify-content-between align-items-start p-0">
-        
+   <div className="card shadow rounded profile-card gradient-border p-3">
+  <div className="card-body d-flex justify-content-between align-items-start p-0">
+
         {/* Left side: details list */}
         <div className="profile-details text-start">
           <ul className="list-unstyled mb-0">

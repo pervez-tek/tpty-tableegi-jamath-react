@@ -8,7 +8,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./navbar.css";
 
-
+import { GrUserAdmin } from "react-icons/gr";
+import { RiBroadcastFill, RiLogoutCircleLine, RiSurveyLine } from "react-icons/ri";
+import { TbArrowRoundaboutLeft, TbReportSearch } from "react-icons/tb";
+import { MdContactMail, MdMosque, MdNightlight, MdOutlineNightlight } from "react-icons/md";
+import { FaMosque } from "react-icons/fa";
+import { ImLocation2 } from "react-icons/im";
 
 function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
@@ -73,6 +78,17 @@ function Navbar() {
           />
         </Link>
 
+        <div className="me-auto d-flex align-items-center gap-2">
+          <ImLocation2 className="location-icon" />
+          <span className="fw-semibold text-white-50">Tirupati</span>
+        </div>
+
+        {/* <div className="me-auto d-flex align-items-right gap-2">
+          <MdNightlight className="location-icon" />
+          <MdOutlineNightlight />
+        </div> */}
+
+
         <button
           className="navbar-toggler"
           type="button"
@@ -85,40 +101,65 @@ function Navbar() {
           <ul className="navbar-nav ms-auto">
             {!isLoggedIn && (
               <li className="nav-item">
-                <NavLink className="nav-link" to="/login" onClick={closeMenu}>
-                  Admin
+                <NavLink className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                } to="/login" onClick={closeMenu}>
+
+                  Admin &nbsp;
+                  <GrUserAdmin />
                 </NavLink>
               </li>
             )}
             <li className="nav-item">
-              <NavLink className="nav-link" to="/surveyForm" onClick={closeMenu}>
-                User
+              <NavLink className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"}
+                to="/surveyForm" onClick={closeMenu}>
+                User &nbsp;
+                <RiSurveyLine />
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/about" onClick={closeMenu}>
-                About
+              <NavLink className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"}
+                to="/about" onClick={closeMenu}>
+                About &nbsp;
+                <TbArrowRoundaboutLeft />
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/listOfMasjids" onClick={closeMenu}>
-                List Of Majids
+              <NavLink className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"}
+                to="/listOfMasjids" onClick={closeMenu}>
+                List Of Majids &nbsp;
+                <MdMosque />
               </NavLink>
             </li>
+            {/* <li className="nav-item">
+              <NavLink className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"}
+                to="/loginForm" onClick={closeMenu}>
+                Login Form
+              </NavLink>
+            </li> */}
             <li className="nav-item">
-              <NavLink className="nav-link" to="/contact" onClick={closeMenu}>
-                Contact
+              <NavLink className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"}
+                to="/contact" onClick={closeMenu}>
+                Contact &nbsp;
+                <MdContactMail />
               </NavLink>
             </li>
 
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"}
                   to="/addMasjid"
                   onClick={closeMenu}
                 >
-                  Add Masjid
+                  Add Masjid &nbsp;
+                  <FaMosque />
                 </NavLink>
               </li>
             )}
@@ -126,11 +167,13 @@ function Navbar() {
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"}
                   to="/broadCastMessage"
                   onClick={closeMenu}
                 >
-                  Broadcast Message
+                  Broadcast Message &nbsp;
+                  <RiBroadcastFill />
                 </NavLink>
               </li>
             )}
@@ -140,11 +183,13 @@ function Navbar() {
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"}
                   to="/reports"
                   onClick={closeMenu}
                 >
-                  Reports
+                  Reports &nbsp;
+                  <TbReportSearch />
                 </NavLink>
               </li>
             )}
@@ -152,13 +197,15 @@ function Navbar() {
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink
-                  className="nav-link"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"}
                   onClick={() => {
                     singout();
                     closeMenu();
                   }}
                 >
-                  Logout
+                  Logout &nbsp;
+                  <RiLogoutCircleLine />
                 </NavLink>
               </li>
             )}

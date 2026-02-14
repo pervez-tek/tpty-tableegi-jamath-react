@@ -34,6 +34,8 @@ function Reports() {
 
   const navigate = useNavigate();
 
+  //const [state, dispatch] = useReducer(first, second, third);
+
   const api = axios.create({ baseURL: API_URL });
   const { user, isLoggedIn, logout } = useAuth();
 
@@ -61,7 +63,7 @@ function Reports() {
     gender:i % 2 === 0 ? "M" : "F",
     halkaNo: i % 2 === 0 ? 1 : 2,
     phone: "+91 9876543210",
-    profession: "Engineer",
+    service: "Engineer",
     email: "ahmed@example.com",
     comments: "Active volunteer in community programs.",
     //image: i % 2 === 0 ? Man : Wom
@@ -240,7 +242,7 @@ function Reports() {
                 <div className="d-flex align-items-center mb-0">
                   <select
                     className="form-select form-select-sm me-3"
-                    style={{ width: 60, height: 30 }}
+                    style={{ width: 65, height: 30 }}
                     value={pageSize}
                     onChange={e => setPageSize(Number(e.target.value))}
                   >
@@ -304,4 +306,4 @@ function Reports() {
   );
 }
 
-export default Reports;
+export default React.memo(Reports);;

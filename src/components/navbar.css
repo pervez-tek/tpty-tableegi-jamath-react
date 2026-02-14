@@ -51,3 +51,19 @@
 .custom-toggler.open span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
+
+.nav-link.active {
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-weight: bold;
+}
+
+.location-icon {
+  width: 30px;
+  height: 30px;
+  color: #fff !important; /* custom orange */
+  justify-content: left;
+  text-align: left;
+  flex-direction: row;
+}

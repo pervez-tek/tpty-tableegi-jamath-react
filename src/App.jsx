@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 function App() {
   const [count, setCount] = useState(0);
-  const { user, isLoggedIn, logout } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth;
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_BACKEND_URL;
 

@@ -5,7 +5,8 @@
 }
 
 .profile-details {
-  flex: 1;              /* take up left space */
+  flex: 1;
+  /* take up left space */
 }
 
 .profile-details ul li {
@@ -14,26 +15,44 @@
 }
 
 .profile-image {
-  flex-shrink: 0;        /* prevent shrinking */
+  flex-shrink: 0;
+  /* prevent shrinking */
 }
 
 .profile-img {
-  width: 96px ;
-  height: 96px ;
+  width: 96px;
+  height: 96px;
   object-fit: cover;
   border: 2px solid #ccc;
 }
 
 @media (max-width: 375px) {
-    .card img {
-        width: 86px;
-        height: 86px;
-    }
+  .card img {
+    width: 86px;
+    height: 86px;
+  }
 }
 
 @media (max-width: 363px) {
-    .card img {
-        width: 75px;
-        height: 75px;
-    }
+  .card img {
+    width: 75px;
+    height: 75px;
+  }
+}
+
+.gradient-border {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* Left Gradient Strip */
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7px;
+  height: 100%;
+  background: linear-gradient(to bottom, orange, white, green);
 }

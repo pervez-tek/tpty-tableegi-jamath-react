@@ -106,7 +106,9 @@ const AddMasjid = () => {
 
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const [name, value] = e.target;
+        //setForm({ ...form, [e.target.name]: e.target.value });
+        setForm((prev) => ({ ...prev, [name]: value }));
     };
 
 
@@ -333,6 +335,7 @@ const AddMasjid = () => {
                                 onChange={handleChange}
                                 placeholder="Enter Masjid"
                                 required
+                                autoComplete="off"
                             />
                             <label className="form-label">Name</label>
                         </div>
@@ -346,6 +349,7 @@ const AddMasjid = () => {
                                 onChange={handleChange}
                                 placeholder="Enter Address"
                                 required
+                                autoComplete="off"
                             />
                             <label className="form-label">Address</label>
                         </div>

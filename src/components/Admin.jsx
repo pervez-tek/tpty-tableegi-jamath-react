@@ -4,6 +4,7 @@ import { useAuth } from "./auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import "./admin.css";
 
 const Admin = () => {
   // State to capture form values
@@ -102,30 +103,44 @@ const Admin = () => {
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <form className="was-validated" onSubmit={handleSubmit} method="post">
 
-          <div className="form-floating mb-3 mt-3">
+          <div className="form-floating mb-3 mt-3 position-relative">
+            <i className="bi bi-person-fill input-icon"></i>
+
             <input
-              className="form-control"
+              type="text"
+              className="form-control ps-5"
+              id="username"
               name="username"
               value={form.username}
               onChange={handleChange}
-              placeholder="Enter Username"
+              placeholder="Username"
               required
+              autoCapitalize="off"
             />
-            <label className="form-label">Username</label>
+
+            <label htmlFor="username" className="ps-5">
+              Username
+            </label>
           </div>
 
-          <div className="form-floating mb-3 mt-3">
+
+
+          <div className="form-floating mb-3 mt-3 position-relative">
+            <i className="bi bi-lock-fill position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
             <input
-              type="password"   // 👈 use password type instead of email
-              className="form-control"
+              type="password"
+              className="form-control ps-5"
+              id="password"
               name="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="Enter Password"
+              placeholder="Password"
               required
+              autoCapitalize="off"
             />
-            <label className="form-label">Password</label>
+            <label htmlFor="password" className="ps-5">Password</label>
           </div>
+
 
           <div className="d-grid gap-3">
             <button type="submit" className="btn btn-primary w-100">

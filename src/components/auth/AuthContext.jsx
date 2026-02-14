@@ -2,7 +2,18 @@
 import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
+// Custom Hooks
 export const useAuth = () => useContext(AuthContext);
+
+export const useAuth1 = () => {
+
+  //use hook also recommend
+  const authContext = useContext(AuthContext);
+
+  if (authContext === undefined) {
+    return new Error("Componenet must be wrraped inside AuthContext Provider");
+  }
+}
 
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem("user"));
@@ -24,6 +35,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
+    // two curly braces {{}} important
     <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
       {children}
     </AuthContext.Provider>
