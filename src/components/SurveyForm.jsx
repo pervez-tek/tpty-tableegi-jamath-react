@@ -310,10 +310,10 @@ const SurveyForm = () => {
 
                     &nbsp;
                     <div className="d-grid gap-3">
-                        <button className="btn btn-primary w-100">
+                        <button className="btn btn-primary w-100 glow-btn">
                             {add && add ? "Submit" : "Update"} Survey
                         </button>
-                        <button className="btn btn-danger w-100" onClick={handleReset}>
+                        <button className="btn btn-danger w-100 glow-btn" onClick={handleReset}>
                             Reset
                         </button>
                     </div>

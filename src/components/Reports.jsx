@@ -191,7 +191,7 @@ function Reports() {
 
               <button
                 type="submit"
-                className="btn btn-primary me-2"
+                className="btn btn-primary me-2 glow-btn"
                 disabled={loading}
               >
                 {loading ? (
@@ -204,7 +204,7 @@ function Reports() {
                 )}
               </button>
 
-              <button type="button" className="btn btn-secondary" onClick={handleReset}>
+              <button type="button" className="btn btn-danger glow-btn" onClick={handleReset}>
                 Reset
               </button>
             </div>

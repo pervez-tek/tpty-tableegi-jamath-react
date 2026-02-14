@@ -143,12 +143,12 @@ const Admin = () => {
 
 
           <div className="d-grid gap-3">
-            <button type="submit" className="btn btn-primary w-100">
+            <button type="submit" className="btn btn-primary w-100 glow-btn">
               {loading ? "Logging in..." : "Login"}
             </button>
             <button
               type="button"
-              className="btn btn-danger w-100"
+              className="btn btn-danger w-100  glow-btn"
               onClick={handleReset}
             >
               Reset

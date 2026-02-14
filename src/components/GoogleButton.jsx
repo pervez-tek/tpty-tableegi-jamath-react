@@ -12,7 +12,7 @@ function GoogleButton({ onClick }) {
     }
     return (
 
-        <button className="btn btn-light border d-flex align-items-center gap-2 w-100 w-md-auto" onClick={GoogleLogin}>
+        <button className="btn btn-light border d-flex align-items-center gap-2 w-100 w-md-auto glow-btn" onClick={GoogleLogin}>
             <img
                 src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                 alt="Google"
