@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import React, { lazy, Suspense } from "react";
 
 
@@ -55,7 +55,7 @@ function SurveyPage({ menuOpen }) {
                             <Suspense fallback={<Loader />}>
 
                                 <Routes>
-                                    <Route path="/" element={<SurveyForm />} />
+                                    <Route path="/" element={<Navigate to="/surveyForm" replace />} />
                                     <Route path="/login" element={<Admin />} />
                                     <Route path="/surveyForm" element={<SurveyForm />} />
                                     <Route path="/about" element={<About />} />
