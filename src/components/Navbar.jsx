@@ -22,6 +22,11 @@ function Navbar({ menuOpen, setMenuOpen }) {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
+    // ✅ Scroll to top smoothly
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const closeMenu = () => {
