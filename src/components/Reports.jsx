@@ -220,7 +220,7 @@ function Reports() {
                 <strong>To:</strong> {results.toDate}
               </p>
               <button
-                className="btn btn-outline-info"
+                className="btn btn-info glow-btn"
                 onClick={() => setShowResults(prev => !prev)}
               >
                 {showResults ? "Hide Results" : "View Results"}
