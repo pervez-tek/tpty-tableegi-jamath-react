@@ -93,7 +93,7 @@ function Navbar({ menuOpen, setMenuOpen }) {
 
         <div className="me-auto d-flex align-items-center gap-2">
           <ImLocation2 className="location-icon glow-icon-warning" />
-          <span className="fw-semibold text-white-50">Tirupati</span>
+          <span className="fw-semibold text-white-50 glow-icon-warning">Tirupati</span>
         </div>
 
         {/* <div className="me-auto d-flex align-items-right gap-2">
