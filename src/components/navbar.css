@@ -63,29 +63,7 @@
   margin-right: 10px;
 }
 
-.location-icon {
-  width: 38px;
-  height: 38px;
-  color: #fff !important;
-  /* custom orange */
-  justify-content: left;
-  text-align: left;
-  flex-direction: row;
-  cursor: pointer;
-}
 
-/* 🌟 Glow Effect */
-.glow-icon-warning {
-  filter: none;
-  transition: all 0.3s ease;
-}
-
-.glow-icon-warning:hover {
-  filter: drop-shadow(0 0 6px #ffc107)
-          drop-shadow(0 0 12px #ffc107)
-          drop-shadow(0 0 20px rgba(255, 193, 7, 0.8));
-  transform: scale(1.15);
-}
 
 
 .menu-icons {
@@ -138,3 +116,28 @@
 }
 
 
+/* Only apply animation on mobile */
+@media (max-width: 991.98px) {
+  .animated-collapse {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s ease-in-out;
+  }
+
+  .animated-collapse.show {
+    max-height: 500px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Desktop should behave normally */
+@media (min-width: 992px) {
+  .animated-collapse {
+    max-height: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
