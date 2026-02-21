@@ -14,6 +14,7 @@ import { TbArrowRoundaboutLeft, TbReportSearch } from "react-icons/tb";
 import { MdContactMail, MdMosque, MdNightlight, MdOutlineNightlight } from "react-icons/md";
 import { FaMosque } from "react-icons/fa";
 import { ImLocation2 } from "react-icons/im";
+import LocationSelector from "./LocationSelector";
 
 function Navbar({ menuOpen, setMenuOpen }) {
   const { user, isLoggedIn, logout } = useAuth();
@@ -33,26 +34,6 @@ function Navbar({ menuOpen, setMenuOpen }) {
     setMenuOpen(false);
   };
 
-
-
-  // const toggleMenu = () => {
-  //   const nav = document.getElementById("navbarNav");
-  //   if (!nav) return;
-
-  //   const bsCollapse =
-  //     Collapse.getInstance(nav) || new Collapse(nav, { toggle: false });
-
-  //   bsCollapse.toggle(); // 👈 open if closed, close if open
-  // };
-
-  // const closeMenu = () => {
-  //   const nav = document.getElementById("navbarNav");
-  //   if (nav) {
-  //     const bsCollapse =
-  //       Collapse.getInstance(nav) || new Collapse(nav, { toggle: false });
-  //     bsCollapse.hide();
-  //   }
-  // };
 
   const API_URL = import.meta.env.VITE_BACKEND_URL;
   const singout = async () => {
@@ -91,11 +72,7 @@ function Navbar({ menuOpen, setMenuOpen }) {
           />
         </Link>
 
-        <div className="me-auto d-flex align-items-center gap-2">
-          <ImLocation2 className="location-icon glow-icon-warning" />
-          <span className="fw-semibold glow-icon-warning"  style={{ cursor: 'pointer', color: '#ffc107' }}>Tirupati</span>
-        </div>
-
+        <LocationSelector />
         {/* <div className="me-auto d-flex align-items-right gap-2">
           <MdNightlight className="location-icon" />
           <MdOutlineNightlight />
@@ -207,7 +184,14 @@ function Navbar({ menuOpen, setMenuOpen }) {
             )}
 
             {isLoggedIn && (
+
               <li className="nav-item">
+                <hr
+                  style={{
+                    borderTop: "1px solid rgb(255, 255, 255)",
+                    margin: "8px 0"
+                  }}
+                />
                 <NavLink className={({ isActive }) =>
                   isActive ? "nav-link active active-link" : "nav-link"}
                   to="/login"
