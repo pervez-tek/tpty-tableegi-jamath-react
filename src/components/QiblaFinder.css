@@ -1,9 +1,10 @@
 .premium-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* horizontal center */
-  justify-content: center;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* horizontal center */
+    justify-content: center;
+    text-align: center;
 }
 
 .enable-btn {
@@ -16,12 +17,13 @@
 }
 
 .compass-container {
-  position: relative;
-  width: 90vw;
-  max-width: 300px;
-  aspect-ratio: 1 / 1;
+    position: relative;
+    width: 90vw;
+    max-width: 300px;
+    aspect-ratio: 1 / 1;
 
-  margin: 30px 0;   /* remove auto */
+    margin: 30px 0;
+    /* remove auto */
 }
 
 /* Compass Dial */
@@ -32,7 +34,7 @@
     background: radial-gradient(circle, #ffffff 50%, #dcdcdc 100%);
     border: 2px solid #15dd80;
     position: absolute;
-    transition: transform 0.4s ease;
+    transition: transform 0.15s linear;
 }
 
 /* Cardinal Points */
@@ -79,8 +81,8 @@
     left: 50%;
 
     transform-origin: center bottom;
-    transform: translate(-50%, -100%);
-    transition: transform 0.4s ease;
+    transform: translate(-50%, -100%);    
+    transition: transform 0.15s linear;
 
     border-radius: 4px;
 }
@@ -119,11 +121,4 @@
         width: 30px;
         top: -35px;
     }
-}
-
-.compass-dial,
-.needle {
-  will-change: transform;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }

@@ -37,21 +37,20 @@ function QiblaFinder() {
     }, []);
 
     const handleOrientation = (event) => {
-    let compassHeading;
+        let compassHeading;
 
-    if (event.webkitCompassHeading !== undefined) {
-        compassHeading = event.webkitCompassHeading;
-    } else if (event.alpha !== null) {
-        compassHeading = 360 - event.alpha;
-    }
+        if (event.webkitCompassHeading !== undefined) {
+            compassHeading = event.webkitCompassHeading;
+        } else if (event.alpha !== null) {
+            compassHeading = 360 - event.alpha;
+        }
 
-    if (compassHeading !== undefined) {
-        const smoothFactor = 0.1; // smaller = smoother
-        setHeading(prev =>
-            prev + smoothFactor * (compassHeading - prev)
-        );
-    }
-};
+        if (compassHeading !== undefined) {
+            // Round to remove tiny jitter
+            const rounded = Math.round(compassHeading);
+            setHeading(rounded);
+        }
+    };
 
     useEffect(() => {
         const enableCompass = async () => {
@@ -89,7 +88,7 @@ function QiblaFinder() {
             <div className="card-body">
                 <div className="premium-container">
                     <h2>Qibla Finder</h2>
-                  
+
 
                     <div className="compass-container">
                         {/* Rotating Compass Dial */}
