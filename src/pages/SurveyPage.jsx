@@ -17,6 +17,8 @@ const Reports = lazy(() => import("../components/Reports"));
 const BroadcastMessage = lazy(() => import("../components/BroadcastMessage"));
 
 const FeedBack = lazy(() => import("../components/FeedBack"));
+const NamazTimings = lazy(() => import("../components/NamazTimings"));
+const QiblaFinder = lazy(() => import("../components/QiblaFinder"));
 const LoginForm = lazy(() => import("../components/LoginForm"));
 const AddMasjid = lazy(() => import("../components/AddMasjid"));
 const ListOfMasjids = lazy(() => import("../components/ListOfMasjids"));
@@ -62,6 +64,8 @@ function SurveyPage({ menuOpen }) {
                                     <Route path="/contact" element={<Contact />} />
                                     <Route path="/listOfMasjids" element={<ListOfMasjids />} />
                                     <Route path="/feedBack" element={<FeedBack />} />
+                                    <Route path="/namazTimings" element={<NamazTimings />} />
+                                    <Route path="/qiblaFinder" element={<QiblaFinder />} />
                                     <Route path="/loginForm" element={<LoginForm />} />
                                     <Route path="/addMasjid" element={<ProtectedRoute>
                                         <AddMasjid />

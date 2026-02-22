@@ -32,13 +32,13 @@ const LocationSelector = () => {
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
+            onClick={() => setIsOpen(!isOpen)}
         >
-            <ImLocation2 className="location-icon glow-icon-warning"   onClick={() => setIsOpen(!isOpen)}/>
+            <ImLocation2 className="location-icon glow-icon-warning" />
 
             <span
                 className="fw-semibold glow-icon-warning hoverEffect"
-                style={{ cursor: "pointer", color: '#ffc107' }}
-                onClick={() => setIsOpen(!isOpen)}
+                style={{ cursor: "pointer", color: '#ffc107' }}                
             >
                 {selectedCity} ▼
             </span>
