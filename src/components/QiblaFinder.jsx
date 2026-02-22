@@ -70,39 +70,43 @@ function QiblaFinder() {
     const isAligned = Math.abs(rotation) < 5;
 
     return (
-        <div className="premium-container">
-            <h2>Qibla Finder</h2>
+        <div className="card shadow">
+            <div className="card-body">
+                <div className="premium-container">
+                    <h2>Qibla Finder</h2>
 
-            {!permissionGranted && (
-                <button className="enable-btn" onClick={requestPermission}>
-                    Enable Compass
-                </button>
-            )}
+                    {!permissionGranted && (
+                        <button className="enable-btn" onClick={requestPermission}>
+                            Enable Compass
+                        </button>
+                    )}
 
-            <div className="compass-container">
-                {/* Rotating Compass Dial */}
-                <div
-                    className="compass-dial"
-                    style={{ transform: `rotate(${-heading}deg)` }}
-                >
-                    <div className="cardinal north">N</div>
-                    <div className="cardinal south">S</div>
-                    <div className="cardinal east">E</div>
-                    <div className="cardinal west">W</div>
-                </div>
+                    <div className="compass-container">
+                        {/* Rotating Compass Dial */}
+                        <div
+                            className="compass-dial"
+                            style={{ transform: `rotate(${-heading}deg)` }}
+                        >
+                            <div className="cardinal north">N</div>
+                            <div className="cardinal south">S</div>
+                            <div className="cardinal east">E</div>
+                            <div className="cardinal west">W</div>
+                        </div>
 
-                {/* Qibla Needle */}
-                <div
-                    className={`needle ${isAligned ? "aligned" : ""}`}
-                    style={{
-                        transform: `rotate(${rotation}deg)`
-                    }}
-                >
-                    <img src={kaaba} alt="Kaaba" />
+                        {/* Qibla Needle */}
+                        <div
+                            className={`needle ${isAligned ? "aligned" : ""}`}
+                            style={{
+                                transform: `translate(-50%, -100%) rotate(${rotation}deg)`
+                            }}
+                        >
+                            <img src={kaaba} alt="Kaaba" />
+                        </div>
+                    </div>
+
+                    {isAligned && <p className="aligned-text">✔ You are facing Qibla</p>}
                 </div>
             </div>
-
-            {isAligned && <p className="aligned-text">✔ You are facing Qibla</p>}
         </div>
     );
 }

@@ -43,24 +43,30 @@
 .west { left: 15px; top: 50%; transform: translateY(-50%); }
 
 /* Qibla Needle */
+/* Qibla Needle */
 .needle {
   position: absolute;
   width: 6px;
-  height: 140px;
+  height: 120px;
   background: gold;
+
   top: 50%;
   left: 50%;
-  transform-origin: bottom center;
+
+  transform-origin: center bottom;
+  transform: translate(-50%, -100%);
   transition: transform 0.4s ease;
+
   border-radius: 4px;
 }
 
+/* Kaaba at tip */
 .needle img {
   position: absolute;
-  bottom: 100%;
+  top: -45px;   /* move above needle */
   left: 50%;
   transform: translateX(-50%);
-  width: 50px;
+  width: 40px;
 }
 
 .needle.aligned {
