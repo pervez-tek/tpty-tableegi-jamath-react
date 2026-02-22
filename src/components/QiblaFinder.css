@@ -1,23 +1,58 @@
-.compass-container {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 50px auto;
+.qibla-container {
+  text-align: center;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
 }
 
+.enable-btn {
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  background: #ffc107;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.error {
+  color: red;
+}
+
+.compass-wrapper {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  margin: 30px auto;
+}
+
+/* ✅ FIXED COMPASS */
 .compass {
   width: 100%;
   height: 100%;
-  border: 4px solid #212529;
+  border: 6px solid #212529;
   border-radius: 50%;
-  position: relative;
-  transition: transform 0.4s ease;
+  background: radial-gradient(circle at center, #ffffff 60%, #e0e0e0 100%);
+  position: relative; /* 🔥 changed from absolute */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
 
+/* Center dot */
+.compass::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #212529;
+  border-radius: 50%;
+  position: absolute;
+}
+
+/* Direction labels */
 .direction {
   position: absolute;
   font-weight: bold;
-  color: #333;
+  font-size: 18px;
 }
 
 .north { top: 10px; left: 50%; transform: translateX(-50%); }
@@ -25,11 +60,24 @@
 .east { right: 10px; top: 50%; transform: translateY(-50%); }
 .west { left: 10px; top: 50%; transform: translateY(-50%); }
 
+/* ✅ FIXED KAABA CENTERING */
 .kaaba {
   position: absolute;
+  width: 60px;
   top: 50%;
   left: 50%;
-  width: 60px;
   transform-origin: center;
-  transition: transform 0.4s ease;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+.kaaba.aligned {
+  box-shadow: 0 0 20px 8px rgba(0, 200, 0, 0.7);
+  border-radius: 50%;
+}
+
+.aligned-text {
+  color: green;
+  font-weight: bold;
 }
