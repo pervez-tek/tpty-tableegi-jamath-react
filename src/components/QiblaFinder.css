@@ -1,83 +1,75 @@
-.qibla-container {
+.premium-container {
   text-align: center;
-  margin-top: 20px;
   font-family: Arial, sans-serif;
 }
 
 .enable-btn {
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  background: #ffc107;
+  padding: 10px 18px;
+  margin-bottom: 20px;
+  background: #0d6efd;
+  color: white;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
 }
 
-.error {
-  color: red;
-}
-
-.compass-wrapper {
+.compass-container {
   position: relative;
-  width: 280px;
-  height: 280px;
+  width: 300px;
+  height: 300px;
   margin: 30px auto;
 }
 
-/* ✅ FIXED COMPASS */
-.compass {
+/* Compass Dial */
+.compass-dial {
   width: 100%;
   height: 100%;
-  border: 6px solid #212529;
   border-radius: 50%;
-  background: radial-gradient(circle at center, #ffffff 60%, #e0e0e0 100%);
-  position: relative; /* 🔥 changed from absolute */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
-}
-
-/* Center dot */
-.compass::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  background: #212529;
-  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 50%, #dcdcdc 100%);
+  border: 8px solid #222;
   position: absolute;
+  transition: transform 0.4s ease;
 }
 
-/* Direction labels */
-.direction {
+/* Cardinal Points */
+.cardinal {
   position: absolute;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 22px;
 }
 
-.north { top: 10px; left: 50%; transform: translateX(-50%); }
-.south { bottom: 10px; left: 50%; transform: translateX(-50%); }
-.east { right: 10px; top: 50%; transform: translateY(-50%); }
-.west { left: 10px; top: 50%; transform: translateY(-50%); }
+.north { top: 15px; left: 50%; transform: translateX(-50%); color: red; }
+.south { bottom: 15px; left: 50%; transform: translateX(-50%); }
+.east { right: 15px; top: 50%; transform: translateY(-50%); }
+.west { left: 15px; top: 50%; transform: translateY(-50%); }
 
-/* ✅ FIXED KAABA CENTERING */
-.kaaba {
+/* Qibla Needle */
+.needle {
   position: absolute;
-  width: 60px;
+  width: 6px;
+  height: 140px;
+  background: gold;
   top: 50%;
   left: 50%;
-  transform-origin: center;
-  transform: translate(-50%, -50%);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  z-index: 2;
+  transform-origin: bottom center;
+  transition: transform 0.4s ease;
+  border-radius: 4px;
 }
 
-.kaaba.aligned {
-  box-shadow: 0 0 20px 8px rgba(0, 200, 0, 0.7);
-  border-radius: 50%;
+.needle img {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+}
+
+.needle.aligned {
+  background: green;
+  box-shadow: 0 0 20px 6px rgba(0, 255, 0, 0.6);
 }
 
 .aligned-text {
   color: green;
   font-weight: bold;
+  margin-top: 20px;
 }
