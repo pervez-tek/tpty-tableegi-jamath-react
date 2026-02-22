@@ -37,18 +37,21 @@ function QiblaFinder() {
     }, []);
 
     const handleOrientation = (event) => {
-        let compassHeading;
+    let compassHeading;
 
-        if (event.webkitCompassHeading !== undefined) {
-            compassHeading = event.webkitCompassHeading;
-        } else if (event.alpha !== null) {
-            compassHeading = 360 - event.alpha;
-        }
+    if (event.webkitCompassHeading !== undefined) {
+        compassHeading = event.webkitCompassHeading;
+    } else if (event.alpha !== null) {
+        compassHeading = 360 - event.alpha;
+    }
 
-        if (compassHeading !== undefined) {
-            setHeading(compassHeading);
-        }
-    };
+    if (compassHeading !== undefined) {
+        const smoothFactor = 0.1; // smaller = smoother
+        setHeading(prev =>
+            prev + smoothFactor * (compassHeading - prev)
+        );
+    }
+};
 
     useEffect(() => {
         const enableCompass = async () => {
