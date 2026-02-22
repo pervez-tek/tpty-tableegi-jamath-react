@@ -50,21 +50,33 @@ function QiblaFinder() {
         }
     };
 
-    const requestPermission = async () => {
-        if (
-            typeof DeviceOrientationEvent !== "undefined" &&
-            typeof DeviceOrientationEvent.requestPermission === "function"
-        ) {
-            const response = await DeviceOrientationEvent.requestPermission();
-            if (response === "granted") {
+    useEffect(() => {
+        const enableCompass = async () => {
+            if (
+                typeof DeviceOrientationEvent !== "undefined" &&
+                typeof DeviceOrientationEvent.requestPermission === "function"
+            ) {
+                try {
+                    const response = await DeviceOrientationEvent.requestPermission();
+                    if (response === "granted") {
+                        window.addEventListener("deviceorientation", handleOrientation);
+                        setPermissionGranted(true);
+                    }
+                } catch (error) {
+                    console.log("Permission denied");
+                }
+            } else {
                 window.addEventListener("deviceorientation", handleOrientation);
                 setPermissionGranted(true);
             }
-        } else {
-            window.addEventListener("deviceorientation", handleOrientation);
-            setPermissionGranted(true);
-        }
-    };
+        };
+
+        enableCompass();
+
+        return () => {
+            window.removeEventListener("deviceorientation", handleOrientation);
+        };
+    }, []);
 
     const rotation = qiblaDirection - heading;
     const isAligned = Math.abs(rotation) < 5;
@@ -74,12 +86,7 @@ function QiblaFinder() {
             <div className="card-body">
                 <div className="premium-container">
                     <h2>Qibla Finder</h2>
-
-                    {!permissionGranted && (
-                        <button className="enable-btn" onClick={requestPermission}>
-                            Enable Compass
-                        </button>
-                    )}
+                  
 
                     <div className="compass-container">
                         {/* Rotating Compass Dial */}
