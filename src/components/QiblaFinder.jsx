@@ -29,11 +29,39 @@ function QiblaFinder() {
     };
 
     useEffect(() => {
+        // Get location immediately
         navigator.geolocation.getCurrentPosition((pos) => {
             const { latitude, longitude } = pos.coords;
             const direction = calculateQibla(latitude, longitude);
             setQiblaDirection(direction);
         });
+
+        const startCompass = async () => {
+            if (
+                typeof DeviceOrientationEvent !== "undefined" &&
+                typeof DeviceOrientationEvent.requestPermission === "function"
+            ) {
+                try {
+                    const response = await DeviceOrientationEvent.requestPermission();
+                    if (response === "granted") {
+                        window.addEventListener("deviceorientation", handleOrientation);
+                        setPermissionGranted(true);
+                    }
+                } catch (error) {
+                    console.log("Permission denied");
+                }
+            } else {
+                window.addEventListener("deviceorientation", handleOrientation);
+                setPermissionGranted(true);
+            }
+        };
+
+        // iPhone requires user interaction → trigger on first touch
+        window.addEventListener("click", startCompass, { once: true });
+
+        return () => {
+            window.removeEventListener("deviceorientation", handleOrientation);
+        };
     }, []);
 
     const handleOrientation = (event) => {
@@ -50,21 +78,7 @@ function QiblaFinder() {
         }
     };
 
-    const requestPermission = async () => {
-        if (
-            typeof DeviceOrientationEvent !== "undefined" &&
-            typeof DeviceOrientationEvent.requestPermission === "function"
-        ) {
-            const response = await DeviceOrientationEvent.requestPermission();
-            if (response === "granted") {
-                window.addEventListener("deviceorientation", handleOrientation);
-                setPermissionGranted(true);
-            }
-        } else {
-            window.addEventListener("deviceorientation", handleOrientation);
-            setPermissionGranted(true);
-        }
-    };
+  
 
     const rotation = qiblaDirection - heading;
     const isAligned = Math.abs(rotation) < 5;
@@ -75,11 +89,7 @@ function QiblaFinder() {
                 <div className="premium-container">
                     <h2>Qibla Finder</h2>
 
-                    {!permissionGranted && (
-                        <button className="enable-btn" onClick={requestPermission}>
-                            Enable Compass
-                        </button>
-                    )}
+                   
 
                     <div className="compass-container">
                         {/* Rotating Compass Dial */}
