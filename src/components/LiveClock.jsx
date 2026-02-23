@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment-hijri";
 import "./LiveClock.css"
+import { ImLocation2 } from "react-icons/im";
 
 function LiveClock() {
     const [time, setTime] = useState(new Date());
+    const hijriDate = moment().format("iD iMMMM iYYYY");
+    //const hijriDate = moment().format("iD iMMM iYYYY");
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -42,16 +46,31 @@ function LiveClock() {
     const { timeString, ampm } = formatTime(time);
 
     return (
-        <div className="clock-container">
-            <div className="clock">
-                {timeString}
-                <sub className="ampm"> {ampm}</sub>
-            </div>
+        <>
+            <div className="clock-container">
+                <div className="clock">
+                    {timeString}
+                    <sub className="ampm"> {ampm}</sub>
+                </div>
 
-            <div className="date">
-                <strong>{formatDate(time)}</strong>
+                <div className="date-container">
+                    <div className="date gregorian">
+                        <strong>{formatDate(time)}</strong>
+                    </div>
+
+                    <div className="date hijri">
+                        <strong>{hijriDate}</strong>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div className="location-container">
+                <ImLocation2 className="selected-location-icon" />
+
+                <span className="location-text">
+                    Tirupathi
+                </span>
+            </div>
+        </>
     );
 }
 

@@ -91,3 +91,10 @@
 .active-prayer {
     box-shadow: 0 0 10px rgba(22,163,74,0.4);
 }
+
+.hijri-date {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 10px;
+  color: black;
+}

@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     /* Left & Right */
-    align-items: center;
+    align-items: left;
     padding: 8px 12px;
     font-family: Arial, sans-serif;
     margin: 0;
@@ -29,5 +29,50 @@
     font-size: 14px;
     color: #555;
     white-space: nowrap;
-    
+
+}
+
+.date-container {
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    /* horizontal center */
+    justify-content: right;
+    gap: 4px;
+    /* space between dates */
+}
+
+.date {
+    font-size: 16px;
+}
+
+.hijri {
+    color: #15dd80;
+    /* optional highlight */
+    font-weight: 600;
+}
+
+.location-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;   /* left align */
+  gap: 6px;
+  width: 100%;
+}
+
+.selected-location-icon {
+    width: 30px !important ;
+    height: 30px !important;
+    color: #0a0a0a;
+    /* custom orange */
+    justify-content: left;
+    text-align: left;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.location-text {
+  cursor: pointer;
+  color: #0a0a0a;
+  font-weight: 600;
 }
