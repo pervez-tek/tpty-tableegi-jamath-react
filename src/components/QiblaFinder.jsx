@@ -75,6 +75,7 @@ function QiblaFinder() {
 
         if (compassHeading !== undefined) {
             setHeading(Math.round(compassHeading));
+            setHeading(prev => prev + (compassHeading - prev) * 0.2);
         }
     };
 
