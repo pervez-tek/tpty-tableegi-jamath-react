@@ -50,33 +50,21 @@ function QiblaFinder() {
         }
     };
 
-    useEffect(() => {
-        const enableCompass = async () => {
-            if (
-                typeof DeviceOrientationEvent !== "undefined" &&
-                typeof DeviceOrientationEvent.requestPermission === "function"
-            ) {
-                try {
-                    const response = await DeviceOrientationEvent.requestPermission();
-                    if (response === "granted") {
-                        window.addEventListener("deviceorientation", handleOrientation);
-                        setPermissionGranted(true);
-                    }
-                } catch (error) {
-                    console.log("Permission denied");
-                }
-            } else {
+    const requestPermission = async () => {
+        if (
+            typeof DeviceOrientationEvent !== "undefined" &&
+            typeof DeviceOrientationEvent.requestPermission === "function"
+        ) {
+            const response = await DeviceOrientationEvent.requestPermission();
+            if (response === "granted") {
                 window.addEventListener("deviceorientation", handleOrientation);
                 setPermissionGranted(true);
             }
-        };
-
-        enableCompass();
-
-        return () => {
-            window.removeEventListener("deviceorientation", handleOrientation);
-        };
-    }, []);
+        } else {
+            window.addEventListener("deviceorientation", handleOrientation);
+            setPermissionGranted(true);
+        }
+    };
 
     const rotation = qiblaDirection - heading;
     const isAligned = Math.abs(rotation) < 5;
