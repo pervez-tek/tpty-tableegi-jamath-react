@@ -32,7 +32,7 @@
     background: radial-gradient(circle, #ffffff 50%, #dcdcdc 100%);
     border: 2px solid #15dd80;
     position: absolute;
-    transition: transform 0.4s ease;
+    transition: transform 0.12s linear;
 }
 
 /* Cardinal Points */
@@ -80,7 +80,7 @@
 
     transform-origin: center bottom;
     transform: translate(-50%, -100%);
-    transition: transform 0.4s ease;
+    transition: transform 0.12s linear;
 
     border-radius: 4px;
 }
@@ -119,11 +119,4 @@
         width: 30px;
         top: -35px;
     }
-}
-
-.compass-dial,
-.needle {
-  will-change: transform;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }

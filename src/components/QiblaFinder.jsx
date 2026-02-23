@@ -74,7 +74,7 @@ function QiblaFinder() {
         }
 
         if (compassHeading !== undefined) {
-            setHeading(compassHeading);
+            setHeading(Math.round(compassHeading));
         }
     };
 
@@ -89,7 +89,7 @@ function QiblaFinder() {
                 <div className="premium-container">
                     <h2>Qibla Finder</h2>
 
-                   
+                   {!permissionGranted && <p>Tap anywhere to activate compass</p>}
 
                     <div className="compass-container">
                         {/* Rotating Compass Dial */}
