@@ -83,6 +83,7 @@
     /* transition: transform 0.12s linear; */
 
     border-radius: 4px;
+     transition: opacity 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
 }
 
 /* Kaaba at tip */
@@ -93,11 +94,20 @@
     left: 50%;
     transform: translateX(-50%);
     width: 40px;
+    height: 40px;           /* Fix height also */
+    object-fit: contain;    /* Prevent distortion */
 }
 
 .needle.aligned {
     background: green;
     box-shadow: 0 0 20px 6px rgba(0, 255, 0, 0.6);
+    opacity: 1;
+}
+
+.needle.not-aligned {
+    background: red;
+    box-shadow: 0 0 20px 6px rgba(255, 30, 0, 0.6);
+    opacity: 1;
 }
 
 .aligned-text {

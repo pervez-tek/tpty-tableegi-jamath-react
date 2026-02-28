@@ -9,11 +9,11 @@ const LocationSelector = () => {
 
     const cities = [
         "Tirupati",
-        "Hyderabad",
-        "Chennai",
-        "Bangalore",
-        "Mumbai",
-        "Delhi"
+        "Chittoor",
+        "SriKhalasti",
+        "Nellore",
+        "Kadapa",
+        "Amaravati"
     ];
 
     // Close on outside click

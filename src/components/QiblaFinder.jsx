@@ -132,7 +132,7 @@ function QiblaFinder() {
 
             {/* Qibla Needle */}
             <div
-              className={`needle ${isAligned ? "aligned" : ""}`}
+              className={`needle ${isAligned ? "aligned" : "not-aligned"}`}
               style={{
                 transform: `translate(-50%, -100%) rotate(${rotation}deg)`
               }}

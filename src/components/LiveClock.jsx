@@ -8,6 +8,12 @@ function LiveClock() {
     const hijriDate = moment().format("iD iMMMM iYYYY");
     //const hijriDate = moment().format("iD iMMM iYYYY");
 
+    const isRamadan = moment().iMonth() === 8;
+
+    if (isRamadan) {
+        console.log("🌙 Ramadan Mubarak!");
+    }
+
     useEffect(() => {
         const interval = setInterval(() => {
             setTime(new Date());
@@ -67,7 +73,7 @@ function LiveClock() {
                 <ImLocation2 className="selected-location-icon" />
 
                 <span className="location-text">
-                    Tirupathi
+                    Tirupathi,Andhra Pradesh,India.
                 </span>
             </div>
         </>
