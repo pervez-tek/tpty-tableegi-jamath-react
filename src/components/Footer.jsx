@@ -8,30 +8,24 @@ import { useState } from "react";
 const Footer = ({ menuOpen, setMenuOpen }) => {
   const [image, setImage] = useState(prayer);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-    // ✅ Scroll to top smoothly
+  const closeMenu = () => {
+    setMenuOpen(false);   // Always close
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
 
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
   return (
 
     <footer className="mobile-footer">
-      <NavLink to="/namazTimings" className="footer-link">
+      <NavLink to="/namazTimings" className="footer-link" onClick={closeMenu}>
         <div className="glow-wrapper">
           <img
             className="rounded-circle glow-img"
             src={image}
             alt="image"
-            onClick={() => {
-              toggleMenu();
+            onClick={() => {              
               setImage(image === prayer ? mat : prayer);
             }}
           />
@@ -40,20 +34,19 @@ const Footer = ({ menuOpen, setMenuOpen }) => {
       <div>
         <p className="mb-1">© 2026 Tableegi Jamath Survey App</p>
 
-        <NavLink to="/feedBack" className="footer-link">
+        <NavLink to="/feedBack" className="footer-link" onClick={closeMenu}>
           <button
             className="btn btn-dark glow-warning">
             Send Feedback
           </button>
         </NavLink>
       </div>
-      <NavLink to="/qiblaFinder" className="footer-link">
+      <NavLink to="/qiblaFinder" className="footer-link" onClick={closeMenu}>
         <div className="glow-wrapper">
           <img
             className="rounded-circle glow-img"
             src={qibla}
-            alt="image"
-            onClick={toggleMenu}
+            alt="image"            
           />
         </div>
       </NavLink>

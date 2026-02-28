@@ -111,8 +111,8 @@
 }
 
 .glow-img {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   transition: transform 0.3s ease;
   position: relative;
   z-index: 2;
