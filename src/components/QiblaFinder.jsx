@@ -2,21 +2,36 @@ import React, { useState, useEffect, useRef } from "react";
 import kaaba from "../assets/images/kaaba.png";
 import "./QiblaFinder.css";
 
+// 📍 Kaaba coordinates (Makkah)
 const KAABA_LAT = 21.4225;
 const KAABA_LON = 39.8262;
 
 function QiblaFinder() {
-  const [heading, setHeading] = useState(0);
-  const [qiblaDirection, setQiblaDirection] = useState(0);
-  const [permissionGranted, setPermissionGranted] = useState(false);
 
+  // -----------------------------
+  // STATE VARIABLES
+  // -----------------------------
+  const [heading, setHeading] = useState(0);           // Current device heading
+  const [qiblaDirection, setQiblaDirection] = useState(0); // Calculated Qibla angle
+  const [permissionGranted, setPermissionGranted] = useState(false);
+  const [stableAligned, setStableAligned] = useState(false); // Prevent flicker
+
+  // -----------------------------
+  // REFS (for smooth animation)
+  // -----------------------------
   const rawHeading = useRef(0);
   const smoothHeading = useRef(0);
   const animationFrame = useRef(null);
 
+  // -----------------------------
+  // DEGREE ↔ RADIAN CONVERSION
+  // -----------------------------
   const toRad = (deg) => (deg * Math.PI) / 180;
   const toDeg = (rad) => (rad * 180) / Math.PI;
 
+  // -----------------------------
+  // CALCULATE QIBLA DIRECTION
+  // -----------------------------
   const calculateQibla = (lat, lon) => {
     const φ1 = toRad(lat);
     const φ2 = toRad(KAABA_LAT);
@@ -28,16 +43,21 @@ function QiblaFinder() {
       Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
 
     const θ = Math.atan2(y, x);
-    return (toDeg(θ) + 360) % 360;
+    return (toDeg(θ) + 360) % 360; // Normalize 0-360
   };
 
-  // Handle compass sensor
+  // -----------------------------
+  // HANDLE DEVICE ORIENTATION
+  // -----------------------------
   const handleOrientation = (event) => {
     let compassHeading;
 
+    // iOS
     if (event.webkitCompassHeading !== undefined) {
       compassHeading = event.webkitCompassHeading;
-    } else if (event.alpha !== null) {
+    } 
+    // Android
+    else if (event.alpha !== null) {
       compassHeading = 360 - event.alpha;
     }
 
@@ -46,15 +66,19 @@ function QiblaFinder() {
     }
   };
 
-  // Smooth animation engine
+  // -----------------------------
+  // SMOOTH HEADING ANIMATION
+  // -----------------------------
   useEffect(() => {
     const animate = () => {
       let diff = rawHeading.current - smoothHeading.current;
 
+      // Fix 360° jump issue
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
 
-      smoothHeading.current += diff * 0.15; // smoothing factor
+      // Smooth factor (lower = more stable)
+      smoothHeading.current += diff * 0.08;
 
       setHeading(smoothHeading.current);
 
@@ -66,9 +90,10 @@ function QiblaFinder() {
     return () => cancelAnimationFrame(animationFrame.current);
   }, []);
 
-  // Get location + request compass
+  // -----------------------------
+  // GET LOCATION + REQUEST PERMISSION
+  // -----------------------------
   useEffect(() => {
-    // Get user location
     navigator.geolocation.getCurrentPosition((pos) => {
       const { latitude, longitude } = pos.coords;
       const direction = calculateQibla(latitude, longitude);
@@ -95,7 +120,6 @@ function QiblaFinder() {
       }
     };
 
-    // iPhone requires user interaction
     window.addEventListener("click", startCompass, { once: true });
 
     return () => {
@@ -103,13 +127,38 @@ function QiblaFinder() {
     };
   }, []);
 
-  const rotation = qiblaDirection - heading;
-  const isAligned = Math.abs(rotation) < 5;
+  // -----------------------------
+  // FIX 360° DIFFERENCE PROBLEM
+  // -----------------------------
+  const getAngleDifference = (a, b) => {
+    let diff = a - b;
+    diff = ((diff + 540) % 360) - 180; // Normalize -180 to 180
+    return diff;
+  };
 
+  const rotation = getAngleDifference(qiblaDirection, heading);
+
+  // Alignment tolerance (7° for stability)
+  const isAligned = Math.abs(rotation) <= 7;
+
+  // Prevent flicker near threshold
+  useEffect(() => {
+    if (isAligned) {
+      const timer = setTimeout(() => setStableAligned(true), 400);
+      return () => clearTimeout(timer);
+    } else {
+      setStableAligned(false);
+    }
+  }, [isAligned]);
+
+  // -----------------------------
+  // UI
+  // -----------------------------
   return (
     <div className="card shadow">
       <div className="card-body">
         <div className="premium-container">
+
           <h2>Qibla Finder</h2>
 
           {!permissionGranted && (
@@ -119,6 +168,7 @@ function QiblaFinder() {
           )}
 
           <div className="compass-container">
+
             {/* Compass Dial */}
             <div
               className="compass-dial"
@@ -132,18 +182,20 @@ function QiblaFinder() {
 
             {/* Qibla Needle */}
             <div
-              className={`needle ${isAligned ? "aligned" : "not-aligned"}`}
+              className={`needle ${stableAligned ? "aligned" : "not-aligned"}`}
               style={{
                 transform: `translate(-50%, -100%) rotate(${rotation}deg)`
               }}
             >
               <img src={kaaba} alt="Kaaba" />
             </div>
+
           </div>
 
-          {isAligned && (
+          {stableAligned && (
             <p className="aligned-text">✔ You are facing Qibla</p>
           )}
+
         </div>
       </div>
     </div>
