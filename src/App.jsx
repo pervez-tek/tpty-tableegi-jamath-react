@@ -77,7 +77,7 @@ function App() {
         <br></br>
         <br></br>
         <br></br>
-        <Footer />
+        <Footer menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
       </AuthProvider>
 
     </>

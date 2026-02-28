@@ -140,7 +140,6 @@
 .needle.aligned {
   background: green;
   box-shadow: 0 0 20px 6px rgba(0, 255, 0, 0.6);
-  animation: pulse 1.5s infinite;
 }
 
 .needle.not-aligned {

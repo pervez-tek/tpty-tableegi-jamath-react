@@ -5,10 +5,24 @@ import mat from "../assets/images/Prayer Mat.png";
 import qibla from "../assets/images/qibla finder.png";
 import { useState } from "react";
 
-const Footer = () => {
+const Footer = ({ menuOpen, setMenuOpen }) => {
   const [image, setImage] = useState(prayer);
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+    // ✅ Scroll to top smoothly
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
   return (
+
     <footer className="mobile-footer">
       <NavLink to="/namazTimings" className="footer-link">
         <div className="glow-wrapper">
@@ -16,7 +30,10 @@ const Footer = () => {
             className="rounded-circle glow-img"
             src={image}
             alt="image"
-            onClick={() => setImage(image === prayer ? mat : prayer)}
+            onClick={() => {
+              toggleMenu();
+              setImage(image === prayer ? mat : prayer);
+            }}
           />
         </div>
       </NavLink>
@@ -35,11 +52,13 @@ const Footer = () => {
           <img
             className="rounded-circle glow-img"
             src={qibla}
-            alt="image"            
+            alt="image"
+            onClick={toggleMenu}
           />
         </div>
       </NavLink>
     </footer>
+
   )
 }
 
