@@ -9,12 +9,17 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from "./components/auth/AuthContext";
 
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+
 
 
 createRoot(document.getElementById('root')).render(
   <AuthProvider>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </BrowserRouter>
   </AuthProvider>
 )

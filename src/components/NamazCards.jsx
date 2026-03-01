@@ -1,73 +1,95 @@
 
 import React, { useState, useEffect } from "react";
 import "./NamazCards.css";
+import { useSelector } from "react-redux";
 
-const namazTimings = [
-    {
-        name: "Fazar",
-        timings: {
-            "Start": "05:28 AM",
-            "Jamaat": "05:45 AM",
-            "Ishraaq": "06:59 AM",
-            "Chaasht": "09:36 AM",
-            "Qaza/Sunrise": "06:39 AM",
-        },
-    },
-    {
-        name: "Zohar",
-        timings: {
-            "Start": "12:33 PM",
-            "Jamaat": "01:30 PM",
-            "Zawaal": "--:--",
-            "Qaza (Shafai)": "03:54 PM",
-            "Qaza (Hanafi)": "04:49 PM",
-        },
-    },
-    {
-        name: "Asr",
-        timings: {
-            "Start": "04:49 PM",
-            "Jamaat": "05:15 PM",
-            "Start (Hanafi)": "04:49 PM",
-            "Start (Shafai)": "03:54 PM",
-            "Qaza": "06:27 PM",
-        },
-    },
-    {
-        name: "Maghrib",
-        timings: {
-            "Start": "06:30 PM",
-            "Jamaat": "06:35 PM",
-            "Sunset": "06:27 PM",
-            "Iftaar": "06:30 PM",
-            "Qaza": "07:38 PM",
-        },
-    },
-    {
-        name: "Isha",
-        timings: {
-            "Start": "07:38 PM",
-            "Jamaat": "08:15 PM",
-            "Tahajjud": "03:37 PM",
-            "Sahoor End": "05:18 PM",
-            "Qaza": "05:28 PM",
-        },
-    },
-    {
-        name: "Juma",
-        timings: {
-            "Khutba": "01:15 PM",
-            "Khutba 1": "01:30 PM",
-            "Khutba 2": "--:--",
-            "Khutba 3": "--:--",
-            "Khutba 4": "--:--",
-        },
-    },
-];
+
+
 
 
 
 function NamazCards() {
+
+    // ✅ Use Redux inside component
+    const { selectedCity, timings, loading, error } = useSelector(
+        (state) => state.location
+    );
+
+    // Convert "05:32" → "05:32 AM"
+    const formatTo12Hour = (time24) => {
+        const [hour, minute] = time24.split(":");
+        const date = new Date();
+        date.setHours(hour, minute);
+
+        return date.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        });
+    };
+
+    const namazTimings = [
+        {
+            name: "Fazar",
+            timings: {
+                "Start": formatTo12Hour(timings.Fajr),
+                "Jamaat": "05:35 AM",
+                "Ishraaq": "06:59 AM",
+                "Chaasht": "09:36 AM",
+                "Qaza/Sunrise": formatTo12Hour(timings.Sunrise),
+            },
+        },
+        {
+            name: "Zohar",
+            timings: {
+                "Start": formatTo12Hour(timings.Dhuhr),
+                "Jamaat": "01:30 PM",
+                "Zawaal": "--:--",                
+                "Qaza (Hanafi)": "04:49 PM",
+                "Qaza (Shafai)": "03:54 PM",
+            },
+        },
+        {
+            name: "Asr",
+            timings: {
+                "Start":formatTo12Hour(timings.Asr),
+                "Jamaat": "05:15 PM",
+                "Start (Hanafi)": "04:49 PM",
+                "Start (Shafai)": "03:54 PM",
+                "Qaza": "06:27 PM",
+            },
+        },
+        {
+            name: "Maghrib",
+            timings: {
+                "Start": formatTo12Hour(timings.Maghrib),
+                "Jamaat": "06:35 PM",
+                "Sunset": formatTo12Hour(timings.Sunset),
+                "Iftaar": "06:30 PM",
+                "Qaza": "07:38 PM",
+            },
+        },
+        {
+            name: "Isha",
+            timings: {
+                "Start": formatTo12Hour(timings.Isha),
+                "Jamaat": "08:45 PM",
+                "Tahajjud": "03:37 PM",
+                "Sahoor End": "05:18 PM",
+                "Qaza": "05:28 PM",
+            },
+        },
+        {
+            name: "Juma",
+            timings: {
+                "Khutba": "01:45 PM",
+                "Khutba 1": "02:00 PM",
+                "Khutba 2": "--:--",
+                "Khutba 3": "--:--",
+                "Khutba 4": "--:--",
+            },
+        },
+    ];
 
 
     const [currentMinutes, setCurrentMinutes] = useState(

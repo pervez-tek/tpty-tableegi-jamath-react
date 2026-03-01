@@ -1,20 +1,81 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ImLocation2 } from "react-icons/im";
+import { useSelector, useDispatch } from "react-redux";
+import { setCity } from "../redux/locationSlice";
+import { fetchNamazTimings } from "../redux/locationSlice";
 import "./LocationSelector.css";
 
 const LocationSelector = () => {
-    const [selectedCity, setSelectedCity] = useState("Tirupati");
+
+    const dispatch = useDispatch();
+    const selectedCity = useSelector((state) => state.location.selectedCity);
+
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     const cities = [
-        "Tirupati",
-        "Chittoor",
-        "SriKhalasti",
-        "Nellore",
-        "Kadapa",
-        "Amaravati"
+
+        {
+            id: 1,
+            name: "Tirupati",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 13.6288,
+            lon: 79.4192,
+            shortName:"tpty"
+        },
+        {
+            id: 2,
+            name: "Chittoor",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 13.2172,
+            lon: 79.1003,
+            shortName:"ctr"
+        },
+        {
+            id: 3,
+            name: "Srikalahasti",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 13.7498,
+            lon: 79.6984,
+            shortName:"skht"
+        },
+        {
+            id: 4,
+            name: "Nellore",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 14.4426,
+            lon: 79.9865,
+            shortName:"nlr"
+
+        },
+        {
+            id: 5,
+            name: "Kadapa",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 14.4674,
+            lon: 78.8242,
+            shortName:"cdp"
+        },
+        {
+            id: 6,
+            name: "Amaravati",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 16.5417,
+            lon: 80.5150,
+            shortName:"amv"
+        }
     ];
+
+
+    useEffect(() => {
+        dispatch(fetchNamazTimings(selectedCity));
+    }, [dispatch]);
 
     // Close on outside click
     useEffect(() => {
@@ -28,7 +89,6 @@ const LocationSelector = () => {
     }, []);
 
     return (
-
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
@@ -38,9 +98,9 @@ const LocationSelector = () => {
 
             <span
                 className="fw-semibold glow-icon-warning hoverEffect"
-                style={{ cursor: "pointer", color: '#ffc107' }}                
+                style={{ cursor: "pointer", color: '#ffc107' }}
             >
-                {selectedCity} ▼
+                {selectedCity.name} ▼
             </span>
 
             {isOpen && (
@@ -57,11 +117,10 @@ const LocationSelector = () => {
                         minWidth: "180px",
                         zIndex: 9999, // 🔥 Prevent hiding
                         animation: "fadeIn 0.2s ease-in-out"
-                    }}
-                >
+                    }}>
                     {cities.map((city) => (
                         <div
-                            key={city}
+                            key={city.id}
                             style={{
                                 padding: "8px 10px",
                                 cursor: "pointer",
@@ -73,12 +132,14 @@ const LocationSelector = () => {
                             onMouseLeave={(e) =>
                                 (e.target.style.background = "transparent")
                             }
+
                             onClick={() => {
-                                setSelectedCity(city);
+                                dispatch(setCity(city)); // 🔥 Redux update
+                                dispatch(fetchNamazTimings(city)); // 🔥 API call
                                 setIsOpen(false);
                             }}
                         >
-                            {city}
+                            {city.name}
                         </div>
                     ))}
                 </div>

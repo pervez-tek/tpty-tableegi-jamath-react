@@ -52,17 +52,28 @@ function QiblaFinder() {
   const handleOrientation = (event) => {
     let compassHeading;
 
-    // iOS
+    // ✅ iOS (Safari)
     if (event.webkitCompassHeading !== undefined) {
       compassHeading = event.webkitCompassHeading;
-    } 
-    // Android
+    }
+
+    // ✅ Android (Chrome)
+    else if (event.absolute === true && event.alpha !== null) {
+      compassHeading = event.alpha;
+    }
+
+    // Fallback (some Android devices)
     else if (event.alpha !== null) {
-      compassHeading = 360 - event.alpha;
+      compassHeading = event.alpha;
+      const screenOrientation =
+        window.screen.orientation?.angle || window.orientation || 0;
+
+      compassHeading = compassHeading + screenOrientation;
     }
 
     if (compassHeading !== undefined) {
-      rawHeading.current = compassHeading;
+      // Normalize
+      rawHeading.current = (360 - compassHeading) % 360;
     }
   };
 
@@ -108,14 +119,16 @@ function QiblaFinder() {
         try {
           const response = await DeviceOrientationEvent.requestPermission();
           if (response === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation);
+            window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+            window.addEventListener("deviceorientation", handleOrientation, true);
             setPermissionGranted(true);
           }
         } catch (err) {
           console.log("Permission denied");
         }
       } else {
-        window.addEventListener("deviceorientation", handleOrientation);
+        window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+        window.addEventListener("deviceorientation", handleOrientation, true);
         setPermissionGranted(true);
       }
     };
@@ -123,6 +136,7 @@ function QiblaFinder() {
     window.addEventListener("click", startCompass, { once: true });
 
     return () => {
+      window.removeEventListener("deviceorientationabsolute", handleOrientation);
       window.removeEventListener("deviceorientation", handleOrientation);
     };
   }, []);
@@ -159,8 +173,8 @@ function QiblaFinder() {
       <div className="card-body">
         <div className="premium-container">
 
-          <h2>Qibla Finder</h2>
-
+          <h2>Qibla Direction</h2>
+          <p>Please calibrate your phone compass before every use for betterresults</p>
           {!permissionGranted && (
             <p style={{ fontSize: "14px", opacity: 0.7 }}>
               Tap anywhere to activate compass

@@ -7,10 +7,13 @@ import GoogleButton from "./GoogleButton";
 import { toast } from "react-toastify";
 import Man from "../assets/images/avt_man.jpg";
 import Wom from "../assets/images/avt_wom.jpg";
+import { useSelector } from "react-redux";
 
 import "./surveyForm.css";
 
 const SurveyForm = () => {
+    const city = useSelector((state) => state.location.selectedCity);
+
     const [form, setForm] = useState({
         id: "",
         image: "",
@@ -99,7 +102,7 @@ const SurveyForm = () => {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-        setForm((prev) => ({...prev, [e.target.name]: e.target.value }));
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const submitSurvey = async (e) => {
@@ -146,6 +149,8 @@ const SurveyForm = () => {
         setAdd(true);
     };
 
+
+
     return (
         <div className="card shadow p-1">
             <div className="card-body">
@@ -155,7 +160,7 @@ const SurveyForm = () => {
                             <tr>
                                 <td>
                                     <h4 className="card-title text-center mb-1">
-                                        {APP_HEADING}
+                                        {city.name}  {APP_HEADING}
                                     </h4>
                                 </td>
                                 <td>

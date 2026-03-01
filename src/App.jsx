@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "./components/auth/AuthContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,9 +20,9 @@ function App() {
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_BACKEND_URL;
   const [menuOpen, setMenuOpen] = useState(false);
+  const city = useSelector((state) => state.location.selectedCity);
 
   useEffect(() => {
-    document.title = import.meta.env.VITE_REACT_APP_TITLE || "Default Title";
     const autoLogout = sessionStorage.getItem("autoLogout");
 
     if (autoLogout === "true") {
@@ -29,6 +30,13 @@ function App() {
       sessionStorage.removeItem("autoLogout");
     }
   }, []);
+
+  useEffect(() => {
+    if (city?.shortName) {
+      document.title = `${city.shortName}-${import.meta.env.VITE_REACT_APP_TITLE || "Default Title"
+        }`;
+    }
+  }, [city]);
 
 
 
@@ -73,11 +81,11 @@ function App() {
         pauseOnHover />
       <AuthProvider>
         <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-        <SurveyPage  menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <SurveyPage menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         <br></br>
         <br></br>
         <br></br>
-        <Footer menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
+        <Footer menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       </AuthProvider>
 
     </>

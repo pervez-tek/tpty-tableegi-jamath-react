@@ -2,11 +2,16 @@ import React, { useEffect, useState } from "react";
 import moment from "moment-hijri";
 import "./LiveClock.css"
 import { ImLocation2 } from "react-icons/im";
+import { useSelector } from "react-redux";
 
 function LiveClock() {
     const [time, setTime] = useState(new Date());
     const hijriDate = moment().format("iD iMMMM iYYYY");
     //const hijriDate = moment().format("iD iMMM iYYYY");
+
+
+
+    const city = useSelector((state) => state.location.selectedCity);
 
     const isRamadan = moment().iMonth() === 8;
 
@@ -73,7 +78,7 @@ function LiveClock() {
                 <ImLocation2 className="selected-location-icon" />
 
                 <span className="location-text">
-                    Tirupathi,Andhra Pradesh,India.
+                    {city.name},{city.state},{city.country}.
                 </span>
             </div>
         </>

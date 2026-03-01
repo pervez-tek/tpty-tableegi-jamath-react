@@ -7,6 +7,7 @@ import "./surveyPage.css";
 import Kalima from "../assets/images/bismillah.png";
 import NotFound from "./NotFound";
 
+
 const Admin = React.lazy(() => import("../components/Admin"));
 // Lazy imports
 const SurveyForm = lazy(() => import("../components/SurveyForm"));
@@ -40,6 +41,7 @@ const ListOfMasjids = lazy(() => import("../components/ListOfMasjids"));
 const Loader = () => <div className="text-center mt-5">Loading...</div>;
 
 function SurveyPage({ menuOpen }) {
+    
     return (
         <>
             <div className={`page-content ${menuOpen ? "shift-down" : ""}`}>
