@@ -33,32 +33,30 @@ function QiblaFinder() {
 
   // Handle compass sensor
   const handleOrientation = (event) => {
-    let compassHeading;
+    let compassHeading = null;
 
-    // ✅ iOS Safari
+    // iOS
     if (event.webkitCompassHeading !== undefined) {
       compassHeading = event.webkitCompassHeading;
     }
 
-    // ✅ Android Chrome (absolute event preferred)
+    // Android absolute event (best)
     else if (event.absolute === true && event.alpha !== null) {
-      compassHeading = event.alpha;
+      compassHeading = 360 - event.alpha;
     }
 
-    // ✅ Fallback Android
+    // Android fallback
     else if (event.alpha !== null) {
-      compassHeading = event.alpha;
+      compassHeading = 360 - event.alpha;
     }
 
-    if (compassHeading !== undefined) {
-      // Fix screen rotation (portrait/landscape)
+    if (compassHeading !== null) {
       const screenAngle =
         window.screen.orientation?.angle || window.orientation || 0;
 
-      compassHeading = compassHeading + screenAngle;
+      compassHeading = (compassHeading + screenAngle) % 360;
 
-      // Normalize properly
-      rawHeading.current = (360 - compassHeading) % 360;
+      rawHeading.current = compassHeading;
     }
   };
 
@@ -85,11 +83,15 @@ function QiblaFinder() {
   // Get location + request compass
   useEffect(() => {
     // Get user location
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const { latitude, longitude } = pos.coords;
-      const direction = calculateQibla(latitude, longitude);
-      setQiblaDirection(direction);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        const direction = calculateQibla(latitude, longitude);
+        setQiblaDirection(direction);
+      },
+      (err) => console.log(err),
+      { enableHighAccuracy: true }
+    );
 
     const startCompass = async () => {
       if (
@@ -99,16 +101,22 @@ function QiblaFinder() {
         try {
           const response = await DeviceOrientationEvent.requestPermission();
           if (response === "granted") {
-            window.addEventListener("deviceorientationabsolute", handleOrientation, true);
-            window.addEventListener("deviceorientation", handleOrientation, true);
+            if ("ondeviceorientationabsolute" in window) {
+              window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+            } else {
+              window.addEventListener("deviceorientation", handleOrientation, true);
+            }
             setPermissionGranted(true);
           }
         } catch (err) {
           console.log("Permission denied");
         }
       } else {
-        window.addEventListener("deviceorientationabsolute", handleOrientation, true);
-        window.addEventListener("deviceorientation", handleOrientation, true);
+        if ("ondeviceorientationabsolute" in window) {
+          window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+        } else {
+          window.addEventListener("deviceorientation", handleOrientation, true);
+        }
         setPermissionGranted(true);
       }
     };
@@ -117,8 +125,11 @@ function QiblaFinder() {
     window.addEventListener("click", startCompass, { once: true });
 
     return () => {
-      window.removeEventListener("deviceorientationabsolute", handleOrientation);
-      window.removeEventListener("deviceorientation", handleOrientation);
+      if ("ondeviceorientationabsolute" in window) {
+        window.removeEventListener("deviceorientationabsolute", handleOrientation);
+      } else {
+        window.removeEventListener("deviceorientation", handleOrientation);
+      }
     };
   }, []);
 
@@ -137,6 +148,9 @@ function QiblaFinder() {
         <div className="premium-container">
           <h2>Qibla Direction</h2>
           <p>Please calibrate your phone compass before every use for betterresults</p>
+          <p style={{ fontSize: "13px", opacity: 0.7 }}>
+            Move your phone in a figure-8 motion to calibrate the compass
+          </p>
 
           {!permissionGranted && (
             <p style={{ fontSize: "14px", opacity: 0.7 }}>
