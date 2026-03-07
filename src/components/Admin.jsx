@@ -45,7 +45,9 @@ const Admin = () => {
           username: response.data.username,
           sessionid: response.data.sessionid,
           isAdminLogin: response.data.isAdminLogin,
-          usrAdminId: response.data.usrAdminId
+          usrAdminId: response.data.usrAdminId,
+          isSuperAdmin: response.data.isSuperAdmin,
+          locationId: response.data.locationId
         };
         login(user); // from useAuth
         navigate("/addMasjid", { state: { loginData: user } });
@@ -65,7 +67,8 @@ const Admin = () => {
               sessionid: "response.data.sessionid",
               isAdminLogin: "response.data.isAdminLogin",
               usrAdminId: "response.data.usrAdminId",
-              isSuperAdmin:false
+              isSuperAdmin:false,
+              locationId: 5
             };
             login(user); // from useAuth
             navigate("/addMasjid", { state: { loginData: user } });
@@ -77,7 +80,8 @@ const Admin = () => {
               sessionid: "response.data.sessionid",
               isAdminLogin: "response.data.isAdminLogin",
               usrAdminId: "response.data.usrAdminId",
-              isSuperAdmin:true
+              isSuperAdmin:true,
+              locationId: 2
             };
             login(user); // from useAuth
             navigate("/addMasjid", { state: { loginData: user } });
