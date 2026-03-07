@@ -94,8 +94,12 @@ const LocationSelector = ({ payload }) => {
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
-            onClick={!isReadOnly ? () => setIsOpen(!isOpen) : undefined}
-
+            
+            onClick={() => {
+                if (!isReadOnly) {
+                    setIsOpen(!isOpen);
+                }
+            }}
         >
             <ImLocation2 className="location-icon glow-icon-warning" />
 

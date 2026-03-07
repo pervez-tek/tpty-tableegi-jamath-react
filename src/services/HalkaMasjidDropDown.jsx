@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 //import { initialMasjidsList1 } from "../components/dummyMasjidsData";
 import { toast } from "react-toastify";
 
-
 // dummyMasjidsData.js
 export const initialMasjidsList = {
   1: [
@@ -49,12 +48,18 @@ export const initialMasjidsList = {
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-function HalkaMasjidDropDown({ value, onChange }) {
+function HalkaMasjidDropDown({ value, onChange,city }) {
 
   const [halkaMasjids, setHalkaMasjids] = useState([]);
 
   useEffect(() => { // Fetch data when component mounts 
-    axios.get(`${API_URL}/getHalkaWiseAllMasjids`, { withCredentials: true }) // your API endpoint 
+    axios.get(`${API_URL}/getHalkaWiseAllMasjids`, {
+      headers: {
+        locationId: city.id ?? null
+      },
+      withCredentials: true
+
+    }) // your API endpoint 
       .then((response) => {
         // console.log("Welcome" + JSON.stringify(response.data));
         setHalkaMasjids(response.data); // assuming response.data is an array 
@@ -75,7 +80,7 @@ function HalkaMasjidDropDown({ value, onChange }) {
 
       });
 
-  }, []);
+  }, [city]);
 
   return (
     <div className="form-floating mb-3 mt-3">

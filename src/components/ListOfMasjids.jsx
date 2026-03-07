@@ -4,12 +4,17 @@ import { toast } from "react-toastify";
 import axios from 'axios';
 import { usePagination } from './pagination/usePagination';
 import PaginationControls from './pagination/PaginationControls';
+import { useSelector } from "react-redux";
+
 
 const ListOfMasjids = () => {
     const API_URL = import.meta.env.VITE_BACKEND_URL;
+    const city = useSelector((state) => state.location.selectedCity);
 
     const [loading, setLoading] = useState(true);
     const [masjids, setMasjids] = useState([]);
+
+  
 
     const showToast = (message, type = "info") => {
         toast.dismiss();
@@ -24,8 +29,12 @@ const ListOfMasjids = () => {
     useEffect(() => {
         const source = axios.CancelToken.source();
         setLoading(true);
+        console.log("City:"+city.name+":"+city.id)
 
         axios.get(`${API_URL}/getAllMasjids`, {
+            headers: {               
+                locationId:city.id ?? null
+            },
             withCredentials: true,
             cancelToken: source.token
         })
@@ -50,7 +59,7 @@ const ListOfMasjids = () => {
             .finally(() => setLoading(false));
 
         return () => source.cancel();
-    }, [API_URL]);
+    }, [API_URL,city]);
 
     // usePagination returns pageItems, pageSize, currentPage, etc.
     const {

@@ -16,7 +16,7 @@ const AddMasjid = () => {
 
     const halka = useMemo(() => {
         const list = [];
-        
+
         for (let i = 1; i <= city.halka; i++) {
             list.push({ id: i, name: `Halka-${i}` });
         }
@@ -38,7 +38,7 @@ const AddMasjid = () => {
     // Try sessionStorage fallback (optional) 
     const stored = typeof window !== "undefined" ? sessionStorage.getItem("user") : null;
     const persisted = stored ? JSON.parse(stored) : null;
-    const initialLogin = navLoginData ?? persisted ?? { adminUsrTrackingId: "", username: "", sessionid: null, usrAdminId: "" };
+    const initialLogin = navLoginData ?? persisted ?? { adminUsrTrackingId: "", username: "", sessionid: null, usrAdminId: "", locationId: city.locationId };
 
     const navigate = useNavigate();
 
@@ -70,7 +70,8 @@ const AddMasjid = () => {
             headers: {
                 sessionid: initialLogin.sessionid ?? "",
                 id: initialLogin.id ?? "", username: initialLogin.username ?? "",
-                usrAdminId: initialLogin.usrAdminId ?? null
+                usrAdminId: initialLogin.usrAdminId ?? null,
+                locationId:initialLogin.locationId ?? null
             },
             withCredentials: true
         }).then((response) => {
@@ -103,7 +104,7 @@ const AddMasjid = () => {
         {
             id: "", halkaNo: 0, masjidName: "", address: "",
             adminUsrTrackingId: initialLogin.id ?? "", username: initialLogin.username ?? "", sessionid: initialLogin.sessionid ?? null,
-            usrAdminId: initialLogin.usrAdminId ?? null
+            usrAdminId: initialLogin.usrAdminId ?? null, locationId: initialLogin.locationId ?? null
         }));
 
 
@@ -113,7 +114,7 @@ const AddMasjid = () => {
 
 
     const handleChange = (e) => {
-        const [name, value] = e.target;
+        const { name, value } = e.target;
         //setForm({ ...form, [e.target.name]: e.target.value });
         setForm((prev) => ({ ...prev, [name]: value }));
     };
@@ -136,7 +137,8 @@ const AddMasjid = () => {
             adminUsrTrackingId: initialLogin.id,
             username: initialLogin.username,
             sessionid: initialLogin.sessionid,
-            usrAdminId: initialLogin.usrAdminId
+            usrAdminId: initialLogin.usrAdminId,
+            locationId: initialLogin.locationId
         };
         console.log("Form:" + JSON.stringify(payload));
         if (editIndex !== null) {
@@ -150,7 +152,8 @@ const AddMasjid = () => {
                 headers: {
                     sessionid: initialLogin.sessionid ?? "",
                     id: initialLogin.id ?? "", username: initialLogin.username ?? "",
-                    usrAdminId: initialLogin.usrAdminId ?? null
+                    usrAdminId: initialLogin.usrAdminId ?? null,
+                    locationId: initialLogin.locationId ?? null
                 },
                 withCredentials: true
             })
@@ -186,7 +189,8 @@ const AddMasjid = () => {
                 headers: {
                     sessionid: initialLogin.sessionid ?? "",
                     id: initialLogin.id ?? "", username: initialLogin.username ?? "",
-                    usrAdminId: initialLogin.usrAdminId ?? null
+                    usrAdminId: initialLogin.usrAdminId ?? null,
+                    locationId: initialLogin.locationId ?? null
                 },
                 withCredentials: true
             })
@@ -219,7 +223,7 @@ const AddMasjid = () => {
         setForm({
             id: "", halkaNo: 0, address: "", masjidName: "",
             adminUsrTrackingId: initialLogin.id ?? "", username: initialLogin.username ?? "", sessionid: initialLogin.sessionid ?? null,
-            usrAdminId: initialLogin.usrAdminId ?? null
+            usrAdminId: initialLogin.usrAdminId ?? null,locationId: initialLogin.locationId ?? null
         });
 
     };
@@ -237,7 +241,7 @@ const AddMasjid = () => {
                 headers: {
                     sessionid: initialLogin.sessionid ?? "",
                     id: initialLogin.id ?? "", username: initialLogin.username ?? "",
-                    usrAdminId: initialLogin.usrAdminId ?? null
+                    usrAdminId: initialLogin.usrAdminId ?? null,locationId: initialLogin.locationId ?? null
                 },
                 withCredentials: true
             })
@@ -269,7 +273,8 @@ const AddMasjid = () => {
             adminUsrTrackingId: initialLogin.id,
             username: initialLogin.username,
             sessionid: initialLogin.sessionid,
-            usrAdminId: initialLogin.usrAdminId
+            usrAdminId: initialLogin.usrAdminId,
+            locationId:initialLogin.locationId
         });
         setEditIndex(index);
 
@@ -306,6 +311,7 @@ const AddMasjid = () => {
                     <input type="hidden" value={form.adminUsrTrackingId || ""} name="adminUsrTrackingId" />
                     <input type="hidden" value={initialLogin.username || ""} name="username" />
                     <input type="hidden" value={initialLogin.usrAdminId || ""} name="usrAdminId" />
+                    <input type="hidden" value={initialLogin.locationId || ""} name="locationId" />
                     <input type="hidden" value={initialLogin.sessionid || ""} name="sessionid" />
 
                     <form className="was-validated" onSubmit={handleSubmit}>

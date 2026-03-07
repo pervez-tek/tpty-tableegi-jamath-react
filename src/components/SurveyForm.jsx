@@ -222,7 +222,7 @@ const SurveyForm = () => {
                             required />
                         <label className="form-label">Age</label>
                     </div>
-                    <HalkaMasjidDropDown value={form.masjidId} onChange={(e) => setForm({ ...form, masjidId: e.target.value })} />
+                    <HalkaMasjidDropDown city={city} value={form.masjidId} onChange={(e) => setForm({ ...form, masjidId: e.target.value })} />
                     <div className="table-responsive">
                         <table className="table table-hover">
                             <tbody>
