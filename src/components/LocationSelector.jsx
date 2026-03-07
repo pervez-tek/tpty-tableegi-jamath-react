@@ -29,24 +29,10 @@ const LocationSelector = ({ payload }) => {
 
     const [cities, setCities] = useState([]);
 
-    useEffect(() => {
-        if (!payload?.isSuperAdmin && payload?.locationId && cities.length > 0) {
-
-            const selected = cities.find(
-                (city) => String(city.id) === String(payload.locationId)
-            );
-
-            if (selected) {
-                dispatch(setCity(selected));
-                dispatch(fetchNamazTimings(selected));
-            }
-        }
-    }, [cities, payload, dispatch]);
-
 
     useEffect(() => {
         const source = axios.CancelToken.source();
-
+        
 
         axios.get(`${API_URL}/getAllLocations`, {
             withCredentials: true,
@@ -70,7 +56,7 @@ const LocationSelector = ({ payload }) => {
                     setCities(locations);
                 }
             })
-            .finally(() => { });
+            .finally(() => setLoading(false));
 
         return () => source.cancel();
     }, [API_URL]);
@@ -94,7 +80,6 @@ const LocationSelector = ({ payload }) => {
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
-            
             onClick={() => {
                 if (!isReadOnly) {
                     setIsOpen(!isOpen);
@@ -149,7 +134,7 @@ const LocationSelector = ({ payload }) => {
                                 setIsOpen(false);
                             }}
                         >
-                            {city.sequenceNo}-{city.name}
+                            {city.name}
                         </div>
                     ))}
                 </div>
