@@ -9,7 +9,7 @@
             lon: 79.4192,
             shortName: "tpty",
             halka: 5,
-            sno:1
+            sequenceNo:1
         },
         {
             id: 2,
@@ -20,7 +20,7 @@
             lon: 79.1003,
             shortName: "ctr",
             halka: 6,
-            sno:2
+            sequenceNo:2
         },
         {
             id: 3,
@@ -31,7 +31,7 @@
             lon: 79.6984,
             shortName: "skht",
             halka: 4,
-            sno:3
+            sequenceNo:3
         },
         {
             id: 4,
@@ -42,7 +42,7 @@
             lon: 79.9865,
             shortName: "nlr",
             halka: 7,
-            sno:4
+            sequenceNo:4
 
         },
         {
@@ -54,7 +54,7 @@
             lon: 78.8242,
             shortName: "cdp",
             halka: 5,
-            sno:5
+            sequenceNo:5
         },
         {
             id: 6,
@@ -65,6 +65,6 @@
             lon: 80.5150,
             shortName: "amv",
             halka: 8,
-            sno:6
+            sequenceNo:6
         }
     ];

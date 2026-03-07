@@ -149,7 +149,7 @@ const LocationSelector = ({ payload }) => {
                                 setIsOpen(false);
                             }}
                         >
-                            {city.name}
+                            {city.sequenceNo}-{city.name}
                         </div>
                     ))}
                 </div>
