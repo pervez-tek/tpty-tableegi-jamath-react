@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { initialMasjidsList, addDummyMasjid, updateDummyMasjid, deleteDummyMasjid } from "./dummyMasjidsData";
@@ -8,17 +8,24 @@ import { toast } from "react-toastify";
 import { useAuth } from "./auth/AuthContext";
 import { usePagination } from "./pagination/usePagination";
 import PaginationControls from "./pagination/PaginationControls";
-
+import { useSelector } from "react-redux";
 
 const AddMasjid = () => {
-    const halka = [
-        { id: 1, name: "Halka-1" },
-        { id: 2, name: "Halka-2" },
-        { id: 3, name: "Halka-3" },
-        { id: 4, name: "Halka-4" },
-        { id: 5, name: "Halka-5" },
-        { id: 0, name: "N/A" }
-    ];
+
+    const city = useSelector((state) => state.location.selectedCity);
+
+    const halka = useMemo(() => {
+        const list = [];
+        
+        for (let i = 1; i <= city.halka; i++) {
+            list.push({ id: i, name: `Halka-${i}` });
+        }
+        list.push({ id: 0, name: "N/A" });
+
+        return list;
+    }, [city]);
+
+
     const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     const [masjids, setMasjids] = useState([]);
@@ -322,7 +329,7 @@ const AddMasjid = () => {
                                 ))}
                             </select>
                             <label htmlFor="halqa" className="form-label">
-                                Halqa (1–5)
+                                Halqa (1–{city.halka})
                             </label>
                         </div>
 

@@ -141,3 +141,28 @@
     transform: none !important;
   }
 }
+
+
+.center-hr {
+  border: none;
+  border-top: 2px solid  rgb(255, 193, 7);
+  margin: 8px 0;
+  width: 100%;
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  animation: expandFromCenter 2s ease-in-out infinite;
+}
+
+@keyframes expandFromCenter {
+  0% {
+    transform: scaleX(0);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}

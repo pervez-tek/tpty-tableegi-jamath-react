@@ -15,11 +15,13 @@ import { MdContactMail, MdMosque, MdNightlight, MdOutlineNightlight } from "reac
 import { FaMosque } from "react-icons/fa";
 import { ImLocation2 } from "react-icons/im";
 import LocationSelector from "./LocationSelector";
+import { resetLocation } from "../redux/locationSlice";
+import { useDispatch } from "react-redux";
 
 function Navbar({ menuOpen, setMenuOpen }) {
   const { user, isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -36,18 +38,22 @@ function Navbar({ menuOpen, setMenuOpen }) {
 
 
   const API_URL = import.meta.env.VITE_BACKEND_URL;
+  const payload = user ?? JSON.parse(sessionStorage.getItem("user") || "{}");
   const singout = async () => {
 
     console.log("signout calling")
 
     // Build payload from context or fallback to sessionStorage 
-    const payload = user ?? JSON.parse(sessionStorage.getItem("user") || "{}");
+
     console.log("Payload" + JSON.stringify(payload));
     await axios.post(`${API_URL}/signOut`, payload, { withCredentials: true })
       .then(response => {
         console.log("DTO:", response.data);
         logout();
+        // Reset Redux location
+        dispatch(resetLocation());
         navigate("/login"); // redirect 
+
       })
       .catch(error => {
         console.error("Error:", error.response?.data || error.message);
@@ -55,11 +61,15 @@ function Navbar({ menuOpen, setMenuOpen }) {
 
         console.log("Erro:" + backendMessage);
         logout();
+        // Reset Redux location
+        dispatch(resetLocation());
         navigate("/login"); // redirect 
+
       });
   }
 
   return (
+
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
       <div className="container-fluid">
         <Link className="navbar-brand" to="/surveyForm">
@@ -72,7 +82,7 @@ function Navbar({ menuOpen, setMenuOpen }) {
           />
         </Link>
 
-        <LocationSelector />
+        <LocationSelector payload={payload} />
         {/* <div className="me-auto d-flex align-items-right gap-2">
           <MdNightlight className="location-icon" />
           <MdOutlineNightlight />
@@ -186,12 +196,7 @@ function Navbar({ menuOpen, setMenuOpen }) {
             {isLoggedIn && (
 
               <li className="nav-item">
-                <hr
-                  style={{
-                    borderTop: "1px solid rgb(255, 255, 255)",
-                    margin: "8px 0"
-                  }}
-                />
+                <hr className="center-hr" />
                 <NavLink className={({ isActive }) =>
                   isActive ? "nav-link active active-link" : "nav-link"}
                   to="/login"

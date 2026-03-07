@@ -64,7 +64,20 @@ const Admin = () => {
               username: "response.data.username",
               sessionid: "response.data.sessionid",
               isAdminLogin: "response.data.isAdminLogin",
-              usrAdminId: "response.data.usrAdminId"
+              usrAdminId: "response.data.usrAdminId",
+              isSuperAdmin:false
+            };
+            login(user); // from useAuth
+            navigate("/addMasjid", { state: { loginData: user } });
+            toast.warning("⚠️ Network error, showing dummy authentication instead!");
+          } else if (form.username === "super" && form.password === "super") {
+            const user = {
+              id: "response.data.id",
+              username: "response.data.username",
+              sessionid: "response.data.sessionid",
+              isAdminLogin: "response.data.isAdminLogin",
+              usrAdminId: "response.data.usrAdminId",
+              isSuperAdmin:true
             };
             login(user); // from useAuth
             navigate("/addMasjid", { state: { loginData: user } });

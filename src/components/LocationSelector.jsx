@@ -4,14 +4,24 @@ import { useSelector, useDispatch } from "react-redux";
 import { setCity } from "../redux/locationSlice";
 import { fetchNamazTimings } from "../redux/locationSlice";
 import "./LocationSelector.css";
+import { useLocation } from "react-router";
 
-const LocationSelector = () => {
+const LocationSelector = ({ payload }) => {
 
     const dispatch = useDispatch();
     const selectedCity = useSelector((state) => state.location.selectedCity);
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const location = useLocation();
+
+    // const allowedRoutes = [
+    //     "/surveyForm",
+    //     "/about", "contact", "listOfMasjids"
+    // ];
+
+    // 🔹 Make readonly when SuperAdmin is FALSE
+    const isReadOnly = payload?.isSuperAdmin === false && payload?.username;
 
     const cities = [
 
@@ -22,7 +32,8 @@ const LocationSelector = () => {
             country: "India",
             lat: 13.6288,
             lon: 79.4192,
-            shortName:"tpty"
+            shortName: "tpty",
+            halka: 5
         },
         {
             id: 2,
@@ -31,7 +42,8 @@ const LocationSelector = () => {
             country: "India",
             lat: 13.2172,
             lon: 79.1003,
-            shortName:"ctr"
+            shortName: "ctr",
+            halka: 6
         },
         {
             id: 3,
@@ -40,7 +52,8 @@ const LocationSelector = () => {
             country: "India",
             lat: 13.7498,
             lon: 79.6984,
-            shortName:"skht"
+            shortName: "skht",
+            halka: 4
         },
         {
             id: 4,
@@ -49,7 +62,8 @@ const LocationSelector = () => {
             country: "India",
             lat: 14.4426,
             lon: 79.9865,
-            shortName:"nlr"
+            shortName: "nlr",
+            halka: 7
 
         },
         {
@@ -59,7 +73,8 @@ const LocationSelector = () => {
             country: "India",
             lat: 14.4674,
             lon: 78.8242,
-            shortName:"cdp"
+            shortName: "cdp",
+            halka: 5
         },
         {
             id: 6,
@@ -68,14 +83,15 @@ const LocationSelector = () => {
             country: "India",
             lat: 16.5417,
             lon: 80.5150,
-            shortName:"amv"
+            shortName: "amv",
+            halka: 8
         }
     ];
 
 
     useEffect(() => {
         dispatch(fetchNamazTimings(selectedCity));
-    }, [dispatch]);
+    }, [dispatch, selectedCity]);
 
     // Close on outside click
     useEffect(() => {
@@ -92,15 +108,21 @@ const LocationSelector = () => {
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+                if (!isReadOnly) {
+                    setIsOpen(!isOpen);
+                }
+            }}
         >
             <ImLocation2 className="location-icon glow-icon-warning" />
 
             <span
                 className="fw-semibold glow-icon-warning hoverEffect"
-                style={{ cursor: "pointer", color: '#ffc107' }}
+                style={{ cursor: isReadOnly ? "not-allowed" : "pointer", color: '#ffc107' }}
             >
-                {selectedCity.name} ▼
+                {selectedCity.name}
+                {/* show arrow only when editable */}
+                {!isReadOnly && " ▼"}
             </span>
 
             {isOpen && (
@@ -134,6 +156,7 @@ const LocationSelector = () => {
                             }
 
                             onClick={() => {
+                                if (isReadOnly) return;
                                 dispatch(setCity(city)); // 🔥 Redux update
                                 dispatch(fetchNamazTimings(city)); // 🔥 API call
                                 setIsOpen(false);

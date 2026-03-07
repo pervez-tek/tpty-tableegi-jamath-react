@@ -35,14 +35,30 @@ function QiblaFinder() {
   const handleOrientation = (event) => {
     let compassHeading;
 
+    // ✅ iOS Safari
     if (event.webkitCompassHeading !== undefined) {
       compassHeading = event.webkitCompassHeading;
-    } else if (event.alpha !== null) {
-      compassHeading = 360 - event.alpha;
+    }
+
+    // ✅ Android Chrome (absolute event preferred)
+    else if (event.absolute === true && event.alpha !== null) {
+      compassHeading = event.alpha;
+    }
+
+    // ✅ Fallback Android
+    else if (event.alpha !== null) {
+      compassHeading = event.alpha;
     }
 
     if (compassHeading !== undefined) {
-      rawHeading.current = compassHeading;
+      // Fix screen rotation (portrait/landscape)
+      const screenAngle =
+        window.screen.orientation?.angle || window.orientation || 0;
+
+      compassHeading = compassHeading + screenAngle;
+
+      // Normalize properly
+      rawHeading.current = (360 - compassHeading) % 360;
     }
   };
 
@@ -83,14 +99,16 @@ function QiblaFinder() {
         try {
           const response = await DeviceOrientationEvent.requestPermission();
           if (response === "granted") {
-            window.addEventListener("deviceorientation", handleOrientation);
+            window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+            window.addEventListener("deviceorientation", handleOrientation, true);
             setPermissionGranted(true);
           }
         } catch (err) {
           console.log("Permission denied");
         }
       } else {
-        window.addEventListener("deviceorientation", handleOrientation);
+        window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+        window.addEventListener("deviceorientation", handleOrientation, true);
         setPermissionGranted(true);
       }
     };
@@ -99,6 +117,7 @@ function QiblaFinder() {
     window.addEventListener("click", startCompass, { once: true });
 
     return () => {
+      window.removeEventListener("deviceorientationabsolute", handleOrientation);
       window.removeEventListener("deviceorientation", handleOrientation);
     };
   }, []);
