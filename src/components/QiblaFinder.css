@@ -113,7 +113,7 @@
 .aligned-text {
     color: green;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 2px;
 }
 
 @media (max-width: 480px) {
