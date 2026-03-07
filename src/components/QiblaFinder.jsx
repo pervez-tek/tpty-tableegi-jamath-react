@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import kaaba from "../assets/images/kaaba.png";
 import "./QiblaFinder.css";
-import { GoogleMap, Polyline, Marker, useJsApiLoader } from "@react-google-maps/api";
+
 
 const KAABA_LAT = 21.4225;
 const KAABA_LON = 39.8262;
@@ -21,9 +21,7 @@ function QiblaFinder() {
   const toRad = (deg) => (deg * Math.PI) / 180;
   const toDeg = (rad) => (rad * 180) / Math.PI;
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "1035892232306-f8hok2klqduou3s8junkbp6v2sehde1d.apps.googleusercontent.com"
-  });
+
 
   const calculateQibla = (lat, lon) => {
     const φ1 = toRad(lat);
@@ -190,7 +188,7 @@ function QiblaFinder() {
       <div className="card-body">
         <div className="premium-container">
           <h2>Qibla Direction</h2>
-          <p>Please calibrate your phone compass before every use for betterresults</p>
+          <p style={{ fontSize: "13px", opacity: 0.7 }}>Please calibrate your phone compass before every use for betterresults</p>
           <p style={{ fontSize: "13px", opacity: 0.7 }}>
             Move your phone in a figure-8 motion to calibrate the compass
           </p>
@@ -232,39 +230,7 @@ function QiblaFinder() {
 
           {isAligned && (
             <p className="aligned-text">✔ You are facing Qibla</p>
-          )}
-
-          {isLoaded && userLocation && (
-
-            <GoogleMap
-              zoom={4}
-              center={userLocation}
-              mapContainerStyle={{
-                width: "100%",
-                height: "300px",
-                borderRadius: "12px"
-              }}
-            >
-
-              <Marker position={userLocation} />
-
-              <Marker position={{ lat: KAABA_LAT, lng: KAABA_LON }} />
-
-              <Polyline
-                path={[
-                  { lat: userLocation.lat, lng: userLocation.lon },
-                  { lat: KAABA_LAT, lng: KAABA_LON }
-                ]}
-                options={{
-                  strokeColor: "#00c853",
-                  strokeOpacity: 0.9,
-                  strokeWeight: 3
-                }}
-              />
-
-            </GoogleMap>
-
-          )}
+          )}          
         </div>
       </div>
     </div>
