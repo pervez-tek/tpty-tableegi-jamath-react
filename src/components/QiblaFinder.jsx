@@ -1,93 +1,103 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import kaaba from "../assets/images/kaaba.png";
 import "./QiblaFinder.css";
+import { GoogleMap, Polyline, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const KAABA_LAT = 21.4225;
 const KAABA_LON = 39.8262;
 
-export default function QiblaFinder() {
-
+function QiblaFinder() {
   const [heading, setHeading] = useState(0);
   const [qiblaDirection, setQiblaDirection] = useState(0);
-  const [permission, setPermission] = useState(false);
+  const [permissionGranted, setPermissionGranted] = useState(false);
+
+  const [distance, setDistance] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
 
   const rawHeading = useRef(0);
   const smoothHeading = useRef(0);
-
   const animationFrame = useRef(null);
 
-  const toRad = (deg) => deg * Math.PI / 180;
-  const toDeg = (rad) => rad * 180 / Math.PI;
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const toDeg = (rad) => (rad * 180) / Math.PI;
 
-  /* -----------------------------
-     QIBLA CALCULATION
-  ------------------------------ */
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "1035892232306-f8hok2klqduou3s8junkbp6v2sehde1d.apps.googleusercontent.com"
+  });
 
   const calculateQibla = (lat, lon) => {
-
     const φ1 = toRad(lat);
     const φ2 = toRad(KAABA_LAT);
     const Δλ = toRad(KAABA_LON - lon);
 
     const y = Math.sin(Δλ) * Math.cos(φ2);
-
     const x =
       Math.cos(φ1) * Math.sin(φ2) -
       Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
 
     const θ = Math.atan2(y, x);
-
     return (toDeg(θ) + 360) % 360;
   };
 
-  /* -----------------------------
-     COMPASS SENSOR
-  ------------------------------ */
-
+  // Handle compass sensor
   const handleOrientation = (event) => {
+    let compassHeading = null;
 
-    let compass = null;
-
-    // iOS Safari
+    // iOS
     if (event.webkitCompassHeading !== undefined) {
-      compass = event.webkitCompassHeading;
+      compassHeading = event.webkitCompassHeading;
     }
 
-    // Android absolute event
+    // Android absolute event (best)
     else if (event.absolute === true && event.alpha !== null) {
-      compass = 360 - event.alpha;
+      compassHeading = 360 - event.alpha;
     }
 
     // Android fallback
     else if (event.alpha !== null) {
-      compass = 360 - event.alpha;
+      compassHeading = 360 - event.alpha;
     }
 
-    if (compass !== null) {
-
+    if (compassHeading !== null) {
       const screenAngle =
         window.screen.orientation?.angle || window.orientation || 0;
 
-      compass = (compass + screenAngle) % 360;
+      compassHeading = (compassHeading + screenAngle) % 360;
 
-      rawHeading.current = compass;
+      rawHeading.current = compassHeading;
     }
   };
 
-  /* -----------------------------
-     SMOOTH COMPASS ANIMATION
-  ------------------------------ */
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
+    const R = 6371; // Earth radius km
+
+    const toRad = (deg) => deg * Math.PI / 180;
+
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
+  };
+
+  // Smooth animation engine
   useEffect(() => {
-
     const animate = () => {
-
       let diff = rawHeading.current - smoothHeading.current;
 
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
 
-      smoothHeading.current += diff * 0.12;
+      smoothHeading.current += diff * 0.15; // smoothing factor
 
       setHeading(smoothHeading.current);
 
@@ -97,173 +107,168 @@ export default function QiblaFinder() {
     animationFrame.current = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationFrame.current);
-
   }, []);
 
-  /* -----------------------------
-     LOCATION
-  ------------------------------ */
-
+  // Get location + request compass
   useEffect(() => {
-
+    // Get user location
     navigator.geolocation.getCurrentPosition(
-
       (pos) => {
 
         const { latitude, longitude } = pos.coords;
 
+        setUserLocation({ lat: latitude, lon: longitude });
+
         const qibla = calculateQibla(latitude, longitude);
-
         setQiblaDirection(qibla);
+
+        const dist = calculateDistance(
+          latitude,
+          longitude,
+          KAABA_LAT,
+          KAABA_LON
+        );
+
+        setDistance(dist.toFixed(0));
+
       },
-
       (err) => console.log(err),
-
       { enableHighAccuracy: true }
-
     );
 
-  }, []);
-
-  /* -----------------------------
-     COMPASS START
-  ------------------------------ */
-
-  const startCompass = async () => {
-
-    if (
-      typeof DeviceOrientationEvent !== "undefined" &&
-      typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-
-      try {
-
-        const response = await DeviceOrientationEvent.requestPermission();
-
-        if (response === "granted") {
-
-          window.addEventListener(
-            "deviceorientationabsolute",
-            handleOrientation,
-            true
-          );
-
-          window.addEventListener(
-            "deviceorientation",
-            handleOrientation,
-            true
-          );
-
-          setPermission(true);
+    const startCompass = async () => {
+      if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function"
+      ) {
+        try {
+          const response = await DeviceOrientationEvent.requestPermission();
+          if (response === "granted") {
+            if ("ondeviceorientationabsolute" in window) {
+              window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+            } else {
+              window.addEventListener("deviceorientation", handleOrientation, true);
+            }
+            setPermissionGranted(true);
+          }
+        } catch (err) {
+          console.log("Permission denied");
         }
-
-      } catch (e) {
-        console.log(e);
+      } else {
+        if ("ondeviceorientationabsolute" in window) {
+          window.addEventListener("deviceorientationabsolute", handleOrientation, true);
+        } else {
+          window.addEventListener("deviceorientation", handleOrientation, true);
+        }
+        setPermissionGranted(true);
       }
+    };
 
-    } else {
-
-      window.addEventListener(
-        "deviceorientationabsolute",
-        handleOrientation,
-        true
-      );
-
-      window.addEventListener(
-        "deviceorientation",
-        handleOrientation,
-        true
-      );
-
-      setPermission(true);
-    }
-  };
-
-  useEffect(() => {
-
+    // iPhone requires user interaction
     window.addEventListener("click", startCompass, { once: true });
 
     return () => {
-
-      window.removeEventListener("deviceorientationabsolute", handleOrientation);
-
-      window.removeEventListener("deviceorientation", handleOrientation);
-
+      if ("ondeviceorientationabsolute" in window) {
+        window.removeEventListener("deviceorientationabsolute", handleOrientation);
+      } else {
+        window.removeEventListener("deviceorientation", handleOrientation);
+      }
     };
-
   }, []);
 
-  /* -----------------------------
-     ALIGNMENT CHECK
-  ------------------------------ */
-
-  const angleDiff = (a, b) => {
-
+  const getAngleDifference = (a, b) => {
     let diff = a - b;
-
-    diff = ((diff + 540) % 360) - 180;
-
+    diff = ((diff + 540) % 360) - 180; // normalize between -180 and 180
     return diff;
   };
 
-  const rotation = angleDiff(qiblaDirection, heading);
-
-  const aligned = Math.abs(rotation) < 5;
-
-  /* -----------------------------
-     UI
-  ------------------------------ */
+  const rotation = getAngleDifference(qiblaDirection, heading);
+  const isAligned = Math.abs(rotation) <= 5;
 
   return (
-
     <div className="card shadow">
-
       <div className="card-body">
-
         <div className="premium-container">
-
           <h2>Qibla Direction</h2>
+          <p>Please calibrate your phone compass before every use for betterresults</p>
+          <p style={{ fontSize: "13px", opacity: 0.7 }}>
+            Move your phone in a figure-8 motion to calibrate the compass
+          </p>
 
-          <p>Move phone in figure 8 motion to calibrate compass</p>
+          {distance && (
+            <p className="distance-text">
+              Distance to Kaaba: <b>{distance} km</b>
+            </p>
+          )}
 
-          {!permission && (
-            <p style={{ opacity: 0.7 }}>Tap screen to activate compass</p>
+          {!permissionGranted && (
+            <p style={{ fontSize: "14px", opacity: 0.7 }}>
+              Tap anywhere to activate compass
+            </p>
           )}
 
           <div className="compass-container">
-
+            {/* Compass Dial */}
             <div
               className="compass-dial"
               style={{ transform: `rotate(${-heading}deg)` }}
             >
-
               <div className="cardinal north">N</div>
               <div className="cardinal south">S</div>
               <div className="cardinal east">E</div>
               <div className="cardinal west">W</div>
-
             </div>
 
+            {/* Qibla Needle */}
             <div
-              className={`needle ${aligned ? "aligned" : ""}`}
+              className={`needle ${isAligned ? "aligned" : "not-aligned"}`}
               style={{
                 transform: `translate(-50%, -100%) rotate(${rotation}deg)`
               }}
             >
-
               <img src={kaaba} alt="Kaaba" />
-
             </div>
-
           </div>
 
-          {aligned && <p className="aligned-text">✔ Facing Qibla</p>}
+          {isAligned && (
+            <p className="aligned-text">✔ You are facing Qibla</p>
+          )}
 
+          {isLoaded && userLocation && (
+
+            <GoogleMap
+              zoom={4}
+              center={userLocation}
+              mapContainerStyle={{
+                width: "100%",
+                height: "300px",
+                borderRadius: "12px"
+              }}
+            >
+
+              <Marker position={userLocation} />
+
+              <Marker position={{ lat: KAABA_LAT, lng: KAABA_LON }} />
+
+              <Polyline
+                path={[
+                  { lat: userLocation.lat, lng: userLocation.lon },
+                  { lat: KAABA_LAT, lng: KAABA_LON }
+                ]}
+                options={{
+                  strokeColor: "#00c853",
+                  strokeOpacity: 0.9,
+                  strokeWeight: 3
+                }}
+              />
+
+            </GoogleMap>
+
+          )}
         </div>
-
       </div>
-
     </div>
-
   );
 }
+
+export default QiblaFinder;

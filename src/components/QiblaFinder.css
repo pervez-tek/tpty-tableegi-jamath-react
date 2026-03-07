@@ -147,3 +147,20 @@
   box-shadow: 0 0 20px 6px rgba(255, 30, 0, 0.6);
   animation: pulse 1.5s infinite;
 }
+
+.needle img{
+width:60px;
+filter: drop-shadow(0 0 10px gold);
+}
+
+.aligned-text{
+color:#00c853;
+font-weight:bold;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:0.6}
+50%{opacity:1}
+100%{opacity:0.6}
+}
