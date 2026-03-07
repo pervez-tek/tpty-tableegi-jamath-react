@@ -204,7 +204,9 @@ function QiblaFinder() {
               Tap anywhere to activate compass
             </p>
           )}
-
+          {isAligned && (
+            <p className="aligned-text">✔ You are facing Qibla</p>
+          )}
           <div className="compass-container">
             {/* Compass Dial */}
             <div
@@ -228,9 +230,7 @@ function QiblaFinder() {
             </div>
           </div>
 
-          {isAligned && (
-            <p className="aligned-text">✔ You are facing Qibla</p>
-          )}          
+
         </div>
       </div>
     </div>
