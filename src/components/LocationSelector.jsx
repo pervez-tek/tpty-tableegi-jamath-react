@@ -4,66 +4,84 @@ import { useSelector, useDispatch } from "react-redux";
 import { setCity } from "../redux/locationSlice";
 import { fetchNamazTimings } from "../redux/locationSlice";
 import "./LocationSelector.css";
-import { useLocation } from "react-router";
-import { locations } from "./dummyLocationsData";
-import { toast } from "react-toastify";
-import axios from 'axios';
 
-const LocationSelector = ({ payload }) => {
+const LocationSelector = ({payload}) => {
 
-    const API_URL = import.meta.env.VITE_BACKEND_URL;
     const dispatch = useDispatch();
     const selectedCity = useSelector((state) => state.location.selectedCity);
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const location = useLocation();
 
-    // const allowedRoutes = [
-    //     "/surveyForm",
-    //     "/about", "contact", "listOfMasjids"
-    // ];
+    const cities = [
 
-    // 🔹 Make readonly when SuperAdmin is FALSE
-    const isReadOnly = payload?.isSuperAdmin === false && payload?.username;
+        {
+            id: 1,
+            name: "Tirupati",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 13.6288,
+            lon: 79.4192,
+            shortName:"tpty",
+            halka:5
+        },
+        {
+            id: 2,
+            name: "Chittoor",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 13.2172,
+            lon: 79.1003,
+            shortName:"ctr",
+            halka:6
+        },
+        {
+            id: 3,
+            name: "Srikalahasti",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 13.7498,
+            lon: 79.6984,
+            shortName:"skht",
+            halka:4
+        },
+        {
+            id: 4,
+            name: "Nellore",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 14.4426,
+            lon: 79.9865,
+            shortName:"nlr",
+            halka:7
 
-    const [cities, setCities] = useState([]);
+        },
+        {
+            id: 5,
+            name: "Kadapa",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 14.4674,
+            lon: 78.8242,
+            shortName:"cdp",
+            halka:5
+        },
+        {
+            id: 6,
+            name: "Amaravati",
+            state: "Andhra Pradesh",
+            country: "India",
+            lat: 16.5417,
+            lon: 80.5150,
+            shortName:"amv",
+            halka:8
+        }
+    ];
 
-
-    useEffect(() => {
-        const source = axios.CancelToken.source();
-        
-
-        axios.get(`${API_URL}/getAllLocations`, {
-            withCredentials: true,
-            cancelToken: source.token
-        })
-            .then((response) => {
-                // remove the extra setLoading(true) here
-                const data = response.data;
-                // adapt if backend returns wrapper or array
-                const items = Array.isArray(data) ? data : (Array.isArray(data.items) ? data.items : []);
-                setCities(items);
-            })
-            .catch((error) => {
-                console.error("Error fetching masjids:", error);
-                if (error.code === "ERR_NETWORK") {
-                    showToast("⚠️ Network error, showing dummy data instead!", "warning");
-                    setCities(locations);
-                } else {
-                    const backendMessage = error.response?.data?.message || error.message;
-                    showToast(`❌ Error: ${backendMessage}`, "error");
-                    setCities(locations);
-                }
-            })
-            .finally(() => setLoading(false));
-
-        return () => source.cancel();
-    }, [API_URL]);
 
     useEffect(() => {
         dispatch(fetchNamazTimings(selectedCity));
-    }, [dispatch, selectedCity]);
+    }, [dispatch]);
 
     // Close on outside click
     useEffect(() => {
@@ -80,21 +98,15 @@ const LocationSelector = ({ payload }) => {
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
-            onClick={() => {
-                if (!isReadOnly) {
-                    setIsOpen(!isOpen);
-                }
-            }}
+            onClick={() => setIsOpen(!isOpen)}
         >
             <ImLocation2 className="location-icon glow-icon-warning" />
 
             <span
                 className="fw-semibold glow-icon-warning hoverEffect"
-                style={{ cursor: isReadOnly ? "not-allowed" : "pointer", color: '#ffc107' }}
+                style={{ cursor: "pointer", color: '#ffc107' }}
             >
-                {selectedCity.name}
-                {/* show arrow only when editable */}
-                {!isReadOnly && " ▼"}
+                {selectedCity.name} ▼
             </span>
 
             {isOpen && (
@@ -128,7 +140,6 @@ const LocationSelector = ({ payload }) => {
                             }
 
                             onClick={() => {
-                                if (isReadOnly) return;
                                 dispatch(setCity(city)); // 🔥 Redux update
                                 dispatch(fetchNamazTimings(city)); // 🔥 API call
                                 setIsOpen(false);
