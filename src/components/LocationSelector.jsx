@@ -1,130 +1,179 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ImLocation2 } from "react-icons/im";
 import { useSelector, useDispatch } from "react-redux";
-import { setCity } from "../redux/locationSlice";
-import { fetchNamazTimings } from "../redux/locationSlice";
+import { setCity, fetchNamazTimings } from "../redux/locationSlice";
 import "./LocationSelector.css";
+import { locations } from "./dummyLocationsData";
+import axios from "axios";
 
-const LocationSelector = ({payload}) => {
+const LocationSelector = ({ payload }) => {
+
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     const dispatch = useDispatch();
     const selectedCity = useSelector((state) => state.location.selectedCity);
 
     const [isOpen, setIsOpen] = useState(false);
+    const [cities, setCities] = useState([]);
+
     const dropdownRef = useRef(null);
 
-    const cities = [
+    // 🔹 Readonly when user is not SuperAdmin
+    const isReadOnly = payload?.isSuperAdmin === false;
 
-        {
-            id: 1,
-            name: "Tirupati",
-            state: "Andhra Pradesh",
-            country: "India",
-            lat: 13.6288,
-            lon: 79.4192,
-            shortName:"tpty",
-            halka:5
-        },
-        {
-            id: 2,
-            name: "Chittoor",
-            state: "Andhra Pradesh",
-            country: "India",
-            lat: 13.2172,
-            lon: 79.1003,
-            shortName:"ctr",
-            halka:6
-        },
-        {
-            id: 3,
-            name: "Srikalahasti",
-            state: "Andhra Pradesh",
-            country: "India",
-            lat: 13.7498,
-            lon: 79.6984,
-            shortName:"skht",
-            halka:4
-        },
-        {
-            id: 4,
-            name: "Nellore",
-            state: "Andhra Pradesh",
-            country: "India",
-            lat: 14.4426,
-            lon: 79.9865,
-            shortName:"nlr",
-            halka:7
+    // ===============================
+    // Fetch Locations
+    // ===============================
+    useEffect(() => {
 
-        },
-        {
-            id: 5,
-            name: "Kadapa",
-            state: "Andhra Pradesh",
-            country: "India",
-            lat: 14.4674,
-            lon: 78.8242,
-            shortName:"cdp",
-            halka:5
-        },
-        {
-            id: 6,
-            name: "Amaravati",
-            state: "Andhra Pradesh",
-            country: "India",
-            lat: 16.5417,
-            lon: 80.5150,
-            shortName:"amv",
-            halka:8
+        const source = axios.CancelToken.source();
+
+        axios.get(`${API_URL}/getAllLocations`, {
+            withCredentials: true,
+            cancelToken: source.token
+        })
+            .then((response) => {
+
+                console.log("Locations API Response:", response.data);
+
+                const data = response.data;
+
+                const items =
+                    Array.isArray(data)
+                        ? data
+                        : Array.isArray(data?.items)
+                            ? data.items
+                            : [];
+
+                setCities(items);
+
+                // set default selected city
+                if (items.length > 0 && !selectedCity) {
+                    dispatch(setCity(items[0]));
+                }
+
+            })
+            .catch((error) => {
+
+                console.error("Error fetching locations:", error);
+
+                // fallback dummy data
+                setCities(locations);
+
+            });
+
+        return () => source.cancel();
+
+    }, [API_URL, dispatch]);
+
+
+
+    // ===============================
+    // Set City for Non Super Admin
+    // ===============================
+    useEffect(() => {
+
+        if (!payload?.isSuperAdmin && payload?.locationId && cities.length > 0) {
+
+            const selected = cities.find(
+                (city) => String(city.id) === String(payload.locationId)
+            );
+
+            if (selected) {
+                dispatch(setCity(selected));
+                dispatch(fetchNamazTimings(selected));
+            }
         }
-    ];
+
+    }, [cities, payload, dispatch]);
 
 
+
+    // ===============================
+    // Fetch Namaz timings
+    // ===============================
     useEffect(() => {
-        dispatch(fetchNamazTimings(selectedCity));
-    }, [dispatch]);
 
-    // Close on outside click
+        if (selectedCity) {
+            dispatch(fetchNamazTimings(selectedCity));
+        }
+
+    }, [dispatch, selectedCity]);
+
+
+
+    // ===============================
+    // Close dropdown outside click
+    // ===============================
     useEffect(() => {
+
         const handleClickOutside = (event) => {
+
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
+
         };
+
         document.addEventListener("mousedown", handleClickOutside);
+
         return () => document.removeEventListener("mousedown", handleClickOutside);
+
     }, []);
+
+
+
 
     return (
         <div
             className="me-auto d-flex align-items-center"
             ref={dropdownRef}
-            onClick={() => setIsOpen(!isOpen)}
+            style={{ position: "relative" }}
         >
+
             <ImLocation2 className="location-icon glow-icon-warning" />
 
+            {/* Location Label */}
             <span
                 className="fw-semibold glow-icon-warning hoverEffect"
-                style={{ cursor: "pointer", color: '#ffc107' }}
+                style={{
+                    cursor: isReadOnly ? "not-allowed" : "pointer",
+                    color: "#ffc107",
+                    marginLeft: "6px"
+                }}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isReadOnly) {
+                        setIsOpen(!isOpen);
+                    }
+                }}
             >
-                {selectedCity.name} ▼
+                {selectedCity?.name || "Select Location"}
+                {!isReadOnly && " ▼"}
             </span>
 
-            {isOpen && (
+
+
+            {/* Dropdown */}
+            {isOpen && !isReadOnly && (
+
                 <div
                     style={{
                         position: "absolute",
-                        top: "50%", // 🔥 Always below
-                        left: "120px",
+                        top: "100%",
+                        left: "0",
                         marginTop: "8px",
                         background: "#98e6b8",
                         borderRadius: "8px",
                         boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                        padding: "1px",
+                        padding: "4px",
                         minWidth: "180px",
-                        zIndex: 9999, // 🔥 Prevent hiding
-                        animation: "fadeIn 0.2s ease-in-out"
-                    }}>
-                    {cities.map((city) => (
+                        zIndex: 9999
+                    }}
+                >
+
+                    {Array.isArray(cities) && cities.map((city) => (
+
                         <div
                             key={city.id}
                             style={{
@@ -138,18 +187,24 @@ const LocationSelector = ({payload}) => {
                             onMouseLeave={(e) =>
                                 (e.target.style.background = "transparent")
                             }
-
                             onClick={() => {
-                                dispatch(setCity(city)); // 🔥 Redux update
-                                dispatch(fetchNamazTimings(city)); // 🔥 API call
+
+                                dispatch(setCity(city));
+                                dispatch(fetchNamazTimings(city));
+
                                 setIsOpen(false);
+
                             }}
                         >
-                            {city.name}
+                            {city.sequenceNo} - {city.name}
                         </div>
+
                     ))}
+
                 </div>
+
             )}
+
         </div>
     );
 };
