@@ -81,7 +81,7 @@ const ListOfMasjids = () => {
     return (
         <div className="card shadow p-0">
             <div className="card-body">
-                <h4 className="card-title text-center mb-4">ListOfMasjids</h4>
+                <h4 className="card-title text-center mb-4">{city.name} Masjids List</h4>
                 <div className="table-responsive">
                     {/* Controls outside the table */}
                     

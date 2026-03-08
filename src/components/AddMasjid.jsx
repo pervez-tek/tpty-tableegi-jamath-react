@@ -391,7 +391,7 @@ const AddMasjid = () => {
             )}
             <hr />
 
-            <h4 className="card-title text-center mb-4">Masjid List</h4>
+            <h4 className="card-title text-center mb-4">{city.name} Masjid List</h4>
             {/* Controls outside the table */}
             <div className="d-flex align-items-center mb-0">
                 <div className="ms-auto d-flex align-items-center">
