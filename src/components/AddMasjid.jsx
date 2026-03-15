@@ -397,7 +397,7 @@ const AddMasjid = () => {
                 <div className="ms-auto d-flex align-items-center">
                     <select
                         className="form-select form-select-sm me-3"
-                        style={{ width: 60, height: 30 }}
+                        style={{ width: 70, height: 30 }}
                         value={pageSize}
                         onChange={e => setPageSize(Number(e.target.value))}
                     >

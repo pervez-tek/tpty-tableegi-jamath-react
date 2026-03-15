@@ -8,8 +8,13 @@ import { toast } from "react-toastify";
 import Man from "../assets/images/avt_man.jpg";
 import Wom from "../assets/images/avt_wom.jpg";
 import { useSelector } from "react-redux";
+import Google from "../assets/images/google-color-svgrepo-com.svg";
+import Facebbok from "../assets/images/facebook-svgrepo-com.svg";
+import Instagram from "../assets/images/instagram-svgrepo-com.svg";
 
 import "./surveyForm.css";
+import { FaFacebook } from "react-icons/fa";
+import { ImInstagram } from "react-icons/im";
 
 const SurveyForm = () => {
     const city = useSelector((state) => state.location.selectedCity);
@@ -155,27 +160,36 @@ const SurveyForm = () => {
         <div className="card shadow p-1">
             <div className="card-body">
                 <div className="table-responsive">
-                    <table>
+                    <table className="mx-auto">
                         <tbody>
                             <tr>
-                                <td>
+                                <td colSpan="2">
                                     <h4 className="card-title text-center mb-1">
                                         {city.name}  {APP_HEADING}
                                     </h4>
                                 </td>
-                                <td>
-                                    {<GoogleButton onClick={handleGoogleClick} />}
-                                </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div className="card-title text-start mb-0">
+                                    <div className="card-title text-center mb-0">
                                         <img
                                             src={form.image ? form.image : form.gender === "F" ? Wom : Man} // 👈 fallback female avatar : Man}
                                             alt="Profile"
                                             className="rounded-circle"
                                             width="50px" height="50px"
                                         />
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <div style={{ transform: "scale(0.85)", width: "50px" }}>
+                                        <GoogleButton socialLogin={Google} />
+                                    </div>
+                                    <div style={{ transform: "scale(0.85)", width: "50px" }}>
+                                        <GoogleButton socialLogin={Facebbok} />
+                                    </div>
+                                    <div style={{ transform: "scale(0.85)", width: "50px" }}>
+                                        <GoogleButton socialLogin={Instagram} />
                                     </div>
                                 </td>
                             </tr>

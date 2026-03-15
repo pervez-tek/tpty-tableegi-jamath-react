@@ -90,11 +90,13 @@ function Navbar({ menuOpen, setMenuOpen }) {
 
 
         <button
-          className="navbar-toggler"
+          className="navbar-toggler custom-toggler"
           type="button"
           onClick={toggleMenu}
         >
-          <span className="navbar-toggler-icon"></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
 
 

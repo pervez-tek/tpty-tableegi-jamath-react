@@ -131,7 +131,12 @@ const LocationSelector = ({ payload }) => {
             style={{ position: "relative" }}
         >
 
-            <ImLocation2 className="location-icon glow-icon-warning" />
+            <ImLocation2 className="location-icon glow-icon-warning"  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!isReadOnly) {
+                        setIsOpen(!isOpen);
+                    }
+                }}/>
 
             {/* Location Label */}
             <span

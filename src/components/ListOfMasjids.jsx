@@ -5,6 +5,9 @@ import axios from 'axios';
 import { usePagination } from './pagination/usePagination';
 import PaginationControls from './pagination/PaginationControls';
 import { useSelector } from "react-redux";
+import ScrollToTop from './ScrollToTop';
+
+
 
 
 const ListOfMasjids = () => {
@@ -14,7 +17,8 @@ const ListOfMasjids = () => {
     const [loading, setLoading] = useState(true);
     const [masjids, setMasjids] = useState([]);
 
-  
+
+
 
     const showToast = (message, type = "info") => {
         toast.dismiss();
@@ -29,11 +33,11 @@ const ListOfMasjids = () => {
     useEffect(() => {
         const source = axios.CancelToken.source();
         setLoading(true);
-        console.log("City:"+city.name+":"+city.id)
+        console.log("City:" + city.name + ":" + city.id)
 
         axios.get(`${API_URL}/getAllMasjids`, {
-            headers: {               
-                locationId:city.id ?? null
+            headers: {
+                locationId: city.id ?? null
             },
             withCredentials: true,
             cancelToken: source.token
@@ -59,7 +63,7 @@ const ListOfMasjids = () => {
             .finally(() => setLoading(false));
 
         return () => source.cancel();
-    }, [API_URL,city]);
+    }, [API_URL, city]);
 
     // usePagination returns pageItems, pageSize, currentPage, etc.
     const {
@@ -84,11 +88,11 @@ const ListOfMasjids = () => {
                 <h4 className="card-title text-center mb-4">{city.name} Masjids List</h4>
                 <div className="table-responsive">
                     {/* Controls outside the table */}
-                    
+
                     <div className="d-flex align-items-center mb-0">
                         <select
                             className="form-select form-select-sm me-3"
-                            style={{ width: 60, height: 30 }}
+                            style={{ width: 70, height: 30 }}
                             value={pageSize}
                             onChange={e => setPageSize(Number(e.target.value))}
                         >
@@ -153,6 +157,7 @@ const ListOfMasjids = () => {
                 </div>
 
             </div>
+            <ScrollToTop />
         </div>
     );
 };

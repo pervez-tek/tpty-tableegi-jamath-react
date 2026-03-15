@@ -166,3 +166,25 @@
     transform: scaleX(0);
   }
 }
+
+.custom-toggler {
+  border: 2px solid #d9e0df;
+  padding: 6px;
+}
+
+.custom-toggler span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: #d9e0df;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+.custom-toggler:focus span {
+  background: #ffc107;
+}
+
+.custom-toggler:focus {
+  border-color: #ffc107;
+}

@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "./auth/AuthContext";
 import { usePagination } from './pagination/usePagination';
 import PaginationControls from './pagination/PaginationControls';
+import ScrollToTop from "./ScrollToTop";
 
 function Reports() {
   const [fromDate, setFromDate] = useState("");
@@ -60,7 +61,7 @@ function Reports() {
   const dummyProfiles = Array.from({ length: 100 }, (_, i) => ({
     name: i % 2 === 0 ? "Ahmed Khan" : "Sana Khan",
     masjidName: "Masjid-e-Quba",
-    gender:i % 2 === 0 ? "M" : "F",
+    gender: i % 2 === 0 ? "M" : "F",
     halkaNo: i % 2 === 0 ? 1 : 2,
     phone: "+91 9876543210",
     service: "Engineer",
@@ -242,7 +243,7 @@ function Reports() {
                 <div className="d-flex align-items-center mb-0">
                   <select
                     className="form-select form-select-sm me-3"
-                    style={{ width: 65, height: 30 }}
+                    style={{ width: 70, height: 30 }}
                     value={pageSize}
                     onChange={e => setPageSize(Number(e.target.value))}
                   >
@@ -298,6 +299,7 @@ function Reports() {
                 </div>
               </div>
             </div>
+            <ScrollToTop />
           </div>
         </>
       )}
