@@ -176,7 +176,7 @@ const SurveyForm = () => {
                                             src={form.image ? form.image : form.gender === "F" ? Wom : Man} // 👈 fallback female avatar : Man}
                                             alt="Profile"
                                             className="rounded-circle"
-                                            width="50px" height="50px"
+                                            width="100px" height="100px"
                                         />
                                     </div>
                                 </td>

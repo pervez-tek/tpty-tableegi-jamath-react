@@ -3,7 +3,7 @@ import React from "react";
 function FiveAamalCheckboxes({ value = [], onChange }) {
   const _5Aamal = [
     { id: "all-5", name: "all-5", label: "-- All --", value: 0 },
-    { id: "masjid-war-jamath", name: "masjid-war-jamath", label: "MasjidWarJamath", value: 1 },
+    { id: "masjid-war-jamath", name: "masjid-war-jamath", label: "Masjid War Jamath", value: 1 },
     { id: "taleem", name: "taleem", label: "Taleem", value: 2 },
     { id: "5ghanta", name: "2.5ghanta", label: "2.5 Ghanta", value: 3 },
     { id: "gust", name: "gust", label: "Gust", value: 4 },

@@ -27,3 +27,26 @@
   transform: translateY(200px);
 }
 
+.watermark {
+  position: fixed;        /* always visible */
+  width: 180px;
+  height: auto;
+
+  opacity: 0.05;          /* transparency */
+  z-index: 9999;          /* above everything */
+
+  pointer-events: none;   /* does not block clicks */
+  user-select: none;      /* cannot select */
+}
+
+/* Left side */
+.watermark-left {
+  top: 150px;
+  left: 0px;
+}
+
+/* Right side */
+.watermark-right {
+  bottom: 100px;
+  right: 0px;
+}

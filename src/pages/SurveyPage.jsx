@@ -5,7 +5,11 @@ import React, { lazy, Suspense } from "react";
 import { useEffect } from "react";
 import "./surveyPage.css";
 import Kalima from "../assets/images/bismillah.png";
+import Lamp1 from "../assets/images/Ramadan Lights1.png";
+import Lamp2 from "../assets/images/Lantern1.png";
+import Lamp3 from "../assets/images/Lantern.png";
 import NotFound from "./NotFound";
+import ReportsTabs from "../components/ReportsTabs";
 
 
 const Admin = React.lazy(() => import("../components/Admin"));
@@ -41,7 +45,7 @@ const ListOfMasjids = lazy(() => import("../components/ListOfMasjids"));
 const Loader = () => <div className="text-center mt-5">Loading...</div>;
 
 function SurveyPage({ menuOpen }) {
-    
+
     return (
         <>
             <div className={`page-content ${menuOpen ? "shift-down" : ""}`}>
@@ -52,6 +56,21 @@ function SurveyPage({ menuOpen }) {
                             alt="profile"
                             height="50px"
                             width="300px"
+                        />
+                    </div>
+
+                    <div>
+                       
+                        <img
+                            src={Lamp1}
+                            alt="left watermark"
+                            className="watermark watermark-left"
+                        />
+
+                        <img
+                            src={Lamp2}
+                            alt="right watermark"
+                            className="watermark watermark-right"
                         />
                     </div>
                     <div className="row justify-content-center custom-row">
@@ -69,6 +88,7 @@ function SurveyPage({ menuOpen }) {
                                     <Route path="/namazTimings" element={<NamazTimings />} />
                                     <Route path="/qiblaFinder" element={<QiblaFinder />} />
                                     <Route path="/loginForm" element={<LoginForm />} />
+                                    <Route path="/reportsTabs" element={<ReportsTabs />} />
                                     <Route path="/addMasjid" element={<ProtectedRoute>
                                         <AddMasjid />
                                     </ProtectedRoute>

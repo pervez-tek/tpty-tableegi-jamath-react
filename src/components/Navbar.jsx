@@ -154,6 +154,15 @@ function Navbar({ menuOpen, setMenuOpen }) {
               </NavLink>
             </li>
 
+             <li className="nav-item">
+              <NavLink className={({ isActive }) =>
+                isActive ? "nav-link active active-link" : "nav-link"}
+                to="/reportsTabs" onClick={closeMenu}>
+                ReportTabs &nbsp;
+                <TbReportSearch className="menu-icons" />
+              </NavLink>
+            </li>
+
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink className={({ isActive }) =>

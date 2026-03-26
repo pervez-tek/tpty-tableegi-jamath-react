@@ -9,6 +9,7 @@ import { useAuth } from "./auth/AuthContext";
 import { usePagination } from "./pagination/usePagination";
 import PaginationControls from "./pagination/PaginationControls";
 import { useSelector } from "react-redux";
+import ScrollToTop from "./ScrollToTop";
 
 const AddMasjid = () => {
 
@@ -485,6 +486,7 @@ const AddMasjid = () => {
                         onChange={setCurrentPage}
                     />
                 </div>
+                <ScrollToTop />
             </div>
         </>
     );

@@ -2,11 +2,25 @@ import { Link, NavLink } from "react-router-dom";
 import "./footer.css";
 import prayer from "../assets/images/Prayer.png";
 import mat from "../assets/images/Prayer Mat.png";
+import namaz from "../assets/images/namaz.jpg";
+import masjid from "../assets/images/masjid.jpg";
 import qibla from "../assets/images/qibla finder.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Footer = ({ menuOpen, setMenuOpen }) => {
   const [image, setImage] = useState(prayer);
+
+  const images = [prayer, mat, namaz, masjid];
+
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); // change every second
+
+    return () => clearInterval(interval); // cleanup
+  }, []);
 
   const closeMenu = () => {
     setMenuOpen(false);   // Always close
@@ -23,7 +37,7 @@ const Footer = ({ menuOpen, setMenuOpen }) => {
         <div className="glow-wrapper">
           <img
             className="rounded-circle glow-img"
-            src={image}
+             src={images[index]}
             alt="image"
             onClick={() => {              
               setImage(image === prayer ? mat : prayer);
