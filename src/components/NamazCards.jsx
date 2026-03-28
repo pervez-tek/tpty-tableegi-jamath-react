@@ -28,14 +28,36 @@ function NamazCards() {
         });
     };
 
+    function subtractMinutes(timeString, minutesToSubtract) {
+        const date = new Date(`1970-01-01T${timeString}`);
+
+        date.setMinutes(date.getMinutes() - minutesToSubtract);
+
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+
+        return `${hours}:${minutes}`;
+    }
+
+    function addMinutes(timeString, minutesToAdd) {
+        const date = new Date(`1970-01-01T${timeString}`);
+
+        date.setMinutes(date.getMinutes() + minutesToAdd);
+
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+
+        return `${hours}:${minutes}`;
+    }
+
     const namazTimings = [
         {
             name: "Fazar",
             timings: {
-                "Start": formatTo12Hour(timings.Fajr),
-                "Jamaat": "05:35 AM",
-                "Ishraaq": "06:59 AM",
-                "Chaasht": "09:36 AM",
+                "Start": formatTo12Hour(subtractMinutes(timings.Fajr, 13)),
+                "Jamaat": "05:45 AM",
+                "Ishraaq": formatTo12Hour(addMinutes(timings.Sunrise,20)),
+                "Chaasht": formatTo12Hour(addMinutes(timings.Sunrise,183)),
                 "Qaza/Sunrise": formatTo12Hour(timings.Sunrise),
             },
         },
@@ -44,39 +66,39 @@ function NamazCards() {
             timings: {
                 "Start": formatTo12Hour(timings.Dhuhr),
                 "Jamaat": "01:30 PM",
-                "Zawaal": "--:--",                
-                "Qaza (Hanafi)": "04:49 PM",
-                "Qaza (Shafai)": "03:54 PM",
+                "Zawaal": formatTo12Hour(subtractMinutes(timings.Dhuhr,5)),
+                "Qaza (Hanafi)": formatTo12Hour(timings.Asr),
+                "Qaza (Shafai)": formatTo12Hour(subtractMinutes(timings.Asr,64)),
             },
         },
         {
             name: "Asr",
             timings: {
-                "Start":formatTo12Hour(timings.Asr),
+                "Start": formatTo12Hour(timings.Asr),
                 "Jamaat": "05:15 PM",
-                "Start (Hanafi)": "04:49 PM",
-                "Start (Shafai)": "03:54 PM",
-                "Qaza": "06:27 PM",
+                "Start (Hanafi)": formatTo12Hour(timings.Asr),
+                "Start (Shafai)": formatTo12Hour(subtractMinutes(timings.Asr,64)),
+                "Qaza": formatTo12Hour(timings.Sunset),
             },
         },
         {
             name: "Maghrib",
             timings: {
-                "Start": formatTo12Hour(timings.Maghrib),
-                "Jamaat": "06:35 PM",
+                "Start": formatTo12Hour(addMinutes(timings.Maghrib, 3)),
+                "Jamaat": formatTo12Hour(addMinutes(timings.Maghrib, 6)),
                 "Sunset": formatTo12Hour(timings.Sunset),
-                "Iftaar": "06:30 PM",
+                "Iftaar": formatTo12Hour(addMinutes(timings.Maghrib, 3)),
                 "Qaza": "07:38 PM",
             },
         },
         {
             name: "Isha",
             timings: {
-                "Start": formatTo12Hour(timings.Isha),
-                "Jamaat": "08:45 PM",
-                "Tahajjud": "03:37 PM",
-                "Sahoor End": "05:18 PM",
-                "Qaza": "05:28 PM",
+                "Start": formatTo12Hour(addMinutes(timings.Isha, 13)),
+                "Jamaat": "08:30 PM",
+                "Tahajjud": "03:13 PM",
+                "Sahoor End": formatTo12Hour(subtractMinutes(timings.Fajr,23)),
+                "Qaza": formatTo12Hour(subtractMinutes(timings.Fajr, 13)),
             },
         },
         {

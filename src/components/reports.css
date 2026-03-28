@@ -31,3 +31,13 @@
 .custom-padding {
     padding: 0.1px !important;
 }
+
+.nav-tabs .nav-link.active {
+  color: #fff !important;
+  background-color: #85ddbb !important;
+}
+
+.nav-tabs .nav-link {
+  color: #da3a3a !important;
+  background-color: #d5d5db !important;
+}

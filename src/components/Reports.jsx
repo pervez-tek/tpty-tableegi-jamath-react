@@ -14,6 +14,7 @@ import PaginationControls from './pagination/PaginationControls';
 import ScrollToTop from "./ScrollToTop";
 
 function Reports() {
+  const [activeTab, setActiveTab] = useState("tab1");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [results, setResults] = useState(null);
@@ -155,82 +156,194 @@ function Reports() {
         <div className="card-body">
           <h4 className="card-title text-center mb-4">Reports</h4>
 
-          {/* Date range form */}
-          <form onSubmit={handleSubmit} className="row g-3 mb-3">
-            <div className="col-md-6">
-              <label htmlFor="fromDate" className="form-label">From Date</label>
-              <input
-                type="date"
-                id="fromDate"
-                className="form-control"
-                value={fromDate}
-                onChange={(e) => {
-                  setFromDate(e.target.value);
-                  setToDate(""); // reset toDate when fromDate changes
-                }}
-                required
-              />
-            </div>
-
-            <div className="col-md-6">
-              <label htmlFor="toDate" className="form-label">To Date</label>
-              <input
-                type="date"
-                id="toDate"
-                className="form-control"
-                value={toDate}
-                min={fromDate || undefined}   // ⭐ KEY LINE
-                onChange={(e) => setToDate(e.target.value)}
-                disabled={!fromDate}          // optional but recommended
-                required
-              />
-            </div>
-
-
-            <div className="col-12 d-flex justify-content-center mt-3">
-
-
+          <ul className="nav nav-tabs mb-3">
+            <li className="nav-item">
               <button
-                type="submit"
-                className="btn btn-primary me-2 glow-btn"
-                disabled={loading}
+                className={`nav-link ${activeTab === "tab1" ? "active" : ""}`}
+                onClick={() => setActiveTab("tab1")}
               >
-                {loading ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2"></span>
-                    Loading...
-                  </>
-                ) : (
-                  "Submit"
-                )}
+                Jamath Report
               </button>
+            </li>
 
-              <button type="button" className="btn btn-danger glow-btn" onClick={handleReset}>
-                Reset
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "tab2" ? "active" : ""}`}
+                onClick={() => setActiveTab("tab2")}
+              >
+                Sehri Report
               </button>
+            </li>
+          </ul>
+
+
+          {activeTab === "tab1" && (
+            <div>
+              <div className="text-center">
+                <div className="accordion accordion-flush" id="reportsAccordion">
+
+                  {/* Panel 1 */}
+                  <div className="accordion-item">
+
+                    <h2 className="accordion-header">
+
+                      <button
+                        className="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne"
+                      >
+                        Jode Dates
+                      </button>
+
+                    </h2>
+
+                    <div
+                      id="collapseOne"
+                      className="accordion-collapse collapse show"
+                      data-bs-parent="#reportsAccordion"
+                    >
+
+                      <div className="accordion-body">
+
+                        <div>
+
+                          {/* Date range form */}
+                          <form onSubmit={handleSubmit} className="row g-3 mb-3">
+                            <div className="col-md-6">
+                              <label htmlFor="fromDate" className="form-label">From Date</label>
+                              <input
+                                type="date"
+                                id="fromDate"
+                                className="form-control"
+                                value={fromDate}
+                                onChange={(e) => {
+                                  setFromDate(e.target.value);
+                                  setToDate(""); // reset toDate when fromDate changes
+                                }}
+                                required
+                              />
+                            </div>
+
+                            <div className="col-md-6">
+                              <label htmlFor="toDate" className="form-label">To Date</label>
+                              <input
+                                type="date"
+                                id="toDate"
+                                className="form-control"
+                                value={toDate}
+                                min={fromDate || undefined}   // ⭐ KEY LINE
+                                onChange={(e) => setToDate(e.target.value)}
+                                disabled={!fromDate}          // optional but recommended
+                                required
+                              />
+                            </div>
+
+
+                            <div className="col-12 d-flex justify-content-center mt-3">
+
+
+                              <button
+                                type="submit"
+                                className="btn btn-primary me-2 glow-btn"
+                                disabled={loading}
+                              >
+                                {loading ? (
+                                  <>
+                                    <span className="spinner-border spinner-border-sm me-2"></span>
+                                    Loading...
+                                  </>
+                                ) : (
+                                  "Submit"
+                                )}
+                              </button>
+
+                              <button type="button" className="btn btn-danger glow-btn" onClick={handleReset}>
+                                Reset
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  {/* Panel 2 */}
+                  <div className="accordion-item">
+
+                    <h2 className="accordion-header">
+
+                      <button
+                        className="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo">
+                        Filter Data
+                      </button>
+
+                    </h2>
+
+                    <div
+                      id="collapseTwo"
+                      className="accordion-collapse collapse"
+                      data-bs-parent="#reportsAccordion">
+
+                      <div className="accordion-body">
+
+                        Results content here
+
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  {/* Results section */}
+                  {results && (
+                    <div className="mt-4 text-center">
+                      <h5>Results</h5>
+                      <p><strong>Count:</strong> {results.count}</p>
+                      <p>
+                        <strong>From:</strong> {results.fromDate} <br />
+                        <strong>To:</strong> {results.toDate}
+                      </p>
+                      <button
+                        className="btn btn-info glow-btn"
+                        onClick={() => setShowResults(prev => !prev)}
+                      >
+                        {showResults ? "Hide Results" : "View Results"}
+                      </button>
+
+                    </div>
+                  )}
+
+
+
+                </div>
+              </div>
             </div>
-          </form>
+          )}
 
-          {/* Results section */}
-          {results && (
-            <div className="mt-4 text-center">
-              <h5>Results</h5>
-              <p><strong>Count:</strong> {results.count}</p>
+          {activeTab === "tab2" && (
+            <div className="text-center">
+
+              <h5>Sehri Panel</h5>
+
               <p>
-                <strong>From:</strong> {results.fromDate} <br />
-                <strong>To:</strong> {results.toDate}
+                Here you can display summary results,
+                charts, or export options.
               </p>
-              <button
-                className="btn btn-info glow-btn"
-                onClick={() => setShowResults(prev => !prev)}
-              >
-                {showResults ? "Hide Results" : "View Results"}
-              </button>
 
             </div>
           )}
+
         </div>
       </div>
+
+
+
 
       {showResults && (
         <>
