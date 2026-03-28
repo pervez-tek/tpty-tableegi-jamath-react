@@ -98,3 +98,26 @@
   margin-top: 10px;
   color: black;
 }
+
+.blink-prayer {
+    animation: blinkCard 1s infinite;
+    border: 3px solid #16a34a;
+    background-color: #fff3cd;
+}
+
+@keyframes blinkCard {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.03);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

@@ -56,8 +56,8 @@ function NamazCards() {
             timings: {
                 "Start": formatTo12Hour(subtractMinutes(timings.Fajr, 13)),
                 "Jamaat": "05:45 AM",
-                "Ishraaq": formatTo12Hour(addMinutes(timings.Sunrise,20)),
-                "Chaasht": formatTo12Hour(addMinutes(timings.Sunrise,183)),
+                "Ishraaq": formatTo12Hour(addMinutes(timings.Sunrise, 20)),
+                "Chaasht": formatTo12Hour(addMinutes(timings.Sunrise, 183)),
                 "Qaza/Sunrise": formatTo12Hour(timings.Sunrise),
             },
         },
@@ -66,9 +66,9 @@ function NamazCards() {
             timings: {
                 "Start": formatTo12Hour(timings.Dhuhr),
                 "Jamaat": "01:30 PM",
-                "Zawaal": formatTo12Hour(subtractMinutes(timings.Dhuhr,5)),
+                "Zawaal": formatTo12Hour(subtractMinutes(timings.Dhuhr, 5)),
                 "Qaza (Hanafi)": formatTo12Hour(timings.Asr),
-                "Qaza (Shafai)": formatTo12Hour(subtractMinutes(timings.Asr,64)),
+                "Qaza (Shafai)": formatTo12Hour(subtractMinutes(timings.Asr, 64)),
             },
         },
         {
@@ -77,7 +77,7 @@ function NamazCards() {
                 "Start": formatTo12Hour(timings.Asr),
                 "Jamaat": "05:15 PM",
                 "Start (Hanafi)": formatTo12Hour(timings.Asr),
-                "Start (Shafai)": formatTo12Hour(subtractMinutes(timings.Asr,64)),
+                "Start (Shafai)": formatTo12Hour(subtractMinutes(timings.Asr, 64)),
                 "Qaza": formatTo12Hour(timings.Sunset),
             },
         },
@@ -88,7 +88,7 @@ function NamazCards() {
                 "Jamaat": formatTo12Hour(addMinutes(timings.Maghrib, 6)),
                 "Sunset": formatTo12Hour(timings.Sunset),
                 "Iftaar": formatTo12Hour(addMinutes(timings.Maghrib, 3)),
-                "Qaza": "07:38 PM",
+                "Qaza": formatTo12Hour(addMinutes(timings.Isha, 13)),
             },
         },
         {
@@ -97,7 +97,7 @@ function NamazCards() {
                 "Start": formatTo12Hour(addMinutes(timings.Isha, 13)),
                 "Jamaat": "08:30 PM",
                 "Tahajjud": "03:13 PM",
-                "Sahoor End": formatTo12Hour(subtractMinutes(timings.Fajr,23)),
+                "Sahoor End": formatTo12Hour(subtractMinutes(timings.Fajr, 23)),
                 "Qaza": formatTo12Hour(subtractMinutes(timings.Fajr, 13)),
             },
         },
@@ -142,10 +142,30 @@ function NamazCards() {
             return hours * 60 + minutes;
         };
 
-        const today = new Date();
-        const isFriday = today.getDay() === 5; // 5 = Friday
+        const prayer = namazTimings.find(p => p.name === prayerName);
 
-        // Build prayer list with start times
+        if (!prayer) return "";
+
+        const jamaatTime = parseTime(prayer.timings["Jamaat"]);
+
+        if (jamaatTime !== null) {
+
+            const blinkStart = jamaatTime - 1; // 2 mins before
+            const blinkEnd = jamaatTime + 1;   // 1 min after
+
+            if (
+                currentMinutes >= blinkStart &&
+                currentMinutes <= blinkEnd
+            ) {
+                return "blink-prayer";
+            }
+        }
+
+        // ---- Existing logic continues ----
+
+        const today = new Date();
+        const isFriday = today.getDay() === 5;
+
         let prayers = namazTimings
             .map(p => ({
                 name: p.name,
@@ -154,12 +174,14 @@ function NamazCards() {
             .filter(p => p.start !== null)
             .sort((a, b) => a.start - b.start);
 
-        // 🔥 If Friday → replace Zohar with Juma
         if (isFriday) {
             const juma = namazTimings.find(p => p.name === "Juma");
 
             if (juma) {
-                const khutbaStart = parseTime(juma.timings["Khutba"] || juma.timings["Khutba 1"]);
+                const khutbaStart = parseTime(
+                    juma.timings["Khutba"] ||
+                    juma.timings["Khutba 1"]
+                );
 
                 if (khutbaStart !== null) {
                     prayers = prayers.map(p =>
@@ -171,7 +193,6 @@ function NamazCards() {
             }
         }
 
-        // Find active prayer (latest start passed)
         let activePrayer = null;
 
         for (let i = 0; i < prayers.length; i++) {
@@ -181,12 +202,17 @@ function NamazCards() {
         }
 
         if (!activePrayer) {
-            return prayerName === prayers[0].name ? "next-prayer" : "";
+            return prayerName === prayers[0].name
+                ? "next-prayer"
+                : "";
         }
 
-        if (prayerName === activePrayer) return "active-prayer";
+        if (prayerName === activePrayer)
+            return "active-prayer";
 
-        const thisPrayer = prayers.find(p => p.name === prayerName);
+        const thisPrayer = prayers.find(
+            p => p.name === prayerName
+        );
 
         if (thisPrayer && thisPrayer.start > currentMinutes)
             return "next-prayer";
