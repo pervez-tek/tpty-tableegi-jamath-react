@@ -98,7 +98,7 @@ const AddMasjid = () => {
             }
         }).finally(() => setLoading(false));
 
-    }, []);
+    }, [city]);
 
 
     const [form, setForm] = useState(() => (

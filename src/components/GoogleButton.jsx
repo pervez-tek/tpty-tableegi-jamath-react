@@ -12,7 +12,7 @@ function GoogleButton({ onClick ,socialLogin}) {
     }
     return (
 
-        <button className="btn btn-light border d-flex align-items-center gap-2 w-100 w-md-auto glow-btn">
+        <button className="btn btn-light border d-flex align-items-center gap-2 w-100 w-md-auto glow-btn" onClick={GoogleLogin}>
             <img
                 src={socialLogin}
                 alt="Google"

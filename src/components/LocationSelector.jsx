@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ImLocation2 } from "react-icons/im";
 import { useSelector, useDispatch } from "react-redux";
-import { setCity, fetchNamazTimings } from "../redux/locationSlice";
+import { setCity, fetchNamazTimings,fetchLocationMasjids } from "../redux/locationSlice";
 import "./LocationSelector.css";
 import { locations } from "./dummyLocationsData";
 import axios from "axios";
@@ -58,7 +58,7 @@ const LocationSelector = ({ payload }) => {
                 console.error("Error fetching locations:", error);
 
                 // fallback dummy data
-                setCities(locations);
+                //setCities(locations);
 
             });
 
@@ -82,6 +82,7 @@ const LocationSelector = ({ payload }) => {
             if (selected) {
                 dispatch(setCity(selected));
                 dispatch(fetchNamazTimings(selected));
+                dispatch(fetchLocationMasjids(selected));
             }
         }
 
@@ -96,6 +97,7 @@ const LocationSelector = ({ payload }) => {
 
         if (selectedCity) {
             dispatch(fetchNamazTimings(selectedCity));
+            dispatch(fetchLocationMasjids(selectedCity));
         }
 
     }, [dispatch, selectedCity]);
@@ -196,7 +198,7 @@ const LocationSelector = ({ payload }) => {
 
                                 dispatch(setCity(city));
                                 dispatch(fetchNamazTimings(city));
-
+                                dispatch(fetchLocationMasjids(city));
                                 setIsOpen(false);
 
                             }}
