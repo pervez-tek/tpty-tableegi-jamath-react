@@ -58,7 +58,7 @@ const LocationSelector = ({ payload }) => {
                 console.error("Error fetching locations:", error);
 
                 // fallback dummy data
-                //setCities(locations);
+                setCities(locations);
 
             });
 
